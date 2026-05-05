@@ -22,7 +22,6 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaWhatsapp, FaInstagram } from "react-icons/fa";
-import motorGraderImage from "@assets/image_1777968547261.png";
 
 /* ─── Fade-in on scroll ─── */
 const FadeIn = ({
@@ -319,7 +318,7 @@ export default function Home() {
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-[#F5A623]/20 to-transparent blur-3xl rounded-full" />
             <img
-              src={motorGraderImage}
+              src="/images/motor-grader-hero.png"
               alt="Motor Grader Machinery"
               className="relative z-10 w-full h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] select-none"
             />
@@ -729,6 +728,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ─── FLOATING WHATSAPP BUTTON ─── */}
+      <a
+        href="https://wa.me/919876543210?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="button-whatsapp-float"
+        className="fixed bottom-6 right-6 z-50 group flex items-center gap-3"
+      >
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.5, type: "spring", stiffness: 200 }}
+          className="flex items-center gap-3"
+        >
+          {/* Tooltip label */}
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-[#0F1014] text-white text-sm font-semibold px-4 py-2 rounded shadow-lg border border-[#2A2E37] whitespace-nowrap">
+            Enquire on WhatsApp
+          </span>
+
+          {/* WhatsApp circle button */}
+          <div className="relative w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.5)] hover:shadow-[0_4px_32px_rgba(37,211,102,0.7)] hover:scale-110 transition-all duration-300">
+            {/* Ping animation */}
+            <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
+            <FaWhatsapp size={30} className="text-white relative z-10" />
+          </div>
+        </motion.div>
+      </a>
 
       {/* ─── FOOTER ─── */}
       <footer className="bg-[#0A0B0E] pt-16 pb-8 border-t border-[#2A2E37]">

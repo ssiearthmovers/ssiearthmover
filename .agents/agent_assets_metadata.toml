@@ -54,3 +54,9 @@ id = "3r00YND438SJ7jusD6SDE"
 uri = "file://artifacts/shiv-shakti/public/images/industry-earthmoving.png"
 type = "image"
 title = "Earthmoving"
+
+[[generated]]
+id = "XW0ex8z-9quXYdJK4DjU9"
+uri = "file://attached_assets/generated_images/generated_image.png"
+type = "image"
+title = "generated_image"
