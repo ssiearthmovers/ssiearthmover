@@ -722,8 +722,8 @@ export default function Home() {
             </button>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <div className="relative">
-              <div className="absolute inset-0 bg-[#F5A623]/20 translate-x-4 translate-y-4 rounded-lg" />
+            <div className="relative p-4">
+              <div className="absolute bottom-0 right-0 w-[calc(100%-1rem)] h-[calc(100%-1rem)] bg-[#F5A623]/20 rounded-lg" />
               <img
                 src="/images/about-warehouse.png"
                 alt="Industrial Warehouse"
