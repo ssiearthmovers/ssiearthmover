@@ -249,12 +249,26 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0F1014] via-[#16181D] to-[#1a1c22]" />
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#F5A623]/8 to-transparent" />
-        <div className="absolute -top-40 -right-20 w-[700px] h-[700px] rounded-full bg-[#F5A623]/5 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#F5A623]/3 blur-[80px] pointer-events-none" />
+        {/* Full-bleed background image with sand/road vibe */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/motor-grader-hero.png"
+            alt=""
+            className="w-full h-full object-cover object-center"
+            style={{ filter: "brightness(0.45) saturate(1.1)" }}
+          />
+          {/* Left fade — blends photo into the dark content side */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0F1014] via-[#0F1014]/80 to-transparent" />
+          {/* Top fade */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0F1014]/60 via-transparent to-[#0F1014]/70" />
+          {/* Warm dusty golden overlay for sand vibe */}
+          <div className="absolute inset-0 bg-gradient-to-tl from-[#8B5E0A]/20 via-transparent to-transparent" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+        {/* Dust / haze particles feel */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#16181D] to-transparent z-10 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-12 items-center relative z-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -271,13 +285,13 @@ export default function Home() {
               Motor Grader Parts Specialist
             </motion.div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white uppercase">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
               Premium Motor Grader{" "}
               <span className="text-[#F5A623]">Spare Parts</span> – 3000+
               Parts Ready for Dispatch
             </h1>
 
-            <p className="text-lg text-gray-400 max-w-xl leading-relaxed">
+            <p className="text-lg text-gray-300 max-w-xl leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
               Trusted supplier of OEM-quality grader blades, cutting edges,
               hydraulic and engine components for construction and mining
               companies across India.
@@ -293,7 +307,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => scrollTo("products")}
-                className="border-2 border-white/20 hover:border-[#F5A623] hover:text-[#F5A623] px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all"
+                className="border-2 border-white/30 hover:border-[#F5A623] hover:text-[#F5A623] px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all backdrop-blur-sm bg-black/20"
                 data-testid="button-browse-categories"
               >
                 Browse Categories
@@ -302,27 +316,16 @@ export default function Home() {
 
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-4">
               {["3000+ Parts in Stock", "Fast PAN India Delivery", "Bulk Orders Available"].map((item) => (
-                <div key={item} className="flex items-center gap-2 text-gray-300 font-medium">
+                <div key={item} className="flex items-center gap-2 text-gray-200 font-medium">
                   <CheckCircle2 className="w-5 h-5 text-[#F5A623] shrink-0" />
-                  <span className="text-sm">{item}</span>
+                  <span className="text-sm drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">{item}</span>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.88 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, delay: 0.15 }}
-            className="relative flex items-center justify-center min-h-[300px] lg:min-h-[560px]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#F5A623]/20 to-transparent blur-3xl rounded-full" />
-            <img
-              src="/images/motor-grader-hero.png"
-              alt="Motor Grader Machinery"
-              className="relative z-10 w-full h-auto object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] select-none"
-            />
-          </motion.div>
+          {/* Right side is intentionally empty — the grader shows through the bg image */}
+          <div className="hidden lg:block" />
         </div>
       </section>
 
