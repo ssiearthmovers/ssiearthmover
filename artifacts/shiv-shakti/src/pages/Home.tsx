@@ -20,6 +20,10 @@ import {
   FileText,
   ThumbsUp,
   MessageSquare,
+  Search,
+  SlidersHorizontal,
+  Wrench,
+  ChevronRight,
 } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaWhatsapp, FaInstagram } from "react-icons/fa";
 
@@ -87,11 +91,35 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+/* ─── Brand / Model data ─── */
+const brandsData: Record<string, { models: string[]; color: string }> = {
+  CAT:         { models: ["12H","120H","120K","140H","140K","140M","143H","160H","160K","160M","163H"], color: "#F5A623" },
+  Komatsu:     { models: ["GD535","GD555","GD655","GD670","GD675","GD825"], color: "#e8c13a" },
+  Volvo:       { models: ["G710B","G720B","G730B","G740B","G780B","G960B"], color: "#3a7be8" },
+  JCB:         { models: ["430","436","436B","444","456"], color: "#F5A623" },
+  CASE:        { models: ["845B","865","865B","885","895B"], color: "#e84a3a" },
+  Champion:    { models: ["710A","720A","740A","780A"], color: "#a0a0a0" },
+  "L&T":       { models: ["LT120","LT135","LT150"], color: "#3ae8a0" },
+  "Bharat Benz": { models: ["General Series","Heavy Series"], color: "#8a3ae8" },
+};
+const partTypesList = [
+  "Cutting Edges","Grader Blades","Scarifier Teeth","Ripper Tips",
+  "End Bits","Corner Bits","Circle Segments","Draw Bar Parts","All Parts",
+];
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
   const [formSent, setFormSent] = useState(false);
+
+  /* Find-Your-Part state */
+  const [finderTab, setFinderTab] = useState<"browse" | "search">("browse");
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
+  const [selectedPart, setSelectedPart] = useState("");
+  const [partSearch, setPartSearch] = useState("");
+  const [finderResult, setFinderResult] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -111,6 +139,7 @@ export default function Home() {
 
   const navLinks = [
     { label: "Products", id: "products" },
+    { label: "Find My Part", id: "finder" },
     { label: "About", id: "about" },
     { label: "Industries", id: "industries" },
     { label: "Contact", id: "contact" },
@@ -391,6 +420,226 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ─── FIND YOUR PART ─── */}
+      <section id="finder" className="py-20 bg-[#16181D]">
+        <div className="max-w-5xl mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-10">
+            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Smart Part Finder</p>
+            <h2 className="text-4xl font-black uppercase text-white">Find Parts for Your Machine</h2>
+            <p className="mt-3 text-gray-400 max-w-xl mx-auto">Select your grader brand and model, or search by part number — we'll match you instantly.</p>
+          </FadeIn>
+
+          {/* Tab switcher */}
+          <div className="flex rounded overflow-hidden border border-[#2A2E37] w-fit mx-auto mb-10">
+            <button
+              onClick={() => { setFinderTab("browse"); setFinderResult(false); }}
+              className={`flex items-center gap-2 px-6 py-3 text-sm font-bold uppercase tracking-wide transition-all ${finderTab === "browse" ? "bg-[#F5A623] text-black" : "bg-[#1A1D24] text-gray-400 hover:text-white"}`}
+              data-testid="tab-browse"
+            >
+              <SlidersHorizontal className="w-4 h-4" /> Browse by Machine
+            </button>
+            <button
+              onClick={() => { setFinderTab("search"); setFinderResult(false); }}
+              className={`flex items-center gap-2 px-6 py-3 text-sm font-bold uppercase tracking-wide transition-all ${finderTab === "search" ? "bg-[#F5A623] text-black" : "bg-[#1A1D24] text-gray-400 hover:text-white"}`}
+              data-testid="tab-search"
+            >
+              <Search className="w-4 h-4" /> Search by Part No.
+            </button>
+          </div>
+
+          {finderTab === "browse" ? (
+            <div className="flex flex-col gap-8">
+              {/* Step 1 — Brand */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="w-7 h-7 rounded-full bg-[#F5A623] text-black text-xs font-black flex items-center justify-center shrink-0">1</span>
+                  <p className="font-bold text-white uppercase tracking-wide text-sm">Select Machine Brand</p>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {Object.entries(brandsData).map(([brand]) => (
+                    <button
+                      key={brand}
+                      onClick={() => { setSelectedBrand(brand); setSelectedModel(""); setSelectedPart(""); setFinderResult(false); }}
+                      className={`py-4 px-3 rounded border-2 font-black text-sm uppercase tracking-wide transition-all ${
+                        selectedBrand === brand
+                          ? "border-[#F5A623] bg-[#F5A623]/10 text-[#F5A623]"
+                          : "border-[#2A2E37] bg-[#1A1D24] text-gray-300 hover:border-[#F5A623]/40 hover:text-white"
+                      }`}
+                      data-testid={`brand-${brand}`}
+                    >
+                      {brand}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 2 — Model */}
+              {selectedBrand && (
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-7 h-7 rounded-full bg-[#F5A623] text-black text-xs font-black flex items-center justify-center shrink-0">2</span>
+                    <p className="font-bold text-white uppercase tracking-wide text-sm">Select Model — {selectedBrand}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {brandsData[selectedBrand].models.map((model) => (
+                      <button
+                        key={model}
+                        onClick={() => { setSelectedModel(model); setSelectedPart(""); setFinderResult(false); }}
+                        className={`px-4 py-2 rounded-full border text-sm font-bold transition-all ${
+                          selectedModel === model
+                            ? "border-[#F5A623] bg-[#F5A623] text-black"
+                            : "border-[#2A2E37] bg-[#1A1D24] text-gray-300 hover:border-[#F5A623]/50"
+                        }`}
+                        data-testid={`model-${model}`}
+                      >
+                        {selectedBrand} {model}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Step 3 — Part Type */}
+              {selectedModel && (
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="w-7 h-7 rounded-full bg-[#F5A623] text-black text-xs font-black flex items-center justify-center shrink-0">3</span>
+                    <p className="font-bold text-white uppercase tracking-wide text-sm">Select Part Type</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {partTypesList.map((part) => (
+                      <button
+                        key={part}
+                        onClick={() => { setSelectedPart(part); setFinderResult(true); }}
+                        className={`flex items-center gap-2 px-4 py-2 rounded border text-sm font-bold transition-all ${
+                          selectedPart === part
+                            ? "border-[#F5A623] bg-[#F5A623]/10 text-[#F5A623]"
+                            : "border-[#2A2E37] bg-[#1A1D24] text-gray-300 hover:border-[#F5A623]/50"
+                        }`}
+                        data-testid={`part-${part}`}
+                      >
+                        <Wrench className="w-3.5 h-3.5" /> {part}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Result CTA */}
+              {finderResult && selectedBrand && selectedModel && selectedPart && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-gradient-to-r from-[#1A1D24] to-[#1E2128] border-2 border-[#F5A623]/50 rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 text-[#F5A623] font-black text-lg mb-1">
+                      <CheckCircle2 className="w-5 h-5" /> Match Found!
+                    </div>
+                    <p className="text-white font-semibold">
+                      <span className="text-[#F5A623]">{selectedPart}</span> for{" "}
+                      <span className="text-[#F5A623]">{selectedBrand} {selectedModel}</span>
+                    </p>
+                    <p className="text-gray-400 text-sm mt-1">Send us this requirement and we'll confirm availability within 2 hours.</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+                    <a
+                      href={`https://wa.me/919953105738?text=Hello%2C%20I%20need%20${encodeURIComponent(selectedPart)}%20for%20${encodeURIComponent(selectedBrand + " " + selectedModel)}.%20Please%20share%20availability%20and%20pricing.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded font-bold text-sm hover:brightness-110 transition-all"
+                      data-testid="button-finder-whatsapp"
+                    >
+                      <FaWhatsapp size={18} /> WhatsApp Enquiry
+                    </a>
+                    <button
+                      onClick={() => scrollTo("contact")}
+                      className="flex items-center gap-2 bg-[#F5A623] text-black px-5 py-3 rounded font-bold text-sm hover:brightness-110 transition-all"
+                      data-testid="button-finder-enquiry"
+                    >
+                      <Send className="w-4 h-4" /> Get Quote
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          ) : (
+            /* Part Number Search Tab */
+            <div className="flex flex-col gap-6">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Enter part number, description or keyword — e.g. 8J5477, Cutting Edge 14ft, Grader Blade..."
+                  value={partSearch}
+                  onChange={(e) => { setPartSearch(e.target.value); setFinderResult(false); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && partSearch.trim()) setFinderResult(true); }}
+                  className="w-full bg-[#1A1D24] border-2 border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-5 py-4 pl-12 text-white placeholder-gray-600 transition-colors text-base"
+                  data-testid="input-part-search"
+                />
+                <button
+                  onClick={() => { if (partSearch.trim()) setFinderResult(true); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-[#F5A623] text-black px-5 py-2 rounded font-bold text-sm hover:brightness-110 transition-all"
+                  data-testid="button-part-search"
+                >
+                  Search
+                </button>
+              </div>
+
+              {/* Quick search suggestions */}
+              <div className="flex flex-wrap gap-2">
+                <span className="text-gray-500 text-xs font-semibold uppercase self-center">Popular searches:</span>
+                {["8J5477 Cutting Edge","Grader Blade 14ft","Scarifier Shank","End Bit CAT 140","Circle Segment"].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => { setPartSearch(s); setFinderResult(true); }}
+                    className="text-xs px-3 py-1.5 rounded-full border border-[#2A2E37] bg-[#1A1D24] text-gray-400 hover:border-[#F5A623]/50 hover:text-[#F5A623] transition-all"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Result CTA */}
+              {finderResult && partSearch.trim() && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-gradient-to-r from-[#1A1D24] to-[#1E2128] border-2 border-[#F5A623]/50 rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 text-[#F5A623] font-black text-lg mb-1">
+                      <Search className="w-5 h-5" /> Searching for: <span className="italic">"{partSearch}"</span>
+                    </div>
+                    <p className="text-gray-300 text-sm mt-1">Send this search to our team — we'll confirm stock and pricing within 2 hours.</p>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+                    <a
+                      href={`https://wa.me/919953105738?text=Hello%2C%20I%20am%20looking%20for%20the%20following%20part%3A%20${encodeURIComponent(partSearch)}.%20Please%20confirm%20availability%20and%20price.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded font-bold text-sm hover:brightness-110 transition-all"
+                      data-testid="button-search-whatsapp"
+                    >
+                      <FaWhatsapp size={18} /> WhatsApp Enquiry
+                    </a>
+                    <a
+                      href={`tel:+919953105738`}
+                      className="flex items-center gap-2 border-2 border-[#F5A623] text-[#F5A623] px-5 py-3 rounded font-bold text-sm hover:bg-[#F5A623] hover:text-black transition-all"
+                      data-testid="button-search-call"
+                    >
+                      <Phone className="w-4 h-4" /> Call Now
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
