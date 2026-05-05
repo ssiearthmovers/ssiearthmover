@@ -117,11 +117,11 @@ export default function Home() {
   ];
 
   const categories = [
-    { title: "Cutting Edges", desc: "High-strength steel cutting edges for motor graders", img: "/images/category-cutting-edges.png" },
-    { title: "Grader Blades", desc: "Premium grader blades for precision leveling", img: "/images/category-grader-blades.png" },
-    { title: "Hydraulic Components", desc: "Cylinders, seals, pumps and fittings", img: "/images/category-hydraulic.png" },
-    { title: "Engine Parts", desc: "OEM-grade engine components for all models", img: "/images/category-engine.png" },
-    { title: "Transmission Parts", desc: "Gearbox and drivetrain components", img: "/images/category-transmission.png" },
+    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.png" },
+    { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.png" },
+    { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-transmission.png" },
+    { title: "End Bits & Wear Parts", desc: "Side end bits, corner bits and all grader wear parts", img: "/images/category-hydraulic.png" },
+    { title: "Circle & Draw Bar Parts", desc: "Circle segments, draw bar pins, bushings and related components", img: "/images/category-engine.png" },
   ];
 
   const features = [
@@ -135,10 +135,10 @@ export default function Home() {
 
   const featuredProducts = [
     { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.png" },
-    { name: "Hydraulic Cylinder Seal Kit", desc: "Complete seal kit for blade lift and circle cylinders.", img: "/images/category-hydraulic.png" },
-    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth surface finishing.", img: "/images/category-grader-blades.png" },
-    { name: "Engine Filter Kit", desc: "Air, oil and fuel filters combo pack for major grader models.", img: "/images/category-engine.png" },
-    { name: "Transmission Gear Set", desc: "Heavy-duty gearbox components for all-terrain grading.", img: "/images/category-transmission.png" },
+    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.png" },
+    { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-transmission.png" },
+    { name: "End Bits — Corner Wear Parts", desc: "Durable end bits and corner protectors for extended blade life.", img: "/images/category-hydraulic.png" },
+    { name: "Circle Segment & Draw Bar Kit", desc: "Complete circle segment set with draw bar pins and bushings.", img: "/images/category-engine.png" },
   ];
 
   const industries = [
@@ -292,9 +292,9 @@ export default function Home() {
             </h1>
 
             <p className="text-lg text-gray-300 max-w-xl leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-              Trusted supplier of OEM-quality grader blades, cutting edges,
-              hydraulic and engine components for construction and mining
-              companies across India.
+              Trusted supplier of OEM-quality cutting edges, grader blades,
+              scarifier teeth, end bits and circle parts for construction and
+              mining companies across India.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
@@ -591,14 +591,14 @@ export default function Home() {
               Get Quote
             </button>
             <a
-              href="tel:+919876543210"
+              href="tel:+919953105738"
               className="flex items-center gap-2 border-2 border-white/20 hover:border-[#F5A623] hover:text-[#F5A623] px-8 py-4 rounded font-bold uppercase tracking-wide transition-all"
               data-testid="button-call-now"
             >
               <Phone className="w-5 h-5" /> Call Now
             </a>
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/919953105738?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#25D366] text-white px-8 py-4 rounded font-bold uppercase tracking-wide hover:brightness-110 transition-all"
@@ -641,8 +641,8 @@ export default function Home() {
             <FadeIn className="flex flex-col gap-8">
               <div className="flex flex-col gap-5">
                 {[
-                  { icon: Phone, label: "Phone", value: "+91 98765 43210", href: "tel:+919876543210" },
-                  { icon: Mail, label: "Email", value: "sales@shivshaktiint.com", href: "mailto:sales@shivshaktiint.com" },
+                  { icon: Phone, label: "Phone", value: "+91-9953105738 | 011-49324607, 41055650", href: "tel:+919953105738" },
+                  { icon: Mail, label: "Email", value: "ssiearthmovers@gmail.com", href: "mailto:ssiearthmovers@gmail.com" },
                   { icon: MapPin, label: "Address", value: "Industrial Area, Phase 1, New Delhi – 110020, India", href: "#" },
                 ].map((item) => (
                   <div key={item.label} className="flex gap-5 p-6 bg-[#1A1D24] border border-[#2A2E37] rounded hover:border-[#F5A623]/40 transition-colors">
@@ -734,7 +734,7 @@ export default function Home() {
 
       {/* ─── FLOATING WHATSAPP BUTTON ─── */}
       <a
-        href="https://wa.me/919876543210?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
+        href="https://wa.me/919953105738?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
         target="_blank"
         rel="noopener noreferrer"
         data-testid="button-whatsapp-float"
@@ -774,7 +774,7 @@ export default function Home() {
               {[
                 { icon: FaFacebook, href: "#" },
                 { icon: FaLinkedin, href: "#" },
-                { icon: FaWhatsapp, href: "https://wa.me/919876543210" },
+                { icon: FaWhatsapp, href: "https://wa.me/919953105738" },
                 { icon: FaInstagram, href: "#" },
               ].map(({ icon: Icon, href }, i) => (
                 <a
@@ -811,7 +811,7 @@ export default function Home() {
           <div>
             <h4 className="text-sm font-black mb-6 text-white uppercase tracking-widest">Products</h4>
             <ul className="flex flex-col gap-3 text-gray-500 text-sm">
-              {["Cutting Edges", "Grader Blades", "Hydraulic Components", "Engine Parts", "Transmission Parts"].map((p) => (
+              {["Cutting Edges", "Grader Blades", "Scarifier Teeth & Ripper Tips", "End Bits & Wear Parts", "Circle & Draw Bar Parts"].map((p) => (
                 <li key={p}>
                   <button onClick={() => scrollTo("products")} className="hover:text-[#F5A623] transition-colors text-left">
                     {p}
@@ -828,13 +828,16 @@ export default function Home() {
                 <MapPin className="w-4 h-4 text-[#F5A623] shrink-0 mt-0.5" />
                 <span>Industrial Area, Phase 1, New Delhi – 110020, India</span>
               </li>
-              <li className="flex gap-3 items-center">
-                <Phone className="w-4 h-4 text-[#F5A623] shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-[#F5A623] transition-colors">+91 98765 43210</a>
+              <li className="flex gap-3 items-start">
+                <Phone className="w-4 h-4 text-[#F5A623] shrink-0 mt-0.5" />
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+919953105738" className="hover:text-[#F5A623] transition-colors">+91-9953105738</a>
+                  <a href="tel:01149324607" className="hover:text-[#F5A623] transition-colors">011-49324607, 41055650</a>
+                </div>
               </li>
               <li className="flex gap-3 items-center">
                 <Mail className="w-4 h-4 text-[#F5A623] shrink-0" />
-                <a href="mailto:sales@shivshaktiint.com" className="hover:text-[#F5A623] transition-colors">sales@shivshaktiint.com</a>
+                <a href="mailto:ssiearthmovers@gmail.com" className="hover:text-[#F5A623] transition-colors">ssiearthmovers@gmail.com</a>
               </li>
             </ul>
           </div>
