@@ -1,0 +1,56 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "Ov7ki9CwAJv18ZA58kJSP"
+uri = "file://artifacts/shiv-shakti/public/images/category-cutting-edges.png"
+type = "image"
+title = "Motor Grader Cutting Edges"
+
+[[generated]]
+id = "bQNdWoKrR2ox6mZNQ39-p"
+uri = "file://artifacts/shiv-shakti/public/images/category-grader-blades.png"
+type = "image"
+title = "Grader Blades"
+
+[[generated]]
+id = "-zcznaMk3LgcYaTE8ETJj"
+uri = "file://artifacts/shiv-shakti/public/images/category-hydraulic.png"
+type = "image"
+title = "Hydraulic Components"
+
+[[generated]]
+id = "bnDwSd5wrs1HSj5voPR9g"
+uri = "file://artifacts/shiv-shakti/public/images/category-engine.png"
+type = "image"
+title = "Engine Parts"
+
+[[generated]]
+id = "mP2NZ8syyYIjW6mNyIPZW"
+uri = "file://artifacts/shiv-shakti/public/images/category-transmission.png"
+type = "image"
+title = "Transmission Parts"
+
+[[generated]]
+id = "TnIUq9vT6DhEtAWlPxwn5"
+uri = "file://artifacts/shiv-shakti/public/images/about-warehouse.png"
+type = "image"
+title = "Industrial Warehouse"
+
+[[generated]]
+id = "-0GhgKzdSkKlIXIDoDxFS"
+uri = "file://artifacts/shiv-shakti/public/images/industry-road.png"
+type = "image"
+title = "Road Construction"
+
+[[generated]]
+id = "R1-bRCnv5Z8Q9PzegXhtk"
+uri = "file://artifacts/shiv-shakti/public/images/industry-mining.png"
+type = "image"
+title = "Mining Industry"
+
+[[generated]]
+id = "3r00YND438SJ7jusD6SDE"
+uri = "file://artifacts/shiv-shakti/public/images/industry-earthmoving.png"
+type = "image"
+title = "Earthmoving"

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Shiv Shakti International"
+version = "1.0.0"
+id = "artifacts/shiv-shakti"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23406
+
+[services.development]
+run = "pnpm --filter @workspace/shiv-shakti run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/shiv-shakti", "run", "build" ]
+publicDir = "artifacts/shiv-shakti/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23406"
+BASE_PATH = "/"

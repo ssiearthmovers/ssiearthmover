@@ -1,0 +1,115 @@
+Create a modern, premium, dark-themed business website for a company named "Shiv Shakti International" that sells motor grader spare parts.
+
+Design Style:
+- Dark background (black/charcoal) with yellow/gold accents
+- Industrial, heavy machinery theme
+- Clean, professional, high-conversion UI
+- Use large bold headings and smooth spacing
+- Add subtle shadows, gradients, and hover effects
+
+Homepage Sections:
+
+1. HERO SECTION
+- Left side: Big headline:
+  "Premium Motor Grader Spare Parts – 3000+ Parts Ready for Dispatch"
+- Subtext about OEM quality parts for construction and mining
+- Two buttons: "Request Bulk Quote" and "Browse Categories"
+- Bullet points: 3000+ parts, PAN India delivery, bulk orders
+- Right side: Large motor grader machine image
+
+2. PRODUCT CATEGORIES
+Create 5 cards with images:
+- Cutting Edges
+- Grader Blades
+- Hydraulic Components
+- Engine Parts
+- Transmission Parts
+Each card:
+- Image
+- Title
+- Short description
+- Button: "Enquire Now"
+
+3. ABOUT US SECTION
+- Small text about company experience and trust
+- Add warehouse/industrial image
+- Button: "Know More"
+
+4. WHY CHOOSE US
+Add 6 icon-based features:
+- OEM Quality
+- 3000+ Parts in Stock
+- Fast Delivery
+- Competitive Pricing
+- Bulk Orders
+- Expert Support
+
+5. FEATURED PRODUCTS
+Show 4–5 product cards with:
+- Image
+- Name
+- Short description
+- Enquire button
+
+6. INDUSTRIES WE SERVE
+Grid with images:
+- Road Construction
+- Mining
+- Infrastructure
+- Earthmoving
+
+7. STATS / ACHIEVEMENTS
+Display numbers:
+- 3000+ Parts
+- 500+ Clients
+- 10+ Years Experience
+- PAN India Delivery
+
+8. TESTIMONIALS
+- Add 2–3 client reviews
+- Include name and company
+
+9. PROCESS SECTION
+Show steps:
+1. Enquiry
+2. Quote
+3. Confirmation
+4. Dispatch
+
+10. CTA SECTION
+Big banner:
+"Need Motor Grader Spare Parts?"
+Buttons:
+- Get Quote
+- Call Now
+- WhatsApp
+
+11. FAQ SECTION
+Add 4 questions:
+- OEM quality?
+- Delivery time?
+- Bulk discounts?
+- Minimum order?
+
+12. CONTACT SECTION
+- Phone
+- Email
+- Address
+- Contact form
+- Google map embed
+
+13. FOOTER
+- Company info
+- Quick links
+- Product links
+- Social icons
+
+Technical Requirements:
+- Use React + Tailwind CSS
+- Fully responsive (mobile + desktop)
+- Smooth scrolling
+- Clean component-based structure
+- Use placeholder images related to construction machinery
+- Add hover animations and transitions
+
+Make the design look premium and similar to industrial websites like Caterpillar or JCB.
