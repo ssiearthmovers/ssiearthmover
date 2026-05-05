@@ -180,24 +180,44 @@ export default function Home() {
       className="min-h-screen text-[#F2F2F2] font-sans"
       style={{ background: "#16181D" }}
     >
+      {/* ─── ANNOUNCEMENT TICKER ─── */}
+      <div className="fixed top-0 left-0 w-full z-[60] bg-[#F5A623] text-black text-xs font-bold overflow-hidden h-9 flex items-center">
+        <div className="animate-ticker whitespace-nowrap select-none">
+          {[1, 2].map((n) => (
+            <span key={n} className="inline-flex items-center gap-8 px-8">
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> 3000+ Parts Ready for Same-Day Dispatch</span>
+              <span className="opacity-40">|</span>
+              <span className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 shrink-0" /> Call: +91-9953105738 &nbsp;|&nbsp; 011-49324607</span>
+              <span className="opacity-40">|</span>
+              <span className="flex items-center gap-2"><Truck className="w-3.5 h-3.5 shrink-0" /> PAN India Delivery — All 28 States</span>
+              <span className="opacity-40">|</span>
+              <span className="flex items-center gap-2"><Package className="w-3.5 h-3.5 shrink-0" /> Bulk Orders Welcome — Special Pricing Available</span>
+              <span className="opacity-40">|</span>
+              <span className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 shrink-0" /> OEM Quality Guaranteed on Every Part</span>
+              <span className="opacity-40">|</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* ─── NAVBAR ─── */}
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-9 left-0 w-full z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#16181D]/95 backdrop-blur-md border-b border-[#2A2E37] py-4"
-            : "bg-transparent py-6"
+            ? "bg-[#0F1014]/97 backdrop-blur-md border-b border-[#2A2E37] py-3"
+            : "bg-[#0F1014]/60 backdrop-blur-sm py-4"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-10 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 flex justify-between items-center gap-6">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="text-xl md:text-2xl font-black tracking-tight text-white uppercase"
+            className="text-lg md:text-xl font-black tracking-tight text-white uppercase shrink-0"
             data-testid="link-logo"
           >
             Shiv Shakti <span className="text-[#F5A623]">International</span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-semibold tracking-wide">
             {navLinks.map((l) => (
               <button
                 key={l.id}
@@ -208,14 +228,25 @@ export default function Home() {
                 {l.label}
               </button>
             ))}
+          </nav>
+
+          <div className="hidden md:flex items-center gap-3">
+            <a
+              href="tel:+919953105738"
+              className="flex items-center gap-2 text-sm font-bold text-gray-200 hover:text-[#F5A623] transition-colors border border-white/10 hover:border-[#F5A623]/40 px-4 py-2 rounded"
+              data-testid="link-phone-nav"
+            >
+              <Phone className="w-4 h-4 text-[#F5A623]" />
+              +91-9953105738
+            </a>
             <button
               onClick={() => scrollTo("contact")}
-              className="bg-[#F5A623] text-black px-6 py-2.5 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all"
+              className="bg-[#F5A623] text-black px-5 py-2.5 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all text-sm"
               data-testid="button-get-quote-nav"
             >
               Get a Quote
             </button>
-          </nav>
+          </div>
 
           <button
             className="md:hidden text-white"
@@ -227,7 +258,7 @@ export default function Home() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-[#0F1014] border-b border-[#2A2E37] flex flex-col p-6 gap-5">
+          <div className="md:hidden absolute top-full left-0 w-full bg-[#0F1014] border-b border-[#2A2E37] flex flex-col p-6 gap-4">
             {navLinks.map((l) => (
               <button
                 key={l.id}
@@ -237,9 +268,15 @@ export default function Home() {
                 {l.label}
               </button>
             ))}
+            <a
+              href="tel:+919953105738"
+              className="flex items-center gap-2 text-[#F5A623] font-bold text-lg mt-2"
+            >
+              <Phone className="w-5 h-5" /> +91-9953105738
+            </a>
             <button
               onClick={() => scrollTo("contact")}
-              className="mt-2 bg-[#F5A623] text-black px-6 py-3 rounded font-black uppercase text-center"
+              className="mt-1 bg-[#F5A623] text-black px-6 py-3 rounded font-black uppercase text-center"
             >
               Get a Quote
             </button>
@@ -248,7 +285,7 @@ export default function Home() {
       </header>
 
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center pt-44 pb-16 overflow-hidden">
         {/* Full-bleed background image with sand/road vibe */}
         <div className="absolute inset-0 z-0">
           <img
@@ -329,6 +366,34 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── COMPATIBLE BRANDS ─── */}
+      <section className="py-10 bg-[#0F1014] border-y border-[#2A2E37]">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <p className="text-gray-500 text-xs font-bold uppercase tracking-widest shrink-0 text-center md:text-left">
+              Compatible With
+            </p>
+            <div className="flex-1 overflow-hidden">
+              <div className="flex items-center gap-12 animate-ticker">
+                {[
+                  "CAT", "VOLVO", "KOMATSU", "JCB", "CASE",
+                  "L&T", "BHARAT BENZ", "CHAMPION", "MOTOR INDIA",
+                  "CATERPILLAR", "VOLVO", "KOMATSU", "JCB", "CASE",
+                  "L&T", "BHARAT BENZ", "CHAMPION", "MOTOR INDIA",
+                ].map((brand, i) => (
+                  <span
+                    key={i}
+                    className="text-gray-400 font-black text-sm md:text-base tracking-widest uppercase whitespace-nowrap hover:text-[#F5A623] transition-colors cursor-default"
+                  >
+                    {brand}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── PRODUCT CATEGORIES ─── */}
       <section id="products" className="py-24 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -382,11 +447,23 @@ export default function Home() {
               About Shiv Shakti International
             </h2>
             <p className="text-gray-300 text-lg leading-relaxed">
-              With over <strong className="text-white">10+ years</strong> in the heavy machinery sector, Shiv Shakti International has become India's most trusted supplier of motor grader spare parts — serving construction, mining, and infrastructure companies nationwide.
+              With over <strong className="text-white">10+ years</strong> of experience, <strong className="text-white">SSI Earthmovers (Shiv Shakti International)</strong> has become India's most trusted supplier of motor grader spare parts — headquartered near <strong className="text-white">Mori Gate, New Delhi</strong>, serving construction, mining, and infrastructure companies nationwide.
             </p>
             <p className="text-gray-400 leading-relaxed">
-              We understand that downtime costs money. That is why we maintain a massive inventory of 3000+ OEM and premium replacement parts. Our expert team ensures you get the exact part you need, dispatched fast. Trusted by <strong className="text-white">500+ clients</strong> across India.
+              Machine downtime costs money. We maintain a warehouse with 3000+ OEM and premium-grade replacement parts, ready for same-day dispatch. From cutting edges and grader blades to scarifier teeth and circle parts — if your grader needs it, we have it. Trusted by <strong className="text-white">500+ clients</strong> across 28 states.
             </p>
+            <div className="flex flex-wrap gap-4 mt-2">
+              {[
+                { label: "Est. 2014", sub: "10+ Years in Business" },
+                { label: "500+ Clients", sub: "Across India" },
+                { label: "3000+ Parts", sub: "Ready to Ship" },
+              ].map((b) => (
+                <div key={b.label} className="border border-[#2A2E37] rounded px-5 py-3 bg-[#111317]">
+                  <div className="text-[#F5A623] font-black text-lg">{b.label}</div>
+                  <div className="text-gray-500 text-xs">{b.sub}</div>
+                </div>
+              ))}
+            </div>
             <button
               onClick={() => scrollTo("contact")}
               className="self-start mt-2 border-2 border-[#F5A623] text-[#F5A623] px-8 py-3 rounded font-bold uppercase tracking-wide hover:bg-[#F5A623] hover:text-black transition-colors"
@@ -643,7 +720,7 @@ export default function Home() {
                 {[
                   { icon: Phone, label: "Phone", value: "+91-9953105738 | 011-49324607, 41055650", href: "tel:+919953105738" },
                   { icon: Mail, label: "Email", value: "ssiearthmovers@gmail.com", href: "mailto:ssiearthmovers@gmail.com" },
-                  { icon: MapPin, label: "Address", value: "Industrial Area, Phase 1, New Delhi – 110020, India", href: "#" },
+                  { icon: MapPin, label: "Address", value: "Near Mori Gate, New Delhi – 110006, India", href: "https://maps.google.com/?q=Mori+Gate+Delhi" },
                 ].map((item) => (
                   <div key={item.label} className="flex gap-5 p-6 bg-[#1A1D24] border border-[#2A2E37] rounded hover:border-[#F5A623]/40 transition-colors">
                     <div className="w-12 h-12 rounded bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center shrink-0">
@@ -661,7 +738,7 @@ export default function Home() {
               <div className="rounded overflow-hidden border border-[#2A2E37] h-60">
                 <iframe
                   title="Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224345.83923196872!2d77.06889754725783!3d28.52758200617607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x37205b715389640!2sNew%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1691234567890"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.785177739855!2d77.22589661508067!3d28.660571982403637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd53e03e15d9%3A0x3a5b6e1d6b32ce04!2sMori%20Gate%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1691234567890"
                   width="100%"
                   height="100%"
                   style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
@@ -826,7 +903,7 @@ export default function Home() {
             <ul className="flex flex-col gap-4 text-gray-500 text-sm">
               <li className="flex gap-3 items-start">
                 <MapPin className="w-4 h-4 text-[#F5A623] shrink-0 mt-0.5" />
-                <span>Industrial Area, Phase 1, New Delhi – 110020, India</span>
+                <span>Near Mori Gate, New Delhi – 110006, India</span>
               </li>
               <li className="flex gap-3 items-start">
                 <Phone className="w-4 h-4 text-[#F5A623] shrink-0 mt-0.5" />
