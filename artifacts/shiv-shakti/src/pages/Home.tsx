@@ -24,6 +24,7 @@ import {
   SlidersHorizontal,
   Wrench,
   ChevronRight,
+  Download,
 } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaWhatsapp, FaInstagram } from "react-icons/fa";
 
@@ -270,6 +271,14 @@ export default function Home() {
               <Phone className="w-4 h-4 text-[#F5A623]" />
               +91-9953105738
             </a>
+            <a
+              href="/ssi-catalogue.pdf"
+              download="SSI-Earthmovers-Catalogue.pdf"
+              className="hidden lg:flex items-center gap-1.5 border border-[#F5A623]/50 text-[#F5A623] px-4 py-2.5 rounded font-bold uppercase tracking-wide hover:bg-[#F5A623] hover:text-black transition-all text-sm"
+              data-testid="button-download-catalogue-nav"
+            >
+              <Download className="w-4 h-4" /> Catalogue
+            </a>
             <button
               onClick={() => scrollTo("contact")}
               className="bg-[#F5A623] text-black px-5 py-2.5 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all text-sm"
@@ -380,6 +389,14 @@ export default function Home() {
               >
                 Browse Categories
               </button>
+              <a
+                href="/ssi-catalogue.pdf"
+                download="SSI-Earthmovers-Catalogue.pdf"
+                className="flex items-center gap-2 border-2 border-[#F5A623]/60 text-[#F5A623] hover:bg-[#F5A623] hover:text-black px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all"
+                data-testid="button-download-catalogue-hero"
+              >
+                <Download className="w-5 h-5" /> Download Catalogue
+              </a>
             </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-4">
