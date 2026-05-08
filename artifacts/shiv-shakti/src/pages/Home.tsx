@@ -113,7 +113,7 @@ const partTypesList = [
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", phone: "", machine: "", part: "", message: "" });
   const [formSent, setFormSent] = useState(false);
 
   /* Find-Your-Part state */
@@ -137,6 +137,8 @@ export default function Home() {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const msg = `Hello SSI Earthmovers,%0A%0AName: ${encodeURIComponent(formData.name)}%0APhone: ${encodeURIComponent(formData.phone)}%0AMachine: ${encodeURIComponent(formData.machine || "Not specified")}%0APart Required: ${encodeURIComponent(formData.part || "Not specified")}%0AMessage: ${encodeURIComponent(formData.message)}`;
+    window.open(`https://wa.me/919953105738?text=${msg}`, "_blank");
     setFormSent(true);
   };
 
@@ -202,9 +204,13 @@ export default function Home() {
 
   const faqs = [
     { q: "Are all parts OEM quality?", a: "Yes. We supply a combination of genuine OEM parts and high-quality compatible replacements that meet or exceed original specifications. Every part is quality-checked before dispatch." },
+    { q: "Which motor grader brands do you stock parts for?", a: "We stock parts for CAT (120K/H, 140H), KOMATSU (GD511), CASE (845B), XCMG (165), Leeboy (785/985), SANY (PQ190), SDLG (9138/9190), Liugong (CG414), BEML (605), and Mitsubishi (330 MG). Can't find your model? Call us — we likely have it." },
     { q: "What is the typical delivery time?", a: "For in-stock items, we dispatch the same day or next business day. Delivery time across India is typically 2–5 business days depending on your location." },
+    { q: "Do you supply cutting edges and grader blades for all sizes?", a: "Yes. We carry cutting edges and grader blades in standard sizes (11-hole, 14ft, 16ft) as well as custom lengths for all major motor grader models. Hardox 400 and 500 grade steel available." },
     { q: "Do you offer bulk discounts?", a: "Absolutely. We have a dedicated bulk pricing structure for fleet operators and contractors. Contact our sales team for a customized quote on volume orders." },
+    { q: "Can I get a part by sharing a part number?", a: "Yes — that's the fastest way. Share the OEM part number via WhatsApp or call and we'll confirm availability and pricing within 2 hours. You can also use our Part Number Search tool on this website." },
     { q: "Is there a minimum order quantity?", a: "There is no minimum order quantity for standard catalogue items. For custom or specialized parts, a minimum order may apply — our team will inform you at the time of enquiry." },
+    { q: "Do you have a physical store I can visit?", a: "Yes. Our branch office is at Nicholson Road, Near Mori Gate, New Delhi – 110006. We also have a head office in Rohini and a workshop in Sonipat. Visit us Monday to Saturday, 9:30 AM – 6:30 PM." },
   ];
 
   return (
@@ -313,6 +319,13 @@ export default function Home() {
               className="flex items-center gap-2 text-[#F5A623] font-bold text-lg mt-2"
             >
               <Phone className="w-5 h-5" /> +91-9953105738
+            </a>
+            <a
+              href="/ssi-catalogue.pdf"
+              download="SSI-Earthmovers-Catalogue.pdf"
+              className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-6 py-3 rounded font-bold uppercase"
+            >
+              <Download className="w-5 h-5" /> Download Catalogue
             </a>
             <button
               onClick={() => scrollTo("contact")}
@@ -983,27 +996,56 @@ export default function Home() {
 
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <FadeIn className="flex flex-col gap-8">
-              <div className="flex flex-col gap-5">
+            <FadeIn className="flex flex-col gap-6">
+              {/* Contact details */}
+              <div className="flex flex-col gap-4">
                 {[
-                  { icon: Phone, label: "Phone", value: "+91-9953105738 | 011-49324607, 41055650", href: "tel:+919953105738" },
+                  { icon: Phone, label: "Phone / WhatsApp", value: "+91-9953105738 | 011-49324607, 41055650", href: "tel:+919953105738" },
                   { icon: Mail, label: "Email", value: "ssiearthmovers@gmail.com", href: "mailto:ssiearthmovers@gmail.com" },
-                  { icon: MapPin, label: "Address", value: "Near Mori Gate, New Delhi – 110006, India", href: "https://maps.google.com/?q=Mori+Gate+Delhi" },
                 ].map((item) => (
-                  <div key={item.label} className="flex gap-5 p-6 bg-[#1A1D24] border border-[#2A2E37] rounded hover:border-[#F5A623]/40 transition-colors">
-                    <div className="w-12 h-12 rounded bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center shrink-0">
-                      <item.icon className="w-6 h-6 text-[#F5A623]" />
+                  <div key={item.label} className="flex gap-5 p-5 bg-[#1A1D24] border border-[#2A2E37] rounded hover:border-[#F5A623]/40 transition-colors">
+                    <div className="w-11 h-11 rounded bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center shrink-0">
+                      <item.icon className="w-5 h-5 text-[#F5A623]" />
                     </div>
                     <div>
-                      <div className="text-sm text-gray-500 mb-1 uppercase tracking-wide font-semibold">{item.label}</div>
-                      <a href={item.href} className="text-white font-semibold hover:text-[#F5A623] transition-colors">{item.value}</a>
+                      <div className="text-xs text-gray-500 mb-1 uppercase tracking-wide font-semibold">{item.label}</div>
+                      <a href={item.href} className="text-white font-semibold hover:text-[#F5A623] transition-colors text-sm">{item.value}</a>
                     </div>
                   </div>
                 ))}
               </div>
 
+              {/* Branch offices */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { label: "Branch Office", addr: "Nicholson Road, Near Mori Gate, New Delhi – 110006" },
+                  { label: "Head Office", addr: "A-9, Ground Floor, Sec-19, Rohini, Delhi – 110085" },
+                  { label: "Workshop", addr: "Plot 138, Phase-1, HSIDC, Rai, Sonipat – 131001" },
+                ].map((o) => (
+                  <div key={o.label} className="p-4 bg-[#1A1D24] border border-[#2A2E37] rounded hover:border-[#F5A623]/40 transition-colors">
+                    <div className="flex items-center gap-2 mb-2">
+                      <MapPin className="w-3.5 h-3.5 text-[#F5A623]" />
+                      <span className="text-[#F5A623] text-xs font-black uppercase tracking-wide">{o.label}</span>
+                    </div>
+                    <p className="text-gray-400 text-xs leading-relaxed">{o.addr}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Business hours */}
+              <div className="p-5 bg-[#1A1D24] border border-[#2A2E37] rounded flex items-center gap-5">
+                <div className="w-11 h-11 rounded bg-[#F5A623]/10 border border-[#F5A623]/30 flex items-center justify-center shrink-0">
+                  <Clock className="w-5 h-5 text-[#F5A623]" />
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 mb-1 uppercase tracking-wide font-semibold">Business Hours</div>
+                  <div className="text-white font-semibold text-sm">Mon – Sat: 9:30 AM – 6:30 PM</div>
+                  <div className="text-gray-500 text-xs mt-0.5">Sunday: Closed &nbsp;|&nbsp; Emergency: WhatsApp anytime</div>
+                </div>
+              </div>
+
               {/* Map embed */}
-              <div className="rounded overflow-hidden border border-[#2A2E37] h-60">
+              <div className="rounded overflow-hidden border border-[#2A2E37] h-48">
                 <iframe
                   title="Location Map"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.785177739855!2d77.22589661508067!3d28.660571982403637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd53e03e15d9%3A0x3a5b6e1d6b32ce04!2sMori%20Gate%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1691234567890"
@@ -1033,30 +1075,85 @@ export default function Home() {
                   onSubmit={handleFormSubmit}
                   className="bg-[#1A1D24] border border-[#2A2E37] rounded p-8 flex flex-col gap-5"
                 >
-                  {[
-                    { name: "name", label: "Full Name", type: "text", placeholder: "Your full name" },
-                    { name: "email", label: "Email Address", type: "email", placeholder: "you@company.com" },
-                    { name: "phone", label: "Phone Number", type: "tel", placeholder: "+91 XXXXX XXXXX" },
-                  ].map((field) => (
-                    <div key={field.name}>
-                      <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">{field.label}</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Full Name *</label>
                       <input
-                        type={field.type}
-                        placeholder={field.placeholder}
+                        type="text"
+                        placeholder="Your name"
                         required
-                        value={formData[field.name as keyof typeof formData]}
-                        onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-4 py-3 text-white placeholder-gray-600 transition-colors"
-                        data-testid={`input-${field.name}`}
+                        data-testid="input-name"
                       />
                     </div>
-                  ))}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Phone / WhatsApp *</label>
+                      <input
+                        type="tel"
+                        placeholder="+91 XXXXX XXXXX"
+                        required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-4 py-3 text-white placeholder-gray-600 transition-colors"
+                        data-testid="input-phone"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Machine Brand & Model</label>
+                      <select
+                        value={formData.machine}
+                        onChange={(e) => setFormData({ ...formData, machine: e.target.value })}
+                        className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-4 py-3 text-white transition-colors"
+                        data-testid="input-machine"
+                      >
+                        <option value="">Select machine...</option>
+                        <option>CAT 120K</option>
+                        <option>CAT 120H</option>
+                        <option>CAT 140H</option>
+                        <option>KOMATSU GD511</option>
+                        <option>MITSUBISHI 330 MG</option>
+                        <option>CASE 845B</option>
+                        <option>XCMG 165</option>
+                        <option>LEEBOY 785</option>
+                        <option>LEEBOY 985</option>
+                        <option>SANY PQ190</option>
+                        <option>SDLG 9138</option>
+                        <option>SDLG 9190</option>
+                        <option>LIUGONG CG414</option>
+                        <option>BEML 605</option>
+                        <option>Other (mention in message)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Part Required</label>
+                      <select
+                        value={formData.part}
+                        onChange={(e) => setFormData({ ...formData, part: e.target.value })}
+                        className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-4 py-3 text-white transition-colors"
+                        data-testid="input-part"
+                      >
+                        <option value="">Select part type...</option>
+                        <option>Cutting Edges</option>
+                        <option>Grader Blades</option>
+                        <option>Scarifier Teeth</option>
+                        <option>Ripper Tips</option>
+                        <option>End Bits / Corner Bits</option>
+                        <option>Circle Segments</option>
+                        <option>Draw Bar Parts</option>
+                        <option>Multiple Parts</option>
+                        <option>Other (mention in message)</option>
+                      </select>
+                    </div>
+                  </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Message / Requirements</label>
+                    <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wide">Message / Part Number / Quantity</label>
                     <textarea
-                      rows={4}
-                      placeholder="Describe your parts requirement..."
-                      required
+                      rows={3}
+                      placeholder="Share part number, quantity, or any details..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded px-4 py-3 text-white placeholder-gray-600 transition-colors resize-none"
@@ -1068,8 +1165,9 @@ export default function Home() {
                     className="w-full bg-[#F5A623] text-black py-4 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all flex items-center justify-center gap-2"
                     data-testid="button-submit-form"
                   >
-                    <Send className="w-5 h-5" /> Send Enquiry
+                    <FaWhatsapp size={20} /> Send via WhatsApp
                   </button>
+                  <p className="text-center text-gray-600 text-xs">Clicking above opens WhatsApp with your enquiry pre-filled. We reply within 2 hours.</p>
                 </form>
               )}
             </FadeIn>
@@ -1141,6 +1239,7 @@ export default function Home() {
               {[
                 { label: "About Us", id: "about" },
                 { label: "Products", id: "products" },
+                { label: "Find My Part", id: "finder" },
                 { label: "Industries", id: "industries" },
                 { label: "Contact", id: "contact" },
               ].map((l) => (
@@ -1150,6 +1249,15 @@ export default function Home() {
                   </button>
                 </li>
               ))}
+              <li>
+                <a
+                  href="/ssi-catalogue.pdf"
+                  download="SSI-Earthmovers-Catalogue.pdf"
+                  className="flex items-center gap-1.5 hover:text-[#F5A623] transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" /> Download Catalogue
+                </a>
+              </li>
             </ul>
           </div>
 
