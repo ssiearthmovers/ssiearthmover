@@ -237,7 +237,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
       {/* ─── NAVBAR ─── */}
       <header
         className={`fixed top-9 left-0 w-full z-50 transition-all duration-300 ${
@@ -336,7 +335,6 @@ export default function Home() {
           </div>
         )}
       </header>
-
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen flex items-center pt-44 pb-16 overflow-hidden">
         {/* Full-bleed background image with sand/road vibe */}
@@ -426,7 +424,6 @@ export default function Home() {
           <div className="hidden lg:block" />
         </div>
       </section>
-
       {/* ─── COMPATIBLE BRANDS ─── */}
       <section className="py-10 bg-[#0F1014] border-y border-[#2A2E37]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -454,7 +451,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── FIND YOUR PART ─── */}
       <section id="finder" className="py-20 bg-[#16181D]">
         <div className="max-w-5xl mx-auto px-6 md:px-10">
@@ -601,7 +597,7 @@ export default function Home() {
             </div>
           ) : (
             /* Part Number Search Tab */
-            <div className="flex flex-col gap-6">
+            (<div className="flex flex-col gap-6">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -621,7 +617,6 @@ export default function Home() {
                   Search
                 </button>
               </div>
-
               {/* Quick search suggestions */}
               <div className="flex flex-wrap gap-2">
                 <span className="text-gray-500 text-xs font-semibold uppercase self-center">Popular searches:</span>
@@ -635,7 +630,6 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-
               {/* Search Result CTA */}
               {finderResult && partSearch.trim() && (
                 <motion.div
@@ -670,11 +664,10 @@ export default function Home() {
                   </div>
                 </motion.div>
               )}
-            </div>
+            </div>)
           )}
         </div>
       </section>
-
       {/* ─── PRODUCT CATEGORIES ─── */}
       <section id="products" className="py-24 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -718,7 +711,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── ABOUT US ─── */}
       <section id="about" className="py-24 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-16 items-center">
@@ -765,7 +757,6 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
-
       {/* ─── WHY CHOOSE US ─── */}
       <section className="py-24 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -786,7 +777,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── FEATURED PRODUCTS ─── */}
       <section className="py-24 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -828,7 +818,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── INDUSTRIES WE SERVE ─── */}
       <section id="industries" className="py-24 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -856,7 +845,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── STATS ─── */}
       <section className="py-20 bg-gradient-to-r from-[#F5A623] via-[#e8980f] to-[#F5A623]">
         <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center text-black">
@@ -872,7 +860,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
       {/* ─── TESTIMONIALS ─── */}
       <section className="py-24 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -896,7 +883,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── PROCESS ─── */}
       <section className="py-24 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -925,7 +911,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── CTA BANNER ─── */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#1A1D24] via-[#16181D] to-[#1A1D24]" />
@@ -967,7 +952,6 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
-
       {/* ─── FAQ ─── */}
       <section className="py-24 bg-[#111317]">
         <div className="max-w-4xl mx-auto px-6 md:px-10">
@@ -984,7 +968,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── CONTACT ─── */}
       <section id="contact" className="py-24 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
@@ -1174,7 +1157,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* ─── FLOATING WHATSAPP BUTTON ─── */}
       <a
         href="https://wa.me/919953105738?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
@@ -1202,7 +1184,6 @@ export default function Home() {
           </div>
         </motion.div>
       </a>
-
       {/* ─── FOOTER ─── */}
       <footer className="bg-[#0A0B0E] pt-16 pb-8 border-t border-[#2A2E37]">
         <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -1210,9 +1191,7 @@ export default function Home() {
             <div className="text-xl font-black text-white uppercase mb-5">
               Shiv Shakti <span className="text-[#F5A623]">International</span>
             </div>
-            <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-              India's premier supplier of premium motor grader spare parts. Keeping your machinery moving since 2014.
-            </p>
+            <p className="text-gray-500 mb-6 text-sm leading-relaxed">India's premier supplier of premium motor grader spare parts. Keeping your machinery moving since 30 years.</p>
             <div className="flex gap-3">
               {[
                 { icon: FaFacebook, href: "#" },
