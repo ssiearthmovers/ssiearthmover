@@ -160,7 +160,7 @@ export default function Home() {
 
   const features = [
     { icon: ShieldCheck, title: "OEM Quality", desc: "Parts that meet or exceed original equipment specifications." },
-    { icon: Package, title: "3000+ Parts in Stock", desc: "Massive ready-to-ship inventory cuts your downtime." },
+    { icon: Package, title: "50,000+ Parts in Stock", desc: "Massive ready-to-ship inventory cuts your downtime." },
     { icon: Clock, title: "Fast Delivery", desc: "Rapid dispatch via a reliable PAN India logistics network." },
     { icon: TrendingUp, title: "Competitive Pricing", desc: "Direct-to-you pricing that respects your bottom line." },
     { icon: CheckCircle2, title: "Bulk Orders Welcome", desc: "Dedicated pricing and handling for large fleet operators." },
@@ -183,9 +183,9 @@ export default function Home() {
   ];
 
   const stats = [
-    { value: 3000, suffix: "+", label: "Parts in Stock" },
+    { value: 50000, suffix: "+", label: "Parts in Stock" },
     { value: 500, suffix: "+", label: "Clients Served" },
-    { value: 10, suffix: "+", label: "Years Experience" },
+    { value: 30, suffix: "+", label: "Years Experience" },
     { value: 28, suffix: " States", label: "PAN India Delivery" },
   ];
 
@@ -223,7 +223,7 @@ export default function Home() {
         <div className="animate-ticker whitespace-nowrap select-none">
           {[1, 2].map((n) => (
             <span key={n} className="inline-flex items-center gap-8 px-8">
-              <span className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> 3000+ Parts Ready for Same-Day Dispatch</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 shrink-0" /> 50,000+ Parts Ready for Same-Day Dispatch</span>
               <span className="opacity-40">|</span>
               <span className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 shrink-0" /> Call: +91-9953105738 &nbsp;|&nbsp; 011-49324607</span>
               <span className="opacity-40">|</span>
@@ -377,7 +377,7 @@ export default function Home() {
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
               Premium Motor Grader{" "}
-              <span className="text-[#F5A623]">Spare Parts</span> – 3000+
+              <span className="text-[#F5A623]">Spare Parts</span> – 50,000+
               Parts Ready for Dispatch
             </h1>
 
@@ -413,7 +413,7 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-3 mt-4">
-              {["3000+ Parts in Stock", "Fast PAN India Delivery", "Bulk Orders Available"].map((item) => (
+              {["50,000+ Parts in Stock", "Fast PAN India Delivery", "Bulk Orders Available"].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-gray-200 font-medium">
                   <CheckCircle2 className="w-5 h-5 text-[#F5A623] shrink-0" />
                   <span className="text-sm drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">{item}</span>
@@ -728,16 +728,16 @@ export default function Home() {
               About Shiv Shakti International
             </h2>
             <p className="text-gray-300 text-lg leading-relaxed">
-              With over <strong className="text-white">10+ years</strong> of experience, <strong className="text-white">SSI Earthmovers (Shiv Shakti International)</strong> has become India's most trusted supplier of motor grader spare parts — headquartered near <strong className="text-white">Mori Gate, New Delhi</strong>, serving construction, mining, and infrastructure companies nationwide.
+              With over <strong className="text-white">30+ years</strong> of experience, <strong className="text-white">SSI Earthmovers (Shiv Shakti International)</strong> has become India's most trusted supplier of motor grader spare parts — headquartered near <strong className="text-white">Mori Gate, New Delhi</strong>, serving construction, mining, and infrastructure companies nationwide.
             </p>
             <p className="text-gray-400 leading-relaxed">
-              Machine downtime costs money. We maintain a warehouse with 3000+ OEM and premium-grade replacement parts, ready for same-day dispatch. From cutting edges and grader blades to scarifier teeth and circle parts — if your grader needs it, we have it. Trusted by <strong className="text-white">500+ clients</strong> across 28 states.
+              Machine downtime costs money. We maintain a warehouse with 50,000+ OEM and premium-grade replacement parts, ready for same-day dispatch. From cutting edges and grader blades to scarifier teeth and circle parts — if your grader needs it, we have it. Trusted by <strong className="text-white">500+ clients</strong> across 28 states.
             </p>
             <div className="flex flex-wrap gap-4 mt-2">
               {[
-                { label: "Est. 2014", sub: "10+ Years in Business" },
+                { label: "30+ Years", sub: "In Business" },
                 { label: "500+ Clients", sub: "Across India" },
-                { label: "3000+ Parts", sub: "Ready to Ship" },
+                { label: "50,000+ Parts", sub: "Ready to Ship" },
               ].map((b) => (
                 <div key={b.label} className="border border-[#2A2E37] rounded px-5 py-3 bg-[#111317]">
                   <div className="text-[#F5A623] font-black text-lg">{b.label}</div>
