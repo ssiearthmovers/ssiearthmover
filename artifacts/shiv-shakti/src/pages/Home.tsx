@@ -93,14 +93,16 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 /* ─── Brand / Model data ─── */
 const brandsData: Record<string, { models: string[]; color: string }> = {
-  CAT:         { models: ["12H","120H","120K","140H","140K","140M","143H","160H","160K","160M","163H"], color: "#F5A623" },
-  Komatsu:     { models: ["GD535","GD555","GD655","GD670","GD675","GD825"], color: "#e8c13a" },
-  Volvo:       { models: ["G710B","G720B","G730B","G740B","G780B","G960B"], color: "#3a7be8" },
-  JCB:         { models: ["430","436","436B","444","456"], color: "#F5A623" },
-  CASE:        { models: ["845B","865","865B","885","895B"], color: "#e84a3a" },
-  Champion:    { models: ["710A","720A","740A","780A"], color: "#a0a0a0" },
-  "L&T":       { models: ["LT120","LT135","LT150"], color: "#3ae8a0" },
-  "Bharat Benz": { models: ["General Series","Heavy Series"], color: "#8a3ae8" },
+  CAT:        { models: ["120K", "120H", "140H"], color: "#F5A623" },
+  MITSUBISHI: { models: ["330 MG"], color: "#e84a3a" },
+  KOMATSU:    { models: ["GD511"], color: "#e8c13a" },
+  CASE:       { models: ["845B"], color: "#3a7be8" },
+  XCMG:       { models: ["165"], color: "#a0a0a0" },
+  LEEBOY:     { models: ["785", "985"], color: "#3ae8a0" },
+  SANY:       { models: ["PQ190"], color: "#8a3ae8" },
+  SDLG:       { models: ["9138", "9190"], color: "#e87a3a" },
+  LIUGONG:    { models: ["CG414"], color: "#3ab8e8" },
+  BEML:       { models: ["605"], color: "#e83a8a" },
 };
 const partTypesList = [
   "Cutting Edges","Grader Blades","Scarifier Teeth","Ripper Tips",
@@ -405,10 +407,10 @@ export default function Home() {
             <div className="flex-1 overflow-hidden">
               <div className="flex items-center gap-12 animate-ticker">
                 {[
-                  "CAT", "VOLVO", "KOMATSU", "JCB", "CASE",
-                  "L&T", "BHARAT BENZ", "CHAMPION", "MOTOR INDIA",
-                  "CATERPILLAR", "VOLVO", "KOMATSU", "JCB", "CASE",
-                  "L&T", "BHARAT BENZ", "CHAMPION", "MOTOR INDIA",
+                  "CAT", "MITSUBISHI", "KOMATSU", "CASE", "XCMG",
+                  "LEEBOY", "SANY", "SDLG", "LIUGONG", "BEML",
+                  "CAT", "MITSUBISHI", "KOMATSU", "CASE", "XCMG",
+                  "LEEBOY", "SANY", "SDLG", "LIUGONG", "BEML",
                 ].map((brand, i) => (
                   <span
                     key={i}
