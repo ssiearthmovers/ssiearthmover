@@ -55,7 +55,7 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function PartRow({ part, index }: { part: BrandPart; index: number }) {
+function PartCard({ part }: { part: BrandPart }) {
   const img = part.img ?? PART_CATEGORY_IMG[part.category];
   const waMsg = encodeURIComponent(
     `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
@@ -80,36 +80,35 @@ function PartRow({ part, index }: { part: BrandPart; index: number }) {
   };
 
   return (
-    <div className={`flex items-center gap-4 px-4 py-3 hover:bg-[#F5A623]/5 transition-colors group border-b border-[#2A2E37] ${index % 2 === 0 ? "bg-[#1A1D24]" : "bg-[#16181D]"}`}>
-      {/* Thumbnail */}
-      <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-[#0D0F13] rounded-lg border border-[#2A2E37] flex items-center justify-center overflow-hidden">
+    <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl overflow-hidden hover:border-[#F5A623]/60 hover:shadow-[0_8px_32px_rgba(245,166,35,0.12)] transition-all group flex flex-col">
+      {/* Image — light bg so gold/steel parts pop */}
+      <div className="bg-[#F4F4F2] flex items-center justify-center overflow-hidden" style={{ height: "200px" }}>
         <img
           src={img}
           alt={part.name}
-          className="w-full h-full object-contain p-1.5 group-hover:scale-110 transition-transform duration-300"
+          className="w-full h-full object-contain p-4 group-hover:scale-108 transition-transform duration-500"
+          style={{ transform: "scale(1)" }}
+          onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+          onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
         />
       </div>
-
-      {/* Part info */}
-      <div className="flex-1 min-w-0">
-        <p className="font-bold text-white text-sm leading-snug truncate">{part.name}</p>
-        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-          <span className="font-mono text-xs text-[#F5A623] bg-[#F5A623]/10 px-2 py-0.5 rounded border border-[#F5A623]/20 whitespace-nowrap">
+      {/* Info */}
+      <div className="p-4 flex flex-col flex-grow gap-3 border-t border-[#2A2E37]">
+        <h3 className="font-bold text-white text-sm leading-snug">{part.name}</h3>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="font-mono text-xs font-bold text-[#F5A623] bg-[#F5A623]/10 px-2.5 py-1 rounded border border-[#F5A623]/30">
             {part.partNo}
           </span>
           <CopyButton text={part.partNo} />
         </div>
-        <p className="text-gray-600 text-xs mt-1 truncate">{part.model}</p>
+        <p className="text-gray-500 text-xs">{part.model}</p>
+        <button
+          onClick={handleEnquire}
+          className="mt-auto w-full flex items-center justify-center gap-2 bg-[#25D366] text-white text-xs font-bold py-2.5 rounded-lg hover:brightness-110 transition-all"
+        >
+          <FaWhatsapp className="w-4 h-4" /> Enquire on WhatsApp
+        </button>
       </div>
-
-      {/* Action */}
-      <button
-        onClick={handleEnquire}
-        className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white text-xs font-bold px-3 py-2 rounded-lg hover:brightness-110 transition-all whitespace-nowrap"
-      >
-        <FaWhatsapp className="w-3.5 h-3.5" />
-        <span className="hidden sm:inline">Enquire</span>
-      </button>
     </div>
   );
 }
@@ -349,21 +348,13 @@ export default function BrandPage() {
               )}
             </div>
 
-            {/* Table header */}
-            {filteredParts.length > 0 && (
-              <div className="hidden sm:flex items-center gap-4 px-4 py-2 bg-[#111317] border border-[#2A2E37] rounded-t-xl text-xs font-bold uppercase tracking-wider text-gray-500">
-                <div className="w-20 shrink-0">Photo</div>
-                <div className="flex-1">Part Name</div>
-                <div className="w-40 shrink-0">Part Number</div>
-                <div className="w-28 shrink-0">Action</div>
-              </div>
-            )}
-
-            {/* Parts List */}
+            {/* Parts Grid */}
             {filteredParts.length > 0 ? (
-              <div className="border border-[#2A2E37] border-t-0 rounded-b-xl overflow-hidden">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
                 {filteredParts.map((part, i) => (
-                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i} />
+                  <FadeIn key={`${part.partNo}-${i}`} delay={Math.min(i * 0.03, 0.3)}>
+                    <PartCard part={part} />
+                  </FadeIn>
                 ))}
               </div>
             ) : (
