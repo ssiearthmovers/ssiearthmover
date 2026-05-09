@@ -305,9 +305,19 @@ export const brands: BrandInfo[] = [
       { name: "Seal Kit", partNo: "51492481", model: "CASE 845B", category: "seal" },
       { name: "Shank", partNo: "87656075", model: "CASE 845B", category: "general" },
       { name: "Side Shift Cylinder", partNo: "75250020", model: "CASE 845B", category: "hydraulic" },
+      { name: "Support", partNo: "—", model: "CASE 845B", category: "general" },
       { name: "Swing Pinion", partNo: "51508479", model: "CASE 845B", category: "gear" },
       { name: "Spacer Steering Cylinder", partNo: "75248808 / 4816-8383", model: "CASE 845B", category: "hydraulic" },
+      { name: "Housing Assembly", partNo: "87618963", model: "CASE 845B", category: "general" },
     ],
+    gallery: {
+      featuredParts: [
+        { name: "Gear Ring, Guide Shoe, Hose, Hub & Plates",    img: "/images/parts/case-sheet-1.png" },
+        { name: "Plates, Seals, Shank, Side Shift & Pinion",    img: "/images/parts/case-sheet-2.png" },
+        { name: "Worm Gear, Ball Joint, Drum, End Bit & Struts", img: "/images/parts/case-sheet-3.png" },
+      ],
+      collageParts: [],
+    },
     img: "/images/machines/case-845b.jpg",
     metaTitle: "CASE 845B Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
