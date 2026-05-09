@@ -341,7 +341,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <img
             src="/images/motor-grader-hero.png"
-            alt=""
+            alt="Motor grader operating on road construction site — SSI Earthmovers supplies OEM spare parts for all major motor grader brands across India"
             className="w-full h-full object-cover object-center"
             style={{ filter: "brightness(0.45) saturate(1.1)" }}
           />
@@ -675,7 +675,7 @@ export default function Home() {
             <div className="mb-12">
               <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">What We Supply</p>
               <h2 className="text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
-                Our Product Categories
+                Motor Grader Spare Parts — Our Product Categories
               </h2>
             </div>
           </FadeIn>
@@ -717,7 +717,7 @@ export default function Home() {
           <FadeIn className="flex flex-col gap-6">
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest">Our Story</p>
             <h2 className="text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
-              About Shiv Shakti International
+              India's Trusted Motor Grader Parts Supplier — Shiv Shakti International
             </h2>
             <p className="text-gray-300 text-lg leading-relaxed">
               With over <strong className="text-white">30+ years</strong> of experience, <strong className="text-white">SSI Earthmovers (Shiv Shakti International)</strong> has become India's most trusted supplier of motor grader spare parts — headquartered near <strong className="text-white">Mori Gate, New Delhi</strong>, serving construction, mining, and infrastructure companies nationwide.
@@ -750,7 +750,7 @@ export default function Home() {
               <div className="absolute bottom-0 right-0 w-[calc(100%-1rem)] h-[calc(100%-1rem)] bg-[#F5A623]/20 rounded-lg" />
               <img
                 src="/images/about-warehouse.png"
-                alt="Industrial Warehouse"
+                alt="SSI Earthmovers motor grader spare parts warehouse — 5,000+ OEM parts in stock at Mori Gate New Delhi"
                 className="relative z-10 rounded-lg w-full h-auto object-cover aspect-[4/3] shadow-2xl"
               />
             </div>
@@ -762,7 +762,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Our Advantages</p>
-            <h2 className="text-4xl font-black uppercase text-white">Why Choose Us</h2>
+            <h2 className="text-4xl font-black uppercase text-white">Why Choose SSI Earthmovers for Motor Grader Parts</h2>
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
@@ -823,7 +823,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Sectors</p>
-            <h2 className="text-4xl font-black uppercase text-white">Industries We Serve</h2>
+            <h2 className="text-4xl font-black uppercase text-white">Industries We Supply Motor Grader Parts To</h2>
           </FadeIn>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
             {industries.map((ind, i) => (
@@ -952,12 +952,58 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
+      {/* ─── SERVICE AREAS ─── */}
+      <section className="py-20 bg-[#16181D]">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-12">
+            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">PAN India Delivery</p>
+            <h2 className="text-4xl font-black uppercase text-white">Motor Grader Parts Delivered Across India</h2>
+            <p className="mt-4 text-gray-400 max-w-2xl mx-auto">We ship motor grader spare parts to construction sites and fleet operators across all 28 states. Same-day dispatch from our New Delhi warehouse.</p>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {[
+                { city: "New Delhi", note: "Same-day" },
+                { city: "Mumbai", note: "Maharashtra" },
+                { city: "Chennai", note: "Tamil Nadu" },
+                { city: "Kolkata", note: "West Bengal" },
+                { city: "Bangalore", note: "Karnataka" },
+                { city: "Hyderabad", note: "Telangana" },
+                { city: "Pune", note: "Maharashtra" },
+                { city: "Ahmedabad", note: "Gujarat" },
+                { city: "Jaipur", note: "Rajasthan" },
+                { city: "Lucknow", note: "Uttar Pradesh" },
+                { city: "Chandigarh", note: "Punjab/Haryana" },
+                { city: "Bhopal", note: "Madhya Pradesh" },
+                { city: "Nagpur", note: "Maharashtra" },
+                { city: "Surat", note: "Gujarat" },
+                { city: "Patna", note: "Bihar" },
+                { city: "Indore", note: "Madhya Pradesh" },
+                { city: "Bhubaneswar", note: "Odisha" },
+                { city: "Guwahati", note: "Assam" },
+                { city: "Raipur", note: "Chhattisgarh" },
+                { city: "Ranchi", note: "Jharkhand" },
+                { city: "Dehradun", note: "Uttarakhand" },
+                { city: "Jammu", note: "J&K" },
+                { city: "Visakhapatnam", note: "Andhra Pradesh" },
+                { city: "Coimbatore", note: "Tamil Nadu" },
+              ].map((loc) => (
+                <div key={loc.city} className="bg-[#1A1D24] border border-[#2A2E37] rounded px-4 py-3 flex flex-col items-center text-center hover:border-[#F5A623]/50 transition-colors">
+                  <span className="text-white font-bold text-sm">{loc.city}</span>
+                  <span className="text-[#F5A623] text-xs mt-0.5">{loc.note}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-gray-500 text-sm mt-6">+ All other districts and tier-2/tier-3 cities across India via our logistics partners.</p>
+          </FadeIn>
+        </div>
+      </section>
       {/* ─── FAQ ─── */}
       <section className="py-24 bg-[#111317]">
         <div className="max-w-4xl mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-16">
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Common Questions</p>
-            <h2 className="text-4xl font-black uppercase text-white">Frequently Asked Questions</h2>
+            <h2 className="text-4xl font-black uppercase text-white">Frequently Asked Questions About Motor Grader Parts</h2>
           </FadeIn>
           <div className="flex flex-col gap-3">
             {faqs.map((faq, i) => (
