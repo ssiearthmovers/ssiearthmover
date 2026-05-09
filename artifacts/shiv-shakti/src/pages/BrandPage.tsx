@@ -56,7 +56,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function PartCard({ part, brand }: { part: BrandPart; brand: { fullName: string; color: string } }) {
-  const img = PART_CATEGORY_IMG[part.category];
+  const img = part.img ?? PART_CATEGORY_IMG[part.category];
   const waMsg = encodeURIComponent(
     `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
   );

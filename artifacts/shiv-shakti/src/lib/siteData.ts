@@ -25,6 +25,7 @@ export type BrandPart = {
   partNo: string;
   model: string;
   category: PartCategory;
+  img?: string;
 };
 
 export const PART_CATEGORY_IMG: Record<PartCategory, string> = {
@@ -137,7 +138,7 @@ export const brands: BrandInfo[] = [
       "Wear Plates",
     ],
     parts: [
-      { name: "Coupling (20 teeth)", partNo: "23A-22-11190", model: "Komatsu GD511", category: "joint" },
+      { name: "Coupling (20 teeth)", partNo: "23A-22-11190", model: "Komatsu GD511", category: "joint", img: "/images/parts/coupling-23a-22-11190.png" },
       { name: "Bushing", partNo: "23A-70-15150", model: "Komatsu GD511", category: "bushing" },
       { name: "Lock", partNo: "238-22-15110", model: "Komatsu GD511", category: "general" },
       { name: "Plug", partNo: "23B-27-11360", model: "Komatsu GD511", category: "general" },
