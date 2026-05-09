@@ -137,8 +137,24 @@ export default function Home() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          machine: formData.machine || null,
+          part: formData.part || null,
+          message: formData.message || null,
+          source: "contact-form",
+        }),
+      });
+    } catch {
+      // silently continue — WhatsApp will still open
+    }
     const msg = `Hello SSI Earthmovers,%0A%0AName: ${encodeURIComponent(formData.name)}%0APhone: ${encodeURIComponent(formData.phone)}%0AMachine: ${encodeURIComponent(formData.machine || "Not specified")}%0APart Required: ${encodeURIComponent(formData.part || "Not specified")}%0AMessage: ${encodeURIComponent(formData.message)}`;
     window.open(`https://wa.me/919953105738?text=${msg}`, "_blank");
     setFormSent(true);
