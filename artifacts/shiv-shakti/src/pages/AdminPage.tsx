@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useLocation } from "wouter";
 import {
   LogOut, RefreshCw, Search, Phone, ShieldCheck, Eye, EyeOff,
   CheckCircle2, Clock, AlertCircle, Inbox, Users, ClipboardList,
   Plus, Trash2, UserCheck, UserX, Download, ChevronDown, X,
   Bell, MessageSquare, Lock, Send, FileText, ArrowLeft,
-  Mail, Zap, Edit3, ChevronRight,
+  Mail, Zap, Edit3, ChevronRight, Box,
 } from "lucide-react";
 
 const API_BASE = "/api";
@@ -841,6 +842,7 @@ function TemplatesPanel({ auth }: { auth: AuthInfo }) {
 // ─── Main Admin Page ───────────────────────────────────────────────────────────
 
 export default function AdminPage() {
+  const [, navigate] = useLocation();
   const [auth, setAuth] = useState<AuthInfo | null>(() => {
     try { return JSON.parse(localStorage.getItem(AUTH_KEY) ?? "null") as AuthInfo | null; }
     catch { return null; }
@@ -958,6 +960,10 @@ export default function AdminPage() {
                 <button onClick={() => setView("templates")}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-colors ${view === "templates" ? "bg-[#F5A623]/10 text-[#F5A623]" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
                   <Zap className="w-4 h-4" /><span className="hidden sm:inline">Templates</span>
+                </button>
+                <button onClick={() => navigate("/stock")}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-colors text-gray-400 hover:text-white hover:bg-white/5">
+                  <Box className="w-4 h-4" /><span className="hidden sm:inline">Stock</span>
                 </button>
               </>
             )}

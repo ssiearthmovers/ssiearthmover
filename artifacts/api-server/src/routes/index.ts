@@ -6,6 +6,7 @@ import workersRouter from "./workers.js";
 import repliesRouter from "./replies.js";
 import templatesRouter from "./templates.js";
 import notificationsRouter from "./notifications.js";
+import stockRouter from "./stock.js";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(enquiriesRouter);
 router.use(repliesRouter);
 router.use(templatesRouter);
 router.use(notificationsRouter);
+router.use(stockRouter);
 
 export default router;
