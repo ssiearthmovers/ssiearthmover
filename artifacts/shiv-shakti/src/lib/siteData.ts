@@ -62,6 +62,10 @@ export type BrandInfo = {
   metaTitle: string;
   metaDesc: string;
   faqs: { q: string; a: string }[];
+  gallery?: {
+    featuredParts: Array<{ name: string; img: string }>;
+    collageParts: string[];
+  };
 };
 
 export const brands: BrandInfo[] = [
@@ -177,6 +181,24 @@ export const brands: BrandInfo[] = [
       { name: "Cover", partNo: "23A-27-11270", model: "Komatsu GD511/GD535", category: "general", img: "/images/parts/km-cover-23a-27-11270.jpg" },
     ],
     img: "/images/machines/komatsu-gd511.jpg",
+    gallery: {
+      featuredParts: [
+        { name: "Sprocket",             img: "/images/parts/km-sprocket-23a-22-11420.jpg" },
+        { name: "Coupling (20T)",        img: "/images/parts/km-coupling-23a-22-11190.jpg" },
+        { name: "Bevel Gear Assembly",   img: "/images/parts/km-bevel-gear-23a-22-11200.jpg" },
+        { name: "Hub",                   img: "/images/parts/km-hub-23a-15-12281.jpg" },
+      ],
+      collageParts: [
+        "/images/parts/km-brake-shoe-23a3211230.jpg",
+        "/images/parts/km-tie-rod-23b-27-11411.jpg",
+        "/images/parts/km-yoke-23a-32-11180.jpg",
+        "/images/parts/km-shaft-23a-27-11350.jpg",
+        "/images/parts/km-gear-233-71-13354.jpg",
+        "/images/parts/km-end-bit-2327052190.jpg",
+        "/images/parts/km-wheel-worm-232-70-54142.jpg",
+        "/images/parts/km-pin-23a-27-11530.jpg",
+      ],
+    },
     metaTitle: "Komatsu GD511 GD535 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
       "Buy Komatsu GD511 & GD535 motor grader spare parts in India. Couplings, gears, shafts, brake shoes, end bits, bevel gear assemblies & more. Same-day dispatch from New Delhi. Call +91-9953105738.",
