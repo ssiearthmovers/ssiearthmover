@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "wouter";
 import { motion, useInView, animate } from "framer-motion";
 import {
   Menu,
@@ -27,6 +28,7 @@ import {
   Download,
 } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { brands as allBrands, productCategories } from "@/lib/siteData";
 
 /* ─── Fade-in on scroll ─── */
 const FadeIn = ({
@@ -151,11 +153,11 @@ export default function Home() {
   ];
 
   const categories = [
-    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.png" },
-    { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.png" },
-    { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-transmission.png" },
-    { title: "End Bits & Wear Parts", desc: "Side end bits, corner bits and all grader wear parts", img: "/images/category-hydraulic.png" },
-    { title: "Circle & Draw Bar Parts", desc: "Circle segments, draw bar pins, bushings and related components", img: "/images/category-engine.png" },
+    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
+    { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.png", slug: "grader-blades" },
+    { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-transmission.png", slug: "scarifier-teeth" },
+    { title: "End Bits & Wear Parts", desc: "Side end bits, corner bits and all grader wear parts", img: "/images/category-hydraulic.png", slug: "end-bits" },
+    { title: "Circle & Draw Bar Parts", desc: "Circle segments, draw bar pins, bushings and related components", img: "/images/category-engine.png", slug: "circle-drawbar-parts" },
   ];
 
   const features = [
@@ -168,11 +170,11 @@ export default function Home() {
   ];
 
   const featuredProducts = [
-    { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.png" },
-    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.png" },
-    { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-transmission.png" },
-    { name: "End Bits — Corner Wear Parts", desc: "Durable end bits and corner protectors for extended blade life.", img: "/images/category-hydraulic.png" },
-    { name: "Circle Segment & Draw Bar Kit", desc: "Complete circle segment set with draw bar pins and bushings.", img: "/images/category-engine.png" },
+    { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
+    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.png", slug: "grader-blades" },
+    { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-transmission.png", slug: "scarifier-teeth" },
+    { name: "End Bits — Corner Wear Parts", desc: "Durable end bits and corner protectors for extended blade life.", img: "/images/category-hydraulic.png", slug: "end-bits" },
+    { name: "Circle Segment & Draw Bar Kit", desc: "Complete circle segment set with draw bar pins and bushings.", img: "/images/category-engine.png", slug: "circle-drawbar-parts" },
   ];
 
   const industries = [
@@ -254,12 +256,44 @@ export default function Home() {
             Shiv Shakti <span className="text-[#F5A623]">International</span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-6 text-sm font-semibold tracking-wide">
-            {navLinks.map((l) => (
+          <nav className="hidden md:flex items-center gap-1 text-sm font-semibold tracking-wide">
+            {/* Products dropdown */}
+            <div className="relative group">
+              <button
+                onClick={() => scrollTo("products")}
+                className="flex items-center gap-1 px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase"
+                data-testid="link-nav-products"
+              >
+                Products <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+              <div className="absolute top-full left-0 mt-1 w-56 bg-[#0F1014] border border-[#2A2E37] rounded-lg shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+                {productCategories.map((p) => (
+                  <Link key={p.slug} href={`/products/${p.slug}`}
+                    className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#F5A623] hover:bg-[#1A1D24] transition-colors">
+                    {p.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            {/* Brands dropdown */}
+            <div className="relative group">
+              <button className="flex items-center gap-1 px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase">
+                Brands <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+              <div className="absolute top-full left-0 mt-1 w-52 bg-[#0F1014] border border-[#2A2E37] rounded-lg shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
+                {allBrands.map((b) => (
+                  <Link key={b.slug} href={`/brands/${b.slug}`}
+                    className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#F5A623] hover:bg-[#1A1D24] transition-colors">
+                    {b.fullName}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            {navLinks.filter(l => l.id !== "products").map((l) => (
               <button
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
-                className="text-gray-300 hover:text-[#F5A623] transition-colors uppercase"
+                className="px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase"
                 data-testid={`link-nav-${l.id}`}
               >
                 {l.label}
@@ -303,32 +337,46 @@ export default function Home() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-[#0F1014] border-b border-[#2A2E37] flex flex-col p-6 gap-4">
+          <div className="md:hidden absolute top-full left-0 w-full bg-[#0F1014] border-b border-[#2A2E37] flex flex-col p-6 gap-1 max-h-[80vh] overflow-y-auto">
             {navLinks.map((l) => (
               <button
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
-                className="text-left text-lg font-semibold text-gray-200 hover:text-[#F5A623] transition-colors uppercase"
+                className="text-left text-base font-semibold text-gray-200 hover:text-[#F5A623] transition-colors uppercase py-2.5 border-b border-[#1A1D24]"
               >
                 {l.label}
               </button>
             ))}
+            <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mt-4 mb-1">Products</p>
+            {productCategories.map((p) => (
+              <Link key={p.slug} href={`/products/${p.slug}`}
+                className="block py-2 text-sm text-gray-300 hover:text-[#F5A623] border-b border-[#1A1D24]">
+                {p.name}
+              </Link>
+            ))}
+            <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mt-4 mb-1">Brands</p>
+            {allBrands.map((b) => (
+              <Link key={b.slug} href={`/brands/${b.slug}`}
+                className="block py-2 text-sm text-gray-300 hover:text-[#F5A623] border-b border-[#1A1D24]">
+                {b.fullName}
+              </Link>
+            ))}
             <a
               href="tel:+919953105738"
-              className="flex items-center gap-2 text-[#F5A623] font-bold text-lg mt-2"
+              className="flex items-center gap-2 text-[#F5A623] font-bold text-base mt-4"
             >
               <Phone className="w-5 h-5" /> +91-9953105738
             </a>
             <a
               href="/ssi-catalogue.pdf"
               download="SSI-Earthmovers-Catalogue.pdf"
-              className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-6 py-3 rounded font-bold uppercase"
+              className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-6 py-3 rounded font-bold uppercase mt-2"
             >
               <Download className="w-5 h-5" /> Download Catalogue
             </a>
             <button
               onClick={() => scrollTo("contact")}
-              className="mt-1 bg-[#F5A623] text-black px-6 py-3 rounded font-black uppercase text-center"
+              className="mt-2 bg-[#F5A623] text-black px-6 py-3 rounded font-black uppercase text-center"
             >
               Get a Quote
             </button>
@@ -696,14 +744,14 @@ export default function Home() {
                   </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-lg font-bold mb-2 text-white">{cat.title}</h3>
-                    <p className="text-sm text-gray-400 mb-5 flex-grow">{cat.desc}</p>
-                    <button
-                      onClick={() => scrollTo("contact")}
-                      className="w-full py-2.5 border border-[#F5A623] text-[#F5A623] rounded font-bold text-sm hover:bg-[#F5A623] hover:text-black transition-colors"
+                    <p className="text-sm text-gray-400 mb-4 flex-grow">{cat.desc}</p>
+                    <Link
+                      href={`/products/${cat.slug}`}
+                      className="w-full py-2.5 border border-[#F5A623] text-[#F5A623] rounded font-bold text-sm hover:bg-[#F5A623] hover:text-black transition-colors text-center flex items-center justify-center gap-1.5"
                       data-testid={`button-enquire-category-${i}`}
                     >
-                      Enquire Now
-                    </button>
+                      View Category <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 </div>
               </FadeIn>
@@ -803,16 +851,56 @@ export default function Home() {
                   </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-base font-bold mb-2 text-white">{p.name}</h3>
-                    <p className="text-sm text-gray-400 mb-5 flex-grow">{p.desc}</p>
-                    <button
-                      onClick={() => scrollTo("contact")}
-                      className="w-full py-2.5 bg-[#F5A623] text-black rounded font-bold text-sm hover:brightness-110 transition-all"
-                      data-testid={`button-enquire-product-${i}`}
-                    >
-                      Enquire Now
-                    </button>
+                    <p className="text-sm text-gray-400 mb-4 flex-grow">{p.desc}</p>
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href={`/products/${p.slug}`}
+                        className="w-full py-2 bg-[#F5A623] text-black rounded font-bold text-sm hover:brightness-110 transition-all text-center"
+                        data-testid={`button-enquire-product-${i}`}
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        onClick={() => scrollTo("contact")}
+                        className="w-full py-2 border border-[#2A2E37] text-gray-400 rounded font-bold text-sm hover:border-[#F5A623]/50 hover:text-[#F5A623] transition-colors"
+                      >
+                        Enquire Now
+                      </button>
+                    </div>
                   </div>
                 </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* ─── BRANDS WE COVER ─── */}
+      <section className="py-20 bg-[#111317]">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <FadeIn className="mb-12">
+            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Brand Support</p>
+            <h2 className="text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
+              Spare Parts for All Major Motor Grader Brands
+            </h2>
+            <p className="text-gray-400 mt-4 max-w-2xl">
+              From Caterpillar and Komatsu to Indian brands like Leeboy and BEML — we stock parts for every motor grader brand operating in India.
+            </p>
+          </FadeIn>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {allBrands.map((brand, i) => (
+              <FadeIn key={brand.slug} delay={i * 0.05}>
+                <Link
+                  href={`/brands/${brand.slug}`}
+                  className="group bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-5 text-center hover:border-[#F5A623]/50 hover:shadow-[0_0_20px_rgba(245,166,35,0.1)] transition-all block"
+                  data-testid={`card-brand-${brand.slug}`}
+                >
+                  <div className="text-xl font-black mb-1.5" style={{ color: brand.color }}>{brand.name}</div>
+                  <div className="text-gray-500 text-xs mb-1">{brand.country}</div>
+                  <div className="text-gray-600 text-xs">{brand.models.join(", ")}</div>
+                  <div className="mt-3 text-[#F5A623] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                    View Parts <ArrowRight className="w-3 h-3" />
+                  </div>
+                </Link>
               </FadeIn>
             ))}
           </div>
@@ -1289,11 +1377,11 @@ export default function Home() {
           <div>
             <h4 className="text-sm font-black mb-6 text-white uppercase tracking-widest">Products</h4>
             <ul className="flex flex-col gap-3 text-gray-500 text-sm">
-              {["Cutting Edges", "Grader Blades", "Scarifier Teeth & Ripper Tips", "End Bits & Wear Parts", "Circle & Draw Bar Parts"].map((p) => (
-                <li key={p}>
-                  <button onClick={() => scrollTo("products")} className="hover:text-[#F5A623] transition-colors text-left">
-                    {p}
-                  </button>
+              {productCategories.map((p) => (
+                <li key={p.slug}>
+                  <Link href={`/products/${p.slug}`} className="hover:text-[#F5A623] transition-colors">
+                    {p.name}
+                  </Link>
                 </li>
               ))}
             </ul>
