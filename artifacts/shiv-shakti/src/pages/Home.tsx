@@ -806,7 +806,6 @@ export default function Home() {
           </FadeIn>
           <FadeIn delay={0.2}>
             <div className="relative p-4">
-              <div className="absolute bottom-0 right-0 w-[calc(100%-1rem)] h-[calc(100%-1rem)] bg-[#F5A623]/20 rounded-lg" />
               <img
                 src="/images/about-warehouse.png"
                 alt="SSI Earthmovers motor grader spare parts warehouse — 5,000+ OEM parts in stock at Mori Gate New Delhi"
