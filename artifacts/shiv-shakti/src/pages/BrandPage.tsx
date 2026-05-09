@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useParams, Link } from "wouter";
 import { motion, useInView } from "framer-motion";
 import {
   CheckCircle2, Phone, Truck, Package, ShieldCheck,
-  ChevronDown, ChevronUp, ArrowRight, MessageSquare, MapPin, Clock
+  ChevronDown, ChevronUp, ArrowRight, MapPin, Clock,
+  Search, Filter, MessageSquare, Copy, Check,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
-import { brands, productCategories, WHATSAPP, PHONE1, PHONE2, EMAIL } from "@/lib/siteData";
+import {
+  brands, productCategories, WHATSAPP, PHONE1, PHONE2,
+  PART_CATEGORY_IMG, type BrandPart,
+} from "@/lib/siteData";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -35,11 +39,113 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  };
+  return (
+    <button onClick={handleCopy} className="ml-1 text-gray-600 hover:text-[#F5A623] transition-colors" title="Copy part number">
+      {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+    </button>
+  );
+}
+
+function PartCard({ part, brand }: { part: BrandPart; brand: { fullName: string; color: string } }) {
+  const img = PART_CATEGORY_IMG[part.category];
+  const waMsg = encodeURIComponent(
+    `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
+  );
+
+  const handleEnquire = async () => {
+    try {
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Website Visitor",
+          phone: "—",
+          machine: part.model,
+          part: `${part.name} (${part.partNo})`,
+          message: `Enquiry via brand parts catalog`,
+          source: "brand-page",
+        }),
+      });
+    } catch { /* continue */ }
+    window.open(`https://wa.me/${WHATSAPP}?text=${waMsg}`, "_blank");
+  };
+
+  return (
+    <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl overflow-hidden hover:border-[#F5A623]/50 hover:shadow-[0_0_20px_rgba(245,166,35,0.08)] transition-all group flex flex-col">
+      <div className="h-32 overflow-hidden bg-[#111317] flex items-center justify-center p-3">
+        <img
+          src={img}
+          alt={part.name}
+          className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
+          style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
+        />
+      </div>
+      <div className="p-4 flex flex-col flex-grow gap-2">
+        <h3 className="font-bold text-white text-sm leading-snug">{part.name}</h3>
+        <div className="flex items-center gap-1 flex-wrap">
+          <span className="font-mono text-xs text-[#F5A623] bg-[#F5A623]/10 px-2 py-0.5 rounded border border-[#F5A623]/20">
+            {part.partNo}
+          </span>
+          <CopyButton text={part.partNo} />
+        </div>
+        <span className="text-gray-600 text-xs">{part.model}</span>
+        <button
+          onClick={handleEnquire}
+          className="mt-auto w-full flex items-center justify-center gap-1.5 bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-xs font-bold py-2 rounded-lg hover:bg-[#25D366]/20 transition-colors"
+        >
+          <FaWhatsapp className="w-3.5 h-3.5" /> Enquire Now
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const CATEGORIES = [
+  { value: "all", label: "All Categories" },
+  { value: "sprocket", label: "Sprockets" },
+  { value: "bushing", label: "Bushings" },
+  { value: "brake", label: "Brake Parts" },
+  { value: "hub", label: "Hubs & Flanges" },
+  { value: "gear", label: "Gears & Worms" },
+  { value: "shaft", label: "Shafts & Axles" },
+  { value: "ring-gear", label: "Ring Gears" },
+  { value: "sleeve", label: "Sleeves" },
+  { value: "plate", label: "Plates & Shims" },
+  { value: "pin", label: "Pins" },
+  { value: "joint", label: "Joints & Yokes" },
+  { value: "seal", label: "Seals" },
+  { value: "hydraulic", label: "Hydraulic Parts" },
+  { value: "end-bit", label: "End Bits / Side Cutters" },
+  { value: "general", label: "General Parts" },
+];
+
 export default function BrandPage() {
   const params = useParams<{ slug: string }>();
   const brand = brands.find(b => b.slug === params.slug);
 
-  useEffect(() => { window.scrollTo(0, 0); }, [params.slug]);
+  const [search, setSearch] = useState("");
+  const [catFilter, setCatFilter] = useState("all");
+
+  useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
+
+  const filteredParts = useMemo(() => {
+    if (!brand?.parts.length) return [];
+    return brand.parts.filter(p => {
+      const matchesCat = catFilter === "all" || p.category === catFilter;
+      const q = search.toLowerCase();
+      const matchesSearch = !q || p.name.toLowerCase().includes(q) || p.partNo.toLowerCase().includes(q) || p.model.toLowerCase().includes(q);
+      return matchesCat && matchesSearch;
+    });
+  }, [brand, search, catFilter]);
 
   if (!brand) {
     return (
@@ -61,7 +167,6 @@ export default function BrandPage() {
 
   return (
     <div className="min-h-screen text-[#F2F2F2] font-sans" style={{ background: "#16181D" }}>
-      {/* Update document title */}
       {typeof document !== "undefined" && (document.title = brand.metaTitle)}
 
       {/* Ticker */}
@@ -95,7 +200,6 @@ export default function BrandPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#0F1014]/70 via-transparent to-[#0F1014]/80" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          {/* Breadcrumb */}
           <FadeIn>
             <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
               <Link href="/" className="hover:text-[#F5A623] transition-colors">Home</Link>
@@ -128,24 +232,30 @@ export default function BrandPage() {
                   {m}
                 </span>
               ))}
+              {brand.parts.length > 0 && (
+                <span className="border border-white/20 text-gray-300 text-sm font-bold px-4 py-1.5 rounded-full">
+                  {brand.parts.length} Parts Listed
+                </span>
+              )}
             </div>
           </FadeIn>
           <FadeIn delay={0.25}>
             <div className="flex flex-wrap gap-4">
-              <a
-                href={`https://wa.me/${WHATSAPP}?text=${waMsg}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#25D366] text-white px-7 py-3.5 rounded font-black text-sm hover:brightness-110 transition-all"
-              >
+              <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-[#25D366] text-white px-7 py-3.5 rounded font-black text-sm hover:brightness-110 transition-all">
                 <FaWhatsapp size={18} /> Enquire on WhatsApp
               </a>
-              <a
-                href={`tel:${PHONE1}`}
-                className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-7 py-3.5 rounded font-bold text-sm hover:bg-[#F5A623]/10 transition-colors"
-              >
+              <a href={`tel:${PHONE1}`}
+                className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-7 py-3.5 rounded font-bold text-sm hover:bg-[#F5A623]/10 transition-colors">
                 <Phone className="w-4 h-4" /> Call Now
               </a>
+              {brand.parts.length > 0 && (
+                <button
+                  onClick={() => document.getElementById("parts-catalog")?.scrollIntoView({ behavior: "smooth" })}
+                  className="flex items-center gap-2 border border-white/20 text-gray-300 px-7 py-3.5 rounded font-bold text-sm hover:border-white/40 transition-colors">
+                  View Parts Catalog ↓
+                </button>
+              )}
             </div>
           </FadeIn>
         </div>
@@ -168,12 +278,9 @@ export default function BrandPage() {
                     <Package className="w-5 h-5 text-[#F5A623]" />
                   </div>
                   <h3 className="font-bold text-white mb-3">{part}</h3>
-                  <a
-                    href={`https://wa.me/${WHATSAPP}?text=Hello,%20I%20need%20${encodeURIComponent(part)}%20for%20${encodeURIComponent(brand.fullName)}%20motor%20grader.%20Please%20share%20pricing.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#F5A623] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
-                  >
+                  <a href={`https://wa.me/${WHATSAPP}?text=Hello,%20I%20need%20${encodeURIComponent(part)}%20for%20${encodeURIComponent(brand.fullName)}%20motor%20grader.%20Please%20share%20pricing.`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="text-[#F5A623] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
                     Enquire Now <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -183,8 +290,95 @@ export default function BrandPage() {
         </div>
       </section>
 
+      {/* PARTS CATALOG */}
+      {brand.parts.length > 0 && (
+        <section id="parts-catalog" className="py-24 bg-[#16181D]">
+          <div className="max-w-7xl mx-auto px-6 md:px-10">
+            <FadeIn className="mb-10">
+              <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Official Part Numbers</p>
+              <h2 className="text-3xl md:text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
+                {brand.fullName} Parts Catalogue
+              </h2>
+              <p className="text-gray-400 mt-4 max-w-2xl">
+                Browse all {brand.parts.length} listed parts with official OEM part numbers. Click the WhatsApp button on any part to enquire instantly.
+              </p>
+            </FadeIn>
+
+            {/* Search + Filter */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Search by part name or part number…"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="w-full bg-[#1A1D24] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-600 transition-colors text-sm"
+                />
+              </div>
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                <select
+                  value={catFilter}
+                  onChange={e => setCatFilter(e.target.value)}
+                  className="appearance-none bg-[#1A1D24] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-9 pr-8 py-3 text-white transition-colors text-sm cursor-pointer"
+                >
+                  {CATEGORIES.map(c => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Result count */}
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-gray-500 text-sm">
+                Showing <span className="text-white font-bold">{filteredParts.length}</span> of {brand.parts.length} parts
+              </p>
+              {(search || catFilter !== "all") && (
+                <button onClick={() => { setSearch(""); setCatFilter("all"); }}
+                  className="text-[#F5A623] text-sm font-bold hover:underline">
+                  Clear filters
+                </button>
+              )}
+            </div>
+
+            {/* Parts Grid */}
+            {filteredParts.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {filteredParts.map((part, i) => (
+                  <FadeIn key={`${part.partNo}-${i}`} delay={Math.min(i * 0.04, 0.4)}>
+                    <PartCard part={part} brand={brand} />
+                  </FadeIn>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-16 text-center">
+                <Search className="w-10 h-10 text-gray-600 mx-auto mb-4" />
+                <p className="text-white font-bold mb-1">No parts found</p>
+                <p className="text-gray-500 text-sm">Try a different search term or clear the filter.</p>
+              </div>
+            )}
+
+            {/* CTA strip */}
+            <div className="mt-10 bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <p className="text-white font-bold">Don't see the part you need?</p>
+                <p className="text-gray-400 text-sm mt-0.5">Share the part number or dimensions — we'll check stock and quote you within 2 hours.</p>
+              </div>
+              <a href={`https://wa.me/${WHATSAPP}?text=Hello,%20I%20need%20a%20${encodeURIComponent(brand.fullName)}%20motor%20grader%20part%20that%20is%20not%20listed%20on%20your%20website.%20Can%20you%20help?`}
+                target="_blank" rel="noopener noreferrer"
+                className="shrink-0 flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg font-black text-sm hover:brightness-110 transition-all">
+                <FaWhatsapp size={16} /> Ask on WhatsApp
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ABOUT BRAND + WHY SSI */}
-      <section className="py-20 bg-[#16181D]">
+      <section className="py-20 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-14 items-start">
           <FadeIn>
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">About {brand.fullName}</p>
@@ -251,12 +445,10 @@ export default function BrandPage() {
       </section>
 
       {/* COMPATIBLE MODELS */}
-      <section className="py-16 bg-[#111317]">
+      <section className="py-16 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="text-center mb-10">
-            <h2 className="text-3xl font-black uppercase text-white">
-              Compatible {brand.fullName} Models
-            </h2>
+            <h2 className="text-3xl font-black uppercase text-white">Compatible {brand.fullName} Models</h2>
             <p className="text-gray-400 mt-3">We stock parts for the following {brand.fullName} motor grader models</p>
           </FadeIn>
           <div className="flex flex-wrap justify-center gap-5">
@@ -274,13 +466,11 @@ export default function BrandPage() {
       </section>
 
       {/* BROWSE ALL PRODUCT CATEGORIES */}
-      <section className="py-20 bg-[#16181D]">
+      <section className="py-20 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="mb-12 text-center">
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">All Categories</p>
-            <h2 className="text-3xl font-black uppercase text-white">
-              Browse Parts for {brand.fullName} Graders
-            </h2>
+            <h2 className="text-3xl font-black uppercase text-white">Browse Parts for {brand.fullName} Graders</h2>
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
             {productCategories.map((cat, i) => (
@@ -305,7 +495,7 @@ export default function BrandPage() {
       </section>
 
       {/* OTHER BRANDS */}
-      <section className="py-16 bg-[#111317]">
+      <section className="py-16 bg-[#16181D]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="mb-8 text-center">
             <h2 className="text-2xl font-black uppercase text-white">We Also Supply Parts for These Brands</h2>
@@ -325,18 +515,14 @@ export default function BrandPage() {
 
       {/* FAQ */}
       {brand.faqs.length > 0 && (
-        <section className="py-20 bg-[#16181D]">
+        <section className="py-20 bg-[#111317]">
           <div className="max-w-3xl mx-auto px-6 md:px-10">
             <FadeIn className="text-center mb-12">
-              <h2 className="text-3xl font-black uppercase text-white">
-                FAQs — {brand.fullName} Grader Parts
-              </h2>
+              <h2 className="text-3xl font-black uppercase text-white">FAQs — {brand.fullName} Grader Parts</h2>
             </FadeIn>
             <div className="flex flex-col gap-3">
               {brand.faqs.map((faq, i) => (
-                <FadeIn key={i} delay={i * 0.07}>
-                  <FaqItem q={faq.q} a={faq.a} />
-                </FadeIn>
+                <FadeIn key={i} delay={i * 0.07}><FaqItem q={faq.q} a={faq.a} /></FadeIn>
               ))}
             </div>
           </div>
@@ -354,12 +540,8 @@ export default function BrandPage() {
               Call or WhatsApp our team. In-stock parts dispatched same day. 30+ years of experience. 500+ clients across India.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a
-                href={`https://wa.me/${WHATSAPP}?text=${waMsg}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-black text-white px-8 py-4 rounded font-black text-sm hover:bg-black/80 transition-all"
-              >
+              <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-black text-white px-8 py-4 rounded font-black text-sm hover:bg-black/80 transition-all">
                 <FaWhatsapp size={18} /> WhatsApp Now
               </a>
               <a href={`tel:${PHONE1}`}
