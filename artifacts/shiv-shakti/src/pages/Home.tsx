@@ -741,13 +741,6 @@ export default function Home() {
                   className="bg-[#1A1D24] border border-[#2A2E37] rounded overflow-hidden group hover:border-[#F5A623]/60 hover:shadow-[0_0_24px_rgba(245,166,35,0.15)] transition-all duration-300 flex flex-col h-full"
                   data-testid={`card-category-${i}`}
                 >
-                  <div className="h-44 overflow-hidden relative">
-                    <img
-                      src={cat.img}
-                      alt={cat.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-lg font-bold mb-2 text-white">{cat.title}</h3>
                     <p className="text-sm text-gray-400 mb-4 flex-grow">{cat.desc}</p>
