@@ -183,21 +183,12 @@ export const brands: BrandInfo[] = [
     img: "/images/machines/komatsu-gd511.jpg",
     gallery: {
       featuredParts: [
-        { name: "Sprocket",             img: "/images/parts/km-sprocket-23a-22-11420.jpg" },
-        { name: "Coupling (20T)",        img: "/images/parts/km-coupling-23a-22-11190.jpg" },
-        { name: "Bevel Gear Assembly",   img: "/images/parts/km-bevel-gear-23a-22-11200.jpg" },
-        { name: "Hub",                   img: "/images/parts/km-hub-23a-15-12281.jpg" },
+        { name: "Couplings, Bushings & Drive Parts",   img: "/images/parts/km-cat-sheet-1.png" },
+        { name: "Locks, Drums & Adjusters",            img: "/images/parts/km-cat-sheet-2.png" },
+        { name: "Yoke, Worm Wheel, Wedge & Tie Rod",   img: "/images/parts/km-cat-sheet-3.png" },
+        { name: "Stud Balls, Sprocket, Shafts & More", img: "/images/parts/km-cat-sheet-4.png" },
       ],
-      collageParts: [
-        "/images/parts/km-brake-shoe-23a3211230.jpg",
-        "/images/parts/km-tie-rod-23b-27-11411.jpg",
-        "/images/parts/km-yoke-23a-32-11180.jpg",
-        "/images/parts/km-shaft-23a-27-11350.jpg",
-        "/images/parts/km-gear-233-71-13354.jpg",
-        "/images/parts/km-end-bit-2327052190.jpg",
-        "/images/parts/km-wheel-worm-232-70-54142.jpg",
-        "/images/parts/km-pin-23a-27-11530.jpg",
-      ],
+      collageParts: [],
     },
     metaTitle: "Komatsu GD511 GD535 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:

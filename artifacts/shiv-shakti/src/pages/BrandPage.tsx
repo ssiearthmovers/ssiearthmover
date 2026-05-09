@@ -315,85 +315,94 @@ export default function BrandPage() {
         </div>
       </section>
 
-      {/* PARTS GALLERY — machine + featured parts bento */}
+      {/* PARTS GALLERY */}
       {brand.gallery && (
-        <section className="py-20 bg-[#0F1014]">
-          <div className="max-w-7xl mx-auto px-6 md:px-10">
-            <FadeIn className="mb-10">
-              <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Parts We Supply</p>
-              <h2 className="text-3xl md:text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
-                {brand.fullName} — Machine &amp; Parts
+        <section className="bg-[#0D0F13]">
+          {/* ── Machine banner ── */}
+          <div className="relative w-full overflow-hidden" style={{ height: "420px" }}>
+            <img
+              src={brand.img}
+              alt={`${brand.fullName} Motor Grader`}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: "center 40%" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            <div className="relative h-full max-w-7xl mx-auto px-6 md:px-10 flex flex-col justify-end pb-10">
+              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-2">
+                {brand.country} · Motor Grader
+              </p>
+              <h2 className="text-4xl md:text-5xl font-black uppercase text-white leading-none mb-3">
+                {brand.fullName}
               </h2>
+              <p className="text-gray-300 text-sm mb-4">{brand.models.join("  ·  ")}</p>
+              <div className="flex gap-3">
+                <span className="bg-[#F5A623] text-black text-xs font-black px-3 py-1.5 rounded-full">
+                  {brand.parts.length} OEM Parts Listed
+                </span>
+                <span className="border border-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                  Same-Day Dispatch · New Delhi
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Catalogue sheet grid ── */}
+          <div className="max-w-7xl mx-auto px-6 md:px-10 py-14">
+            <FadeIn className="mb-8">
+              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-2">Official Parts Catalogue</p>
+              <h3 className="text-2xl md:text-3xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
+                Parts We Stock for {brand.fullName}
+              </h3>
             </FadeIn>
 
-            {/* Bento grid — machine left, 2×2 parts right */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              {/* Machine image — spans 2 cols × 2 rows */}
-              <div className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden min-h-[340px] md:min-h-[420px] group">
-                <img
-                  src={brand.img}
-                  alt={`${brand.fullName} Motor Grader`}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                  style={{ minHeight: "inherit" }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-6">
-                  <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-1">{brand.country} · Motor Grader</p>
-                  <p className="text-white text-2xl font-black uppercase leading-tight">{brand.fullName}</p>
-                  <p className="text-gray-300 text-sm mt-1">{brand.models.join(" · ")}</p>
-                </div>
-                <div className="absolute top-4 right-4 bg-[#F5A623] text-black text-xs font-black px-3 py-1 rounded-full">
-                  {brand.parts.length} Parts Listed
-                </div>
-              </div>
-
-              {/* 4 featured part cells */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {brand.gallery.featuredParts.map((fp, i) => (
-                <FadeIn key={i} delay={0.05 + i * 0.07}
-                  className="relative rounded-2xl overflow-hidden bg-[#F4F4F2] flex flex-col items-center justify-center group"
-                  style={{ minHeight: "200px" }}>
-                  <img
-                    src={fp.img}
-                    alt={fp.name}
-                    className="w-full h-full object-contain p-5 group-hover:scale-110 transition-transform duration-500"
-                    style={{ minHeight: "160px" }}
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                    <p className="text-white text-xs font-bold truncate">{fp.name}</p>
+                <FadeIn key={i} delay={i * 0.08}>
+                  <div className="rounded-2xl overflow-hidden border border-[#2A2E37] hover:border-[#F5A623]/50 hover:shadow-[0_8px_40px_rgba(245,166,35,0.1)] transition-all group">
+                    {/* Image on true white — catalogue sheets are already white bg */}
+                    <div className="bg-white flex items-center justify-center" style={{ height: "260px" }}>
+                      <img
+                        src={fp.img}
+                        alt={fp.name}
+                        className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    {/* Footer label */}
+                    <div className="bg-[#1A1D24] px-5 py-3 flex items-center justify-between border-t border-[#2A2E37]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1 h-5 bg-[#F5A623] rounded-full" />
+                        <p className="text-white text-sm font-bold">{fp.name}</p>
+                      </div>
+                      <a
+                        href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello SSI Earthmovers, I need ${fp.name} for ${brand.fullName} motor grader. Please share pricing.`)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs font-bold text-[#25D366] hover:underline"
+                      >
+                        <FaWhatsapp className="w-3.5 h-3.5" /> Enquire
+                      </a>
+                    </div>
                   </div>
                 </FadeIn>
               ))}
             </div>
 
-            {/* Collage strip — 8 small parts in a mosaic */}
-            <FadeIn delay={0.3}>
-              <p className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-3">More Parts We Stock</p>
-              <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
-                {brand.gallery.collageParts.map((src, i) => (
-                  <div key={i}
-                    className="bg-[#F4F4F2] rounded-xl overflow-hidden aspect-square flex items-center justify-center p-2 hover:scale-105 transition-transform duration-300">
-                    <img src={src} alt="part" className="w-full h-full object-contain" />
-                  </div>
-                ))}
-              </div>
-            </FadeIn>
-
-            {/* CTA row */}
-            <FadeIn delay={0.35} className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-5">
+            {/* CTA bar */}
+            <FadeIn delay={0.35} className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-6">
               <div>
-                <p className="text-white font-bold">Need a specific part for {brand.fullName}?</p>
-                <p className="text-gray-500 text-sm mt-0.5">Share the OEM part number and we'll confirm stock within 2 hours.</p>
+                <p className="text-white font-bold text-base">Don't see the exact part you need?</p>
+                <p className="text-gray-500 text-sm mt-1">Share your OEM part number — we'll confirm availability and quote within 2 hours.</p>
               </div>
               <div className="flex gap-3 shrink-0">
                 <a href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello SSI Earthmovers, I need a ${brand.fullName} motor grader part. Please help.`)}`}
                   target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 bg-[#25D366] text-white text-sm font-bold px-5 py-2.5 rounded-lg hover:brightness-110 transition-all">
-                  <FaWhatsapp className="w-4 h-4" /> WhatsApp
+                  <FaWhatsapp className="w-4 h-4" /> WhatsApp Us
                 </a>
                 <button
                   onClick={() => document.getElementById("parts-catalog")?.scrollIntoView({ behavior: "smooth" })}
                   className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] text-sm font-bold px-5 py-2.5 rounded-lg hover:bg-[#F5A623]/10 transition-all">
-                  View All Parts ↓
+                  Full Parts List ↓
                 </button>
               </div>
             </FadeIn>
