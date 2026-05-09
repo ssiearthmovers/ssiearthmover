@@ -1,17 +1,18 @@
 import { Router, type IRouter } from "express";
 import { db } from "@workspace/db";
-import { enquiriesTable, insertEnquirySchema } from "@workspace/db/schema";
+import { enquiriesTable, insertEnquirySchema, notificationsTable } from "@workspace/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { requireAdmin, requireAuth, type AuthPayload } from "../middlewares/adminAuth.js";
 
 const VALID_STATUSES = [
   "new",
-  "contacted",
+  "assigned",
+  "in-progress",
   "price-sent",
-  "pending",
+  "awaiting-reply",
   "order-confirmed",
   "dispatched",
-  "completed",
+  "closed",
 ];
 
 const router: IRouter = Router();
@@ -24,7 +25,14 @@ router.post("/enquiries", async (req, res) => {
   }
   try {
     const enquiry = await db.insert(enquiriesTable).values(parsed.data).returning();
-    res.json(enquiry[0]);
+    const created = enquiry[0]!;
+    await db.insert(notificationsTable).values({
+      workerId: null,
+      enquiryId: created.id,
+      type: "new_enquiry",
+      message: `New enquiry #${created.id} from ${created.name}${created.part ? ` — ${created.part}` : ""}`,
+    });
+    res.json(created);
   } catch (err) {
     req.log.error({ err }, "Failed to save enquiry");
     res.status(500).json({ error: "Failed to save enquiry" });
@@ -79,11 +87,22 @@ router.patch("/enquiries/:id/assign", requireAdmin, async (req, res) => {
   };
   if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
   try {
+    const current = await db.select({ status: enquiriesTable.status }).from(enquiriesTable).where(eq(enquiriesTable.id, id));
+    const currentStatus = current[0]?.status ?? "new";
+    const newStatus = assignedToId && currentStatus === "new" ? "assigned" : currentStatus;
     const updated = await db
       .update(enquiriesTable)
-      .set({ assignedToId: assignedToId ?? null, assignedToName: assignedToName ?? null })
+      .set({ assignedToId: assignedToId ?? null, assignedToName: assignedToName ?? null, status: newStatus })
       .where(eq(enquiriesTable.id, id))
       .returning();
+    if (assignedToId && assignedToName) {
+      await db.insert(notificationsTable).values({
+        workerId: assignedToId,
+        enquiryId: id,
+        type: "assigned",
+        message: `You've been assigned enquiry #${id} (${updated[0]?.name ?? ""})`,
+      });
+    }
     res.json(updated[0]);
   } catch (err) {
     req.log.error({ err }, "Failed to assign enquiry");

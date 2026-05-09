@@ -4,7 +4,7 @@ import type { Request, Response, NextFunction } from "express";
 const SECRET = process.env.SESSION_SECRET ?? "dev-fallback-secret";
 
 export interface AuthPayload {
-  role: "admin" | "worker";
+  role: string;
   workerId?: number;
   workerName?: string;
   iat: number;
