@@ -55,8 +55,26 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function PartCard({ part }: { part: BrandPart }) {
-  const img = part.img ?? PART_CATEGORY_IMG[part.category];
+const CAT_BADGE: Record<string, { label: string; cls: string }> = {
+  sprocket:    { label: "Sprocket",    cls: "bg-amber-500/15 text-amber-400 border-amber-500/30" },
+  bushing:     { label: "Bushing",     cls: "bg-blue-500/15 text-blue-400 border-blue-500/30" },
+  brake:       { label: "Brake",       cls: "bg-red-500/15 text-red-400 border-red-500/30" },
+  hub:         { label: "Hub",         cls: "bg-purple-500/15 text-purple-400 border-purple-500/30" },
+  gear:        { label: "Gear",        cls: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30" },
+  shaft:       { label: "Shaft",       cls: "bg-cyan-500/15 text-cyan-400 border-cyan-500/30" },
+  "ring-gear": { label: "Ring Gear",   cls: "bg-orange-500/15 text-orange-400 border-orange-500/30" },
+  sleeve:      { label: "Sleeve",      cls: "bg-teal-500/15 text-teal-400 border-teal-500/30" },
+  plate:       { label: "Plate/Shim",  cls: "bg-slate-500/15 text-slate-400 border-slate-500/30" },
+  pin:         { label: "Pin",         cls: "bg-green-500/15 text-green-400 border-green-500/30" },
+  joint:       { label: "Joint/Yoke",  cls: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30" },
+  seal:        { label: "Seal",        cls: "bg-pink-500/15 text-pink-400 border-pink-500/30" },
+  hydraulic:   { label: "Hydraulic",   cls: "bg-sky-500/15 text-sky-400 border-sky-500/30" },
+  "end-bit":   { label: "End Bit",     cls: "bg-rose-500/15 text-rose-400 border-rose-500/30" },
+  general:     { label: "General",     cls: "bg-zinc-500/15 text-zinc-400 border-zinc-500/30" },
+};
+
+function PartRow({ part, index }: { part: BrandPart; index: number }) {
+  const badge = CAT_BADGE[part.category] ?? CAT_BADGE.general;
   const waMsg = encodeURIComponent(
     `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
   );
@@ -67,11 +85,10 @@ function PartCard({ part }: { part: BrandPart }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "Website Visitor",
-          phone: "—",
+          name: "Website Visitor", phone: "—",
           machine: part.model,
           part: `${part.name} (${part.partNo})`,
-          message: `Enquiry via brand parts catalog`,
+          message: "Enquiry via brand parts catalog",
           source: "brand-page",
         }),
       });
@@ -80,35 +97,39 @@ function PartCard({ part }: { part: BrandPart }) {
   };
 
   return (
-    <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl overflow-hidden hover:border-[#F5A623]/60 hover:shadow-[0_8px_32px_rgba(245,166,35,0.12)] transition-all group flex flex-col">
-      {/* Image — light bg so gold/steel parts pop */}
-      <div className="bg-[#F4F4F2] flex items-center justify-center overflow-hidden" style={{ height: "200px" }}>
-        <img
-          src={img}
-          alt={part.name}
-          className="w-full h-full object-contain p-4 group-hover:scale-108 transition-transform duration-500"
-          style={{ transform: "scale(1)" }}
-          onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
-          onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
-        />
-      </div>
-      {/* Info */}
-      <div className="p-4 flex flex-col flex-grow gap-3 border-t border-[#2A2E37]">
-        <h3 className="font-bold text-white text-sm leading-snug">{part.name}</h3>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="font-mono text-xs font-bold text-[#F5A623] bg-[#F5A623]/10 px-2.5 py-1 rounded border border-[#F5A623]/30">
-            {part.partNo}
+    <div className={`grid items-center gap-3 px-5 py-4 border-b border-[#2A2E37] hover:bg-[#F5A623]/5 transition-colors group
+      ${index % 2 === 0 ? "bg-[#1A1D24]" : "bg-[#16181D]"}
+    `} style={{ gridTemplateColumns: "2rem 1fr auto auto" }}>
+      {/* Row number */}
+      <span className="text-xs text-gray-600 font-mono tabular-nums">{index + 1}</span>
+
+      {/* Part info */}
+      <div className="min-w-0">
+        <p className="font-semibold text-white text-sm leading-tight">{part.name}</p>
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${badge.cls}`}>
+            {badge.label}
           </span>
-          <CopyButton text={part.partNo} />
+          <span className="text-gray-500 text-xs">{part.model}</span>
         </div>
-        <p className="text-gray-500 text-xs">{part.model}</p>
-        <button
-          onClick={handleEnquire}
-          className="mt-auto w-full flex items-center justify-center gap-2 bg-[#25D366] text-white text-xs font-bold py-2.5 rounded-lg hover:brightness-110 transition-all"
-        >
-          <FaWhatsapp className="w-4 h-4" /> Enquire on WhatsApp
-        </button>
       </div>
+
+      {/* Part number */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        <span className="font-mono text-sm font-bold text-[#F5A623] bg-[#F5A623]/10 px-3 py-1.5 rounded border border-[#F5A623]/25 whitespace-nowrap">
+          {part.partNo}
+        </span>
+        <CopyButton text={part.partNo} />
+      </div>
+
+      {/* Enquire */}
+      <button
+        onClick={handleEnquire}
+        className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white text-xs font-bold px-4 py-2 rounded-lg hover:brightness-110 transition-all whitespace-nowrap"
+      >
+        <FaWhatsapp className="w-3.5 h-3.5" />
+        <span className="hidden md:inline">Enquire</span>
+      </button>
     </div>
   );
 }
@@ -348,13 +369,19 @@ export default function BrandPage() {
               )}
             </div>
 
-            {/* Parts Grid */}
+            {/* Parts Table */}
             {filteredParts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              <div className="rounded-xl overflow-hidden border border-[#2A2E37]">
+                {/* Table header */}
+                <div className="grid items-center gap-3 px-5 py-3 bg-[#111317] border-b border-[#2A2E37]"
+                  style={{ gridTemplateColumns: "2rem 1fr auto auto" }}>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">#</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Part Name / Category</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">OEM Part No.</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 hidden md:block">Action</span>
+                </div>
                 {filteredParts.map((part, i) => (
-                  <FadeIn key={`${part.partNo}-${i}`} delay={Math.min(i * 0.03, 0.3)}>
-                    <PartCard part={part} />
-                  </FadeIn>
+                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i} />
                 ))}
               </div>
             ) : (
