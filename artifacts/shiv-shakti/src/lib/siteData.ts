@@ -462,9 +462,9 @@ export const brands: BrandInfo[] = [
     name: "SANY",
     fullName: "Sany",
     country: "China",
-    models: ["Sany PQ190", "Sany PQ170"],
+    models: ["Sany PQ190", "Sany PQ170", "Sany STG170"],
     color: "#8a3ae8",
-    tagline: "Spare parts for Sany PQ190 motor graders — PAN India supply",
+    tagline: "Spare parts for Sany PQ190 & STG170 motor graders — PAN India supply",
     description:
       "The Sany PQ190 is a heavy-duty motor grader increasingly deployed in Indian road and mining projects. SSI Earthmovers stocks cutting edges, grader blades, scarifier teeth and all major wearing parts for the Sany PQ190.",
     longDescription:
@@ -491,7 +491,20 @@ export const brands: BrandInfo[] = [
       { name: "Carrier Planet", partNo: "60331-00300", model: "Sany PQ190/170", category: "hub" },
       { name: "Drive Cross Assembly", partNo: "6036110600", model: "Sany PQ190/170", category: "joint" },
       { name: "End Bit (8 Hole)", partNo: "62681-10700", model: "Sany PQ190/170", category: "end-bit" },
+      { name: "Sun Gear Shaft", partNo: "—", model: "Sany STG170", category: "shaft" },
+      { name: "Ring Gear & Ring Hub", partNo: "—", model: "Sany STG170", category: "ring-gear" },
+      { name: "Sun Gear", partNo: "—", model: "Sany STG170", category: "gear" },
+      { name: "Carrier Assembly", partNo: "—", model: "Sany STG170", category: "gear" },
+      { name: "Seal Cage / Chuck Nut", partNo: "—", model: "Sany STG170", category: "seal" },
+      { name: "Ball Joint", partNo: "RH10659957", model: "Sany STG170", category: "joint" },
+      { name: "Shaft / Pin", partNo: "20160301-164343", model: "Sany STG170", category: "shaft" },
     ],
+    gallery: {
+      featuredParts: [
+        { name: "Sun Gear Shaft, Ring Gear & Ring Hub, Sun Gear, Carrier Assembly, Guide, Seal Cage, Ball Joint & Shaft", img: "/images/parts/sany-sheet-1.png" },
+      ],
+      collageParts: [],
+    },
     img: "/images/motor-grader-hero.png",
     metaTitle: "Sany PQ190 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
