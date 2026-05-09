@@ -169,11 +169,9 @@ export default function Home() {
   ];
 
   const categories = [
-    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.jpg", slug: "cutting-edges" },
+    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
     { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.jpg", slug: "grader-blades" },
-    { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-scarifier-teeth.jpg", slug: "scarifier-teeth" },
-    { title: "End Bits & Wear Parts", desc: "Side end bits, corner bits and all grader wear parts", img: "/images/category-end-bits.jpg", slug: "end-bits" },
-    { title: "Circle & Draw Bar Parts", desc: "Circle segments, draw bar pins, bushings and related components", img: "/images/category-circle-drawbar.jpg", slug: "circle-drawbar-parts" },
+    { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth" },
   ];
 
   const features = [
@@ -186,11 +184,9 @@ export default function Home() {
   ];
 
   const featuredProducts = [
-    { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.jpg", slug: "cutting-edges" },
+    { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
     { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.jpg", slug: "grader-blades" },
-    { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-scarifier-teeth.jpg", slug: "scarifier-teeth" },
-    { name: "End Bits — Corner Wear Parts", desc: "Durable end bits and corner protectors for extended blade life.", img: "/images/category-end-bits.jpg", slug: "end-bits" },
-    { name: "Circle Segment & Draw Bar Kit", desc: "Complete circle segment set with draw bar pins and bushings.", img: "/images/category-circle-drawbar.jpg", slug: "circle-drawbar-parts" },
+    { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth" },
   ];
 
   const industries = [

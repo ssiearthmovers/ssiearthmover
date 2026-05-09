@@ -898,7 +898,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Custom Size Cutting Edges", desc: "Non-standard lengths and hole patterns manufactured on order. Contact us with dimensions." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-cutting-edges.jpg",
+    img: "/images/category-cutting-edges.png",
     metaTitle: "Motor Grader Cutting Edges India | Hardox 400 500 | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader cutting edges in India. Hardox 400 & 500 grade. CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML. Same-day dispatch from New Delhi.",
     faqs: [
@@ -956,7 +956,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Complete Shank Assembly", desc: "Full shank + tip assembly for quick changeover. Reduces downtime." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-scarifier-teeth.jpg",
+    img: "/images/category-scarifier-teeth.png",
     metaTitle: "Motor Grader Scarifier Teeth India | All Brands | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader scarifier teeth and shanks in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
     faqs: [
