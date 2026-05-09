@@ -169,7 +169,7 @@ export default function Home() {
   ];
 
   const categories = [
-    { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.png", slug: "grader-blades", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(1.5)" } },
+    { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.png", slug: "grader-blades", imgClass: "object-contain p-4", imgStyle: { filter: "brightness(1.15) contrast(1.35) saturate(1.8) drop-shadow(0 4px 12px rgba(245,166,35,0.35))" } },
     { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(1.5)" } },
     { title: "Axle", desc: "Heavy-duty motor grader axle assemblies and components for all major brands", img: "/images/category-axle.png", slug: "circle-drawbar-parts", imgClass: "object-contain p-4", imgStyle: { filter: "brightness(1.15) contrast(1.3) saturate(1.2)" } },
     { title: "Ball Joints & Tie Rod Ends", desc: "Precision ball joints and tie rod ends for steering and suspension systems", img: "/images/category-ball-joints.png", slug: "circle-drawbar-parts", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(1.5)" } },
@@ -186,7 +186,7 @@ export default function Home() {
   ];
 
   const featuredProducts = [
-    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.png", slug: "grader-blades", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(1.5)" } },
+    { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.png", slug: "grader-blades", imgClass: "object-contain p-4", imgStyle: { filter: "brightness(1.15) contrast(1.35) saturate(1.8) drop-shadow(0 4px 12px rgba(245,166,35,0.35))" } },
     { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(1.5)" } },
     { name: "Axle Assembly", desc: "Heavy-duty axle assemblies and components for all major motor grader brands.", img: "/images/category-axle.png", slug: "circle-drawbar-parts", imgClass: "object-contain p-4", imgStyle: { filter: "brightness(1.15) contrast(1.3) saturate(1.2)" } },
     { name: "Ball Joints & Tie Rod Ends", desc: "Precision steering ball joints and tie rod ends for all grader models.", img: "/images/category-ball-joints.png", slug: "circle-drawbar-parts", imgClass: "object-contain p-5", imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(1.5)" } },
