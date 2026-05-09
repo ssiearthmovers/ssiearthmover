@@ -209,18 +209,24 @@ function AddWorkerModal({ token, onCreated, onClose }: { token: string; onCreate
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("worker");
+  const [customRole, setCustomRole] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const finalRole = role === "custom" ? customRole.trim() : role;
+    if (role === "custom" && !customRole.trim()) {
+      setError("Please enter a custom role name.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
       const res = await fetch(`${API_BASE}/workers`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader(token) },
-        body: JSON.stringify({ name, username, password, role }),
+        body: JSON.stringify({ name, username, password, role: finalRole }),
       });
       const data = (await res.json()) as Worker & { error?: string };
       if (!res.ok) { setError(data.error ?? "Failed to create worker"); return; }
@@ -261,7 +267,17 @@ function AddWorkerModal({ token, onCreated, onClose }: { token: string; onCreate
               <option value="sales">Sales</option>
               <option value="dispatch">Dispatch</option>
               <option value="admin">Admin</option>
+              <option value="custom">Custom…</option>
             </select>
+            {role === "custom" && (
+              <input
+                type="text"
+                value={customRole}
+                onChange={(e) => setCustomRole(e.target.value)}
+                placeholder="Type role name (e.g. Accountant)"
+                className="mt-2 w-full bg-[#0D0F12] border border-[#F5A623]/50 focus:border-[#F5A623] outline-none rounded-lg px-4 py-3 text-white placeholder-gray-600 transition-colors text-sm"
+              />
+            )}
           </div>
           {error && <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2.5 text-red-400 text-sm">{error}</div>}
           <div className="flex gap-3 mt-1">
