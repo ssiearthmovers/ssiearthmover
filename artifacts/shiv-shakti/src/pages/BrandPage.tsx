@@ -357,8 +357,11 @@ export default function BrandPage() {
             </FadeIn>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {brand.gallery.featuredParts.map((fp, i) => (
-                <FadeIn key={i} delay={i * 0.08}>
+              {brand.gallery.featuredParts.map((fp, i) => {
+                const isLastOdd = brand.gallery!.featuredParts.length % 2 !== 0
+                  && i === brand.gallery!.featuredParts.length - 1;
+                return (
+                <FadeIn key={i} delay={i * 0.08} className={isLastOdd ? "sm:col-span-2" : ""}>
                   <div className="rounded-2xl overflow-hidden border border-[#2A2E37] hover:border-[#F5A623]/50 hover:shadow-[0_8px_40px_rgba(245,166,35,0.1)] transition-all group">
                     {/* Image on true white — catalogue sheets are already white bg */}
                     <div className="bg-white flex items-center justify-center" style={{ height: "260px" }}>
@@ -384,7 +387,8 @@ export default function BrandPage() {
                     </div>
                   </div>
                 </FadeIn>
-              ))}
+                );
+              })}
             </div>
 
             {/* CTA bar */}
