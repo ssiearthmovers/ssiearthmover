@@ -742,7 +742,6 @@ export default function Home() {
                   data-testid={`card-category-${i}`}
                 >
                   <div className="h-44 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors z-10" />
                     <img
                       src={cat.img}
                       alt={cat.title}
