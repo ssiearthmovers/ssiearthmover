@@ -1086,6 +1086,81 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
+      {/* ─── CUSTOMER REVIEWS ─── */}
+      <section className="py-24 bg-[#16181D]">
+        <div className="max-w-7xl mx-auto px-6 md:px-10">
+          <FadeIn className="text-center mb-14">
+            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">What Our Clients Say</p>
+            <h2 className="text-4xl font-black uppercase text-white">Trusted by 500+ Contractors Across India</h2>
+            <p className="text-gray-400 mt-4 max-w-xl mx-auto">From NHAI highway contractors to state PWD departments and mining operators — here's what our clients say.</p>
+          </FadeIn>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                review: "We've been sourcing CAT 140H cutting edges and grader blades from SSI Earthmovers for over 6 years. Their Hardox 400 edges last nearly twice as long as what we used before. Same-day dispatch has saved us multiple times during critical project phases.",
+                role: "Road Construction Contractor",
+                location: "Uttar Pradesh",
+                stars: 5,
+              },
+              {
+                review: "Ordered Komatsu GD511 scarifier teeth late on a Friday — they arranged next-day courier. No other supplier in Delhi was willing to do that. Their stock depth is unmatched and prices are competitive for bulk orders.",
+                role: "Infrastructure Project Manager",
+                location: "Rajasthan",
+                stars: 5,
+              },
+              {
+                review: "We maintain a fleet of 12 motor graders across our coal mine operations. SSI Earthmovers handles all our wearing parts — cutting edges, end bits, circle segments. Quality is consistent and their team knows the technical specs inside out.",
+                role: "Mining Operations Manager",
+                location: "Jharkhand",
+                stars: 5,
+              },
+              {
+                review: "Purchased BEML 605 grader parts for a state highway project. The parts fit perfectly and the price was significantly lower than OEM direct. Delivery to site in Madhya Pradesh took just 3 days. Will continue to use.",
+                role: "State PWD Contractor",
+                location: "Madhya Pradesh",
+                stars: 5,
+              },
+              {
+                review: "I simply WhatsApp the part number and get a quote within an hour. Their response speed is the best part — no waiting days for a reply. The Leeboy 785 cutting edges we got are of excellent quality.",
+                role: "Rural Road Construction Contractor",
+                location: "Bihar",
+                stars: 5,
+              },
+              {
+                review: "SSI Earthmovers is our go-to for XCMG and SDLG grader parts. They had both models in stock when no other supplier could confirm availability. The circle segment set for our SDLG 9190 was exactly to spec.",
+                role: "Equipment Hire Company",
+                location: "Gujarat",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <FadeIn key={i} delay={i * 0.07}>
+                <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl p-6 flex flex-col gap-4 hover:border-[#F5A623]/30 transition-all h-full">
+                  {/* Stars */}
+                  <div className="flex gap-1">
+                    {Array.from({ length: t.stars }).map((_, s) => (
+                      <svg key={s} className="w-4 h-4 fill-[#F5A623]" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  {/* Quote */}
+                  <p className="text-gray-300 text-sm leading-relaxed flex-grow">&ldquo;{t.review}&rdquo;</p>
+                  {/* Identity — no personal names */}
+                  <div className="flex items-center gap-3 pt-3 border-t border-[#2A2E37]">
+                    <div className="w-9 h-9 rounded-full bg-[#F5A623]/20 border border-[#F5A623]/40 flex items-center justify-center shrink-0">
+                      <ThumbsUp className="w-4 h-4 text-[#F5A623]" />
+                    </div>
+                    <div>
+                      <div className="text-white text-sm font-bold">{t.role}</div>
+                      <div className="text-gray-500 text-xs">{t.location}</div>
+                    </div>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* ─── FAQ ─── */}
       <section className="py-24 bg-[#111317]">
         <div className="max-w-4xl mx-auto px-6 md:px-10">
