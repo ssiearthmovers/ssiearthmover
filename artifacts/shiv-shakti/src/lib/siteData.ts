@@ -898,7 +898,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Custom Size Cutting Edges", desc: "Non-standard lengths and hole patterns manufactured on order. Contact us with dimensions." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-cutting-edges.png",
+    img: "/images/category-cutting-edges.jpg",
     metaTitle: "Motor Grader Cutting Edges India | Hardox 400 500 | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader cutting edges in India. Hardox 400 & 500 grade. CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML. Same-day dispatch from New Delhi.",
     faqs: [
@@ -928,7 +928,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Hardox 500 Blade", desc: "Maximum wear life for mining, quarry and rocky terrain applications." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-grader-blades.png",
+    img: "/images/category-grader-blades.jpg",
     metaTitle: "Motor Grader Blades India | All Brands & Sizes | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader moldboard blades in India. Mild steel, Hardox 400 & 500. All standard sizes. CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG. Same-day dispatch.",
     faqs: [
@@ -956,7 +956,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Complete Shank Assembly", desc: "Full shank + tip assembly for quick changeover. Reduces downtime." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-cutting-edges.png",
+    img: "/images/category-scarifier-teeth.jpg",
     metaTitle: "Motor Grader Scarifier Teeth India | All Brands | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader scarifier teeth and shanks in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
     faqs: [
@@ -983,7 +983,7 @@ export const productCategories: ProductCategory[] = [
       { name: "LH + RH Pair Set", desc: "Complete set of left and right end bits. Priced as a pair." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-cutting-edges.png",
+    img: "/images/category-end-bits.jpg",
     metaTitle: "Motor Grader End Bits Corner Bits India | All Brands | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader end bits and corner bits in India. LH & RH pairs. CAT, Komatsu, CASE, XCMG, Leeboy, SDLG. Same-day dispatch from New Delhi.",
     faqs: [
@@ -1011,7 +1011,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Circle Wear Plates", desc: "Liner plates that protect the circle from wear. Extend circle life." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-grader-blades.png",
+    img: "/images/category-circle-drawbar.jpg",
     metaTitle: "Motor Grader Circle Segments Ring Gear Drawbar Parts India | SSI Earthmovers",
     metaDesc: "Buy motor grader circle segments, ring gear and drawbar parts in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
     faqs: [
