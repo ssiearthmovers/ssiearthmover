@@ -538,8 +538,18 @@ export const brands: BrandInfo[] = [
       { name: "Duramide Slide", partNo: "28350002251", model: "SDLG 9138/9190", category: "plate" },
       { name: "Sliding Shoe", partNo: "260193454000", model: "SDLG 9138/9190", category: "general" },
       { name: "Cutting Edge 11 Hole", partNo: "LGG28140009601", model: "SDLG 9138/9190", category: "end-bit" },
-      { name: "C Plate", partNo: "4110001903022 / LGG4110001903023", model: "SDLG 9138/9190", category: "plate" },
+      { name: "Bolt Nut (LGG)", partNo: "4110001903022 / LGG4110001903023", model: "SDLG 9138/9190", category: "general" },
+      { name: "Spacer Sleeve (LGG)", partNo: "LGG410001903122", model: "SDLG 9138/9190", category: "sleeve" },
+      { name: "Clamping Plate (LGG)", partNo: "28350002901", model: "SDLG 9138/9190", category: "plate" },
+      { name: "Shaft Sprocket", partNo: "—", model: "SDLG 9138/9190", category: "shaft" },
     ],
+    gallery: {
+      featuredParts: [
+        { name: "Side Cutter, Flange, Shaft, Cutting Edge, Bolt Nut, Spacer & Plates", img: "/images/parts/sdlg-sheet-1.png" },
+        { name: "Shafts, Shaft Sprocket, Seal Cage & Duramide Slide",                 img: "/images/parts/sdlg-sheet-2.png" },
+      ],
+      collageParts: [],
+    },
     img: "/images/motor-grader-hero.png",
     metaTitle: "SDLG 9138 9190 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
