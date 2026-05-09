@@ -191,11 +191,6 @@ export default function Home() {
     { value: 28, suffix: " States", label: "PAN India Delivery" },
   ];
 
-  const testimonials = [
-    { text: "Shiv Shakti International has been our go-to supplier for grader parts for over 5 years. Their inventory is unmatched and delivery is always on time.", name: "Rajesh Sharma", company: "R.S. Infrastructure Pvt. Ltd." },
-    { text: "We run a fleet of 20 motor graders on our mining project. The quality of their cutting edges and hydraulic components keeps our machines running at peak efficiency.", name: "Anil Kumar Verma", company: "Verma Mining Solutions" },
-    { text: "Competitive pricing, genuine OEM parts, and expert support. Whenever I need a part, they have it ready. Highly recommended for bulk buyers.", name: "Priya Nair", company: "Nair Road Builders" },
-  ];
 
   const processSteps = [
     { icon: MessageSquare, step: "01", title: "Enquiry", desc: "Share your requirement via call, WhatsApp or our contact form." },
@@ -946,29 +941,6 @@ export default function Home() {
               </div>
             </FadeIn>
           ))}
-        </div>
-      </section>
-      {/* ─── TESTIMONIALS ─── */}
-      <section className="py-24 bg-[#16181D]">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <FadeIn className="text-center mb-16">
-            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">What Clients Say</p>
-            <h2 className="text-4xl font-black uppercase text-white">Testimonials</h2>
-          </FadeIn>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <FadeIn key={t.name} delay={i * 0.1}>
-                <div className="bg-[#1A1D24] border border-[#2A2E37] hover:border-[#F5A623]/40 rounded p-8 flex flex-col gap-6 transition-colors h-full" data-testid={`card-testimonial-${i}`}>
-                  <div className="text-[#F5A623] text-4xl leading-none font-serif">"</div>
-                  <p className="text-gray-300 leading-relaxed flex-grow italic">"{t.text}"</p>
-                  <div className="border-t border-[#2A2E37] pt-5">
-                    <div className="font-bold text-white">{t.name}</div>
-                    <div className="text-sm text-[#F5A623] mt-1">{t.company}</div>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
         </div>
       </section>
       {/* ─── PROCESS ─── */}
