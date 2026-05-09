@@ -365,7 +365,20 @@ export const brands: BrandInfo[] = [
       { name: "Tyre Axle", partNo: "275400182", model: "XCMG 165", category: "shaft" },
       { name: "Pin Long (Centre Shaft)", partNo: "380400961", model: "XCMG 165", category: "pin" },
       { name: "Sleeve", partNo: "380400490", model: "XCMG 165", category: "sleeve" },
+      { name: "Ball Joint LH", partNo: "380300926 / 83670014", model: "XCMG 165", category: "joint" },
+      { name: "Sleeve", partNo: "380400497", model: "XCMG 165", category: "sleeve" },
+      { name: "Shaft", partNo: "275400392", model: "XCMG 165", category: "shaft" },
+      { name: "Bearing", partNo: "1210030_001210031", model: "XCMG 165", category: "general" },
+      { name: "Bustle (Wear Plate)", partNo: "—", model: "XCMG 165", category: "general" },
+      { name: "Guide Thick", partNo: "63510024", model: "XCMG 165", category: "general" },
     ],
+    gallery: {
+      featuredParts: [
+        { name: "Guide, King Pin, Nut, Shafts, Sleeves & Spindle Plate", img: "/images/parts/xcmg-sheet-1.png" },
+        { name: "Ball Joint, Sleeve, Shafts, Bearing, Bustle & Guide Thick", img: "/images/parts/xcmg-sheet-2.png" },
+      ],
+      collageParts: [],
+    },
     img: "/images/motor-grader-hero.png",
     metaTitle: "XCMG 165 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
