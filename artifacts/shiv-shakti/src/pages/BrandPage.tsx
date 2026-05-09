@@ -80,13 +80,12 @@ function PartCard({ part, brand }: { part: BrandPart; brand: { fullName: string;
   };
 
   return (
-    <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl overflow-hidden hover:border-[#F5A623]/50 hover:shadow-[0_0_20px_rgba(245,166,35,0.08)] transition-all group flex flex-col">
-      <div className="h-32 overflow-hidden bg-[#111317] flex items-center justify-center p-3">
+    <div className="bg-[#1A1D24] border border-[#2A2E37] rounded-xl overflow-hidden hover:border-[#F5A623]/60 hover:shadow-[0_0_24px_rgba(245,166,35,0.12)] transition-all group flex flex-col">
+      <div className="h-52 overflow-hidden bg-[#0D0F13] flex items-center justify-center p-4 border-b border-[#2A2E37]">
         <img
           src={img}
           alt={part.name}
-          className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500"
-          style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.5))" }}
+          className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
         />
       </div>
       <div className="p-4 flex flex-col flex-grow gap-2">
@@ -97,10 +96,10 @@ function PartCard({ part, brand }: { part: BrandPart; brand: { fullName: string;
           </span>
           <CopyButton text={part.partNo} />
         </div>
-        <span className="text-gray-600 text-xs">{part.model}</span>
+        <span className="text-gray-500 text-xs">{part.model}</span>
         <button
           onClick={handleEnquire}
-          className="mt-auto w-full flex items-center justify-center gap-1.5 bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-xs font-bold py-2 rounded-lg hover:bg-[#25D366]/20 transition-colors"
+          className="mt-auto w-full flex items-center justify-center gap-1.5 bg-[#25D366] text-white text-xs font-bold py-2.5 rounded-lg hover:brightness-110 transition-all"
         >
           <FaWhatsapp className="w-3.5 h-3.5" /> Enquire Now
         </button>
@@ -346,7 +345,7 @@ export default function BrandPage() {
 
             {/* Parts Grid */}
             {filteredParts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
                 {filteredParts.map((part, i) => (
                   <FadeIn key={`${part.partNo}-${i}`} delay={Math.min(i * 0.04, 0.4)}>
                     <PartCard part={part} brand={brand} />
