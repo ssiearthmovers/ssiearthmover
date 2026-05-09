@@ -36,7 +36,8 @@ router.post("/workers", requireAdmin, async (req, res) => {
     res.status(400).json({ error: "Name, username, and password are required" });
     return;
   }
-  const workerRole = role === "admin" ? "admin" : "worker";
+  const ALLOWED_ROLES = ["admin", "worker", "operator", "sales", "dispatch"];
+  const workerRole = ALLOWED_ROLES.includes(role ?? "") ? role! : "worker";
   try {
     const created = await db
       .insert(workersTable)

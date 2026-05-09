@@ -257,6 +257,9 @@ function AddWorkerModal({ token, onCreated, onClose }: { token: string; onCreate
             <select value={role} onChange={(e) => setRole(e.target.value)}
               className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-4 py-3 text-white transition-colors text-sm cursor-pointer">
               <option value="worker">Worker</option>
+              <option value="operator">Operator</option>
+              <option value="sales">Sales</option>
+              <option value="dispatch">Dispatch</option>
               <option value="admin">Admin</option>
             </select>
           </div>
