@@ -169,9 +169,11 @@ export default function Home() {
   ];
 
   const categories = [
-    { title: "Cutting Edges", desc: "High-strength Hardox steel cutting edges for all motor grader models", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
     { title: "Grader Blades", desc: "Premium curved & straight grader blades for precision leveling", img: "/images/category-grader-blades.jpg", slug: "grader-blades" },
     { title: "Scarifier Teeth & Ripper Tips", desc: "Heavy-duty scarifier teeth, ripper tips and shanks for tough terrain", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth" },
+    { title: "Axle", desc: "Heavy-duty motor grader axle assemblies and components for all major brands", img: "/images/category-axle.png", slug: "circle-drawbar-parts" },
+    { title: "Ball Joints & Tie Rod Ends", desc: "Precision ball joints and tie rod ends for steering and suspension systems", img: "/images/category-ball-joints.png", slug: "circle-drawbar-parts" },
+    { title: "Sprockets / Worm Gears / Ring Gears", desc: "High-strength sprockets, worm gears and ring gears for all motor grader models", img: "/images/category-sprockets.png", slug: "circle-drawbar-parts" },
   ];
 
   const features = [
@@ -184,9 +186,11 @@ export default function Home() {
   ];
 
   const featuredProducts = [
-    { name: "Cutting Edge Set — 14 ft", desc: "Full 14ft set. Hardox 400 grade steel. Universal bolt pattern.", img: "/images/category-cutting-edges.png", slug: "cutting-edges" },
     { name: "Grader Blade — 16 ft", desc: "Curved high-tensile grader blade for smooth and precise surface finishing.", img: "/images/category-grader-blades.jpg", slug: "grader-blades" },
     { name: "Scarifier Teeth Set", desc: "Heavy-duty replaceable scarifier teeth for hard ground breaking.", img: "/images/category-scarifier-teeth.png", slug: "scarifier-teeth" },
+    { name: "Axle Assembly", desc: "Heavy-duty axle assemblies and components for all major motor grader brands.", img: "/images/category-axle.png", slug: "circle-drawbar-parts" },
+    { name: "Ball Joints & Tie Rod Ends", desc: "Precision steering ball joints and tie rod ends for all grader models.", img: "/images/category-ball-joints.png", slug: "circle-drawbar-parts" },
+    { name: "Sprockets / Worm Gears / Ring Gears", desc: "High-strength transmission gears and sprockets for all motor grader brands.", img: "/images/category-sprockets.png", slug: "circle-drawbar-parts" },
   ];
 
   const industries = [
@@ -741,6 +745,13 @@ export default function Home() {
                   className="bg-[#1A1D24] border border-[#2A2E37] rounded overflow-hidden group hover:border-[#F5A623]/60 hover:shadow-[0_0_24px_rgba(245,166,35,0.15)] transition-all duration-300 flex flex-col h-full"
                   data-testid={`card-category-${i}`}
                 >
+                  <div className="h-44 overflow-hidden relative">
+                    <img
+                      src={cat.img}
+                      alt={cat.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-lg font-bold mb-2 text-white">{cat.title}</h3>
                     <p className="text-sm text-gray-400 mb-4 flex-grow">{cat.desc}</p>
