@@ -379,7 +379,7 @@ export const brands: BrandInfo[] = [
       ],
       collageParts: [],
     },
-    img: "/images/motor-grader-hero.png",
+    img: "/images/machines/xcmg-165.jpg",
     metaTitle: "XCMG 165 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
     metaDesc:
       "Buy XCMG 165 motor grader spare parts in India. Cutting edges, grader blades, scarifier teeth, end bits. Same-day dispatch from New Delhi. Call +91-9953105738.",
