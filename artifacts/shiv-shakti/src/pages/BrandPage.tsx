@@ -219,8 +219,8 @@ export default function BrandPage() {
         <div className="absolute inset-0 z-0">
           <img src={brand.img}
             alt={`${brand.fullName} motor grader spare parts — SSI Earthmovers`}
-            className="w-full h-full object-cover object-center"
-            style={{ filter: "brightness(0.3) saturate(0.9)" }} />
+            className="w-full h-full object-contain object-right"
+            style={{ filter: "brightness(0.35) saturate(0.9)" }} />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0F1014] via-[#0F1014]/80 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0F1014]/70 via-transparent to-[#0F1014]/80" />
         </div>
@@ -323,8 +323,7 @@ export default function BrandPage() {
             <img
               src={brand.img}
               alt={`${brand.fullName} Motor Grader`}
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{ objectPosition: "center 40%" }}
+              className="absolute inset-0 w-full h-full object-contain object-right"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
