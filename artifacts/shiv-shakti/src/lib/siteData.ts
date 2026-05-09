@@ -711,6 +711,56 @@ export const brands: BrandInfo[] = [
       },
     ],
   },
+  {
+    slug: "ace",
+    name: "ACE",
+    fullName: "ACE (Action Construction)",
+    country: "India",
+    models: ["ACE AG 176"],
+    color: "#e83a3a",
+    tagline: "OEM-spec spare parts for ACE AG 176 motor graders — PAN India supply",
+    description:
+      "The ACE AG 176 is a popular Indian-made motor grader widely used on PMGSY, state highway and municipal road projects. SSI Earthmovers stocks a dedicated range of ACE AG 176 spare parts including cutting edges, blades, scarifier teeth and all major circle assembly components.",
+    longDescription:
+      "Action Construction Equipment (ACE) graders, particularly the AG 176, are trusted across India for road construction and maintenance projects. SSI Earthmovers maintains a focused inventory of ACE AG 176 spare parts — chuk nuts, adjust washers, bearings, C plates, sliding shoes, sleeves, and other critical wear components — all sourced to OEM dimensional specifications. As a Made-in-India brand, ACE graders are deployed widely across PMGSY projects and state PWD contracts. Our New Delhi warehouse stocks ACE AG 176 parts for same-day dispatch, ensuring minimal downtime for contractors and fleet operators.",
+    keyParts: [
+      "Cutting Edges",
+      "Grader Blades",
+      "Scarifier Teeth",
+      "End Bits",
+      "Circle Segments & C Plates",
+      "Bearings & Sleeves",
+      "Chuk Nuts & Adjust Washers",
+    ],
+    parts: [
+      { name: "Chuk Nut", partNo: "260193449000", model: "ACE AG 176", category: "general" },
+      { name: "Adjust Washer", partNo: "2601934538001", model: "ACE AG 176", category: "general" },
+      { name: "Bearing", partNo: "260193454000", model: "ACE AG 176", category: "general" },
+      { name: "C Plate", partNo: "—", model: "ACE AG 176", category: "plate" },
+      { name: "Sliding Shoe", partNo: "260193454000", model: "ACE AG 176", category: "general" },
+      { name: "Sleeve", partNo: "—", model: "ACE AG 176", category: "sleeve" },
+    ],
+    gallery: {
+      featuredParts: [
+        { name: "Chuk Nut, Adjust Washer, Bearing, C Plate, Sliding Shoe & Sleeve", img: "/images/parts/ace-sheet-1.png" },
+      ],
+      collageParts: [],
+    },
+    img: "/images/machines/ace-ag176.jpg",
+    metaTitle: "ACE AG 176 Motor Grader Spare Parts India | SSI Earthmovers Delhi",
+    metaDesc:
+      "Buy ACE AG 176 motor grader spare parts in India. Cutting edges, grader blades, scarifier teeth, end bits, bearings, sleeves. Same-day dispatch from New Delhi. Call +91-9953105738.",
+    faqs: [
+      {
+        q: "Do you stock ACE AG 176 motor grader parts?",
+        a: "Yes, we maintain a ready stock of ACE AG 176 spare parts including cutting edges, grader blades, scarifier teeth, C plates, bearings, sliding shoes and sleeves — available for same-day dispatch from New Delhi.",
+      },
+      {
+        q: "Where can I buy ACE AG 176 grader spare parts in India?",
+        a: "SSI Earthmovers, near Mori Gate, New Delhi is a specialist supplier of ACE AG 176 parts. We deliver PAN India in 2–5 business days. Call +91-9953105738 or WhatsApp for pricing and availability.",
+      },
+    ],
+  },
 ];
 
 export type ProductCategory = {
