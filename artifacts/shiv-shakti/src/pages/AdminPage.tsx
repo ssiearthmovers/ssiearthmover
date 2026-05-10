@@ -6,6 +6,7 @@ import {
   Plus, Trash2, UserCheck, UserX, Download, ChevronDown, X,
   Bell, MessageSquare, Lock, Send, FileText, ArrowLeft,
   Mail, Zap, Edit3, ChevronRight, Box,
+  Package, Upload, AlertTriangle, Database,
 } from "lucide-react";
 
 const API_BASE = "/api";
@@ -61,6 +62,37 @@ interface Template {
   body: string;
   createdAt: string;
 }
+
+interface Product {
+  id: number;
+  partNumber: string;
+  brand: string | null;
+  model: string | null;
+  category: string | null;
+  oemNumber: string | null;
+  name: string;
+  description: string | null;
+  unit: string;
+  rackLocation: string | null;
+  quantity: number;
+  reorderLevel: number;
+  status: string;
+  updatedAt: string;
+}
+
+interface ImportHistoryItem {
+  id: number;
+  fileName: string;
+  totalRows: number;
+  inserted: number;
+  updated: number;
+  skipped: number;
+  errors: string | null;
+  actorName: string;
+  createdAt: string;
+}
+
+type ImportRow = Record<string, string>;
 
 interface NotificationItem {
   id: number;

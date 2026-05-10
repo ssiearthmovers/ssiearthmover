@@ -1,0 +1,133 @@
+Upgrade my existing stock and catalogue system into a smart automated inventory platform for SSI Earthmovers.
+
+IMPORTANT:
+- Do NOT build full accounting or Tally system.
+- Focus ONLY on inventory, stock automation, catalogue sync, and Excel import.
+- Keep current website design and admin system intact.
+
+MAIN GOAL:
+Create one centralized inventory database where products automatically update across the website.
+
+========================================
+1. EXCEL / CSV IMPORT SYSTEM
+========================================
+
+Create bulk import system for stock inventory.
+
+Requirements:
+- Upload Excel (.xlsx) or CSV files
+- Also allow copy-paste table import
+- Automatically detect columns
+- Prevent duplicate products
+- Update existing products automatically
+
+Supported fields:
+- Part Number
+- Product Name
+- Brand
+- Category
+- Machine Model
+- Availability
+- Description
+- OEM Number
+- Product Images (optional)
+
+========================================
+2. CENTRAL PRODUCT DATABASE
+========================================
+
+Create one centralized inventory database.
+
+Every product should automatically connect to:
+- brand pages
+- category pages
+- search system
+- Find My Part system
+- public catalogue
+
+Example:
+If Brand = CAT
+→ automatically appears in CAT catalogue
+
+If Category = Cutting Edges
+→ automatically appears in Cutting Edges page
+
+No manual duplication.
+
+========================================
+3. AUTOMATIC STOCK AVAILABILITY
+========================================
+
+Create automatic stock status system.
+
+Admin/staff can:
+- update stock
+- mark products sold
+- add incoming stock
+
+Public users should ONLY see:
+- In Stock
+- Limited Availability
+- Out of Stock
+
+IMPORTANT:
+Never show exact stock quantity publicly.
+
+========================================
+4. AUTOMATIC STOCK DEDUCTION
+========================================
+
+When admin records a sale:
+- stock quantity automatically reduces
+- availability updates automatically
+
+Example:
+Current stock = 10
+Sold = 2
+Remaining stock = 8
+
+========================================
+5. SMART PRODUCT SEARCH
+========================================
+
+All imported products should automatically become searchable by:
+- part number
+- product name
+- machine model
+- brand
+- category
+
+========================================
+6. FIND MY PART INTEGRATION
+========================================
+
+Imported products should automatically appear inside:
+- Find My Part flow
+- machine model filters
+- brand filters
+
+========================================
+7. ADMIN DASHBOARD IMPROVEMENTS
+========================================
+
+Add:
+- total products
+- low stock alerts
+- recently updated products
+- recently sold products
+- fast inventory search
+- import history
+
+========================================
+8. IMPORTANT
+========================================
+
+- Keep current dark industrial UI
+- Do NOT redesign website
+- Do NOT break existing systems
+- Keep website fast
+- Keep all category pages working
+- Make system scalable for thousands of products
+
+FINAL GOAL:
+Create a professional industrial inventory and catalogue management system where Excel stock imports automatically power the public website catalogue and availability system.
