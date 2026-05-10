@@ -1,166 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Home -->
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/</loc>
+    <loc>https://ssiearthmovers.in/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
 
-  <!-- Brand pages -->
+  <!-- Tool Pages -->
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/cat</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/komatsu</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/case</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/xcmg</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/leeboy</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/sany</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/sdlg</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/liugong</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/beml</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/mitsubishi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/brands/ace</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-
-  <!-- Product / Parts category pages -->
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/cutting-edges</loc>
+    <loc>https://ssiearthmovers.in/find-my-part</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/grader-blades</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/scarifier-teeth</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/end-bits</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/circle-drawbar-parts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/braking-system</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/ball-joints</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/sprockets-gears</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <lastmod>2026-05-10</lastmod>
-  </url>
-  <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/products/hydraulic-cylinders</loc>
+    <loc>https://ssiearthmovers.in/search</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
 
-  <!-- Blog -->
+  <!-- Brand Pages -->
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://ssiearthmovers.in/brands/cat</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/blog/top-motor-grader-spare-parts-india</loc>
+    <loc>https://ssiearthmovers.in/brands/komatsu</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/blog/how-to-choose-cutting-edges-motor-grader</loc>
+    <loc>https://ssiearthmovers.in/brands/case</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/blog/cat-vs-komatsu-grader-parts-india</loc>
+    <loc>https://ssiearthmovers.in/brands/xcmg</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
   <url>
-    <loc>https://dark-business-web--dakshgoel112.replit.app/blog/signs-hydraulic-issues-motor-grader</loc>
+    <loc>https://ssiearthmovers.in/brands/leeboy</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/sany</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/sdlg</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/liugong</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/beml</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/mitsubishi</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/brands/ace</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+
+  <!-- Product Category Pages -->
+  <url>
+    <loc>https://ssiearthmovers.in/products/cutting-edges</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/grader-blades</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/scarifier-teeth</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/end-bits</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/braking-system</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/ball-joints</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/sprockets-gears</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/hydraulic-cylinders</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-05-10</lastmod>
+  </url>
+  <url>
+    <loc>https://ssiearthmovers.in/products/circle-drawbar-parts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
     <lastmod>2026-05-10</lastmod>
   </url>
 
