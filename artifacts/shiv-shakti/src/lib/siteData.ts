@@ -986,10 +986,10 @@ export const productCategories: ProductCategory[] = [
   },
   {
     slug: "end-bits",
-    name: "End Bits & Corner Bits",
-    tagline: "Heavy-duty end bits and corner bits for motor grader blades",
+    name: "End Bits",
+    tagline: "Heavy-duty end bits for motor grader blades — LH & RH pairs",
     description:
-      "End bits (also called corner bits or side cutters) protect the ends of the motor grader blade and handle the heaviest wear during grading operations. SSI Earthmovers supplies cast and forged end bits for all major grader brands.",
+      "End bits protect the ends of the motor grader blade and handle the heaviest wear during grading operations. SSI Earthmovers supplies cast and forged end bits for all major grader brands in left-hand and right-hand pairs.",
     longDescription:
       "End bits sit at both ends of the motor grader blade and take the most severe wear — they handle the transition between cutting and pushing material. A worn end bit accelerates wear on the main blade and reduces grading quality. SSI Earthmovers supplies both LH (left-hand) and RH (right-hand) end bits in cast steel and Hardox grades for all motor grader models. Our end bits are dimensionally matched to OEM specifications for a perfect bolt-on fit.",
     specs: [
@@ -1004,9 +1004,9 @@ export const productCategories: ProductCategory[] = [
       { name: "LH + RH Pair Set", desc: "Complete set of left and right end bits. Priced as a pair." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-end-bits.jpg",
-    metaTitle: "Motor Grader End Bits Corner Bits India | All Brands | SSI Earthmovers Delhi",
-    metaDesc: "Buy motor grader end bits and corner bits in India. LH & RH pairs. CAT, Komatsu, CASE, XCMG, Leeboy, SDLG. Same-day dispatch from New Delhi.",
+    img: "/images/category-end-bits.png",
+    metaTitle: "Motor Grader End Bits India | LH & RH Pairs | SSI Earthmovers Delhi",
+    metaDesc: "Buy motor grader end bits in India. LH & RH pairs. Cast steel & Hardox. CAT, Komatsu, CASE, XCMG, Leeboy, SDLG. Same-day dispatch from New Delhi.",
     faqs: [
       { q: "What is the difference between LH and RH end bits?", a: "LH (left-hand) and RH (right-hand) end bits are mirror images of each other — they fit on the left and right ends of the grader blade respectively. Both are needed for a complete set." },
     ],
