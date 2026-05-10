@@ -190,6 +190,7 @@ export const brands: BrandInfo[] = [
       { name: "Adjuster",                                     partNo: "23H-735-1131",        model: "Komatsu GD535",       category: "general" },
       { name: "Adjuster (L.H)",                               partNo: "23B-735-1170",        model: "Komatsu GD511/GD535", category: "general" },
       { name: "Adjuster (R.H)",                               partNo: "23B-735-1180",        model: "Komatsu GD511/GD535", category: "general" },
+      { name: "Adjuster (R.H)",                               partNo: "23H-735-1141",        model: "Komatsu GD535",       category: "general", img: "/images/adjuster-rh-komatsu-23h-735-1141.png" },
       { name: "Balance Rod",                                  partNo: "23B-735-324041",      model: "Komatsu GD535",       category: "general" },
       { name: "Bevel Gear Assembly (Crown-43T, Shaft-12T, 20T)", partNo: "23A-22-11200",    model: "Komatsu GD511/GD535", category: "gear" },
       { name: "Bracket",                                      partNo: "23A-27-11160",        model: "Komatsu GD511/GD535", category: "general" },
