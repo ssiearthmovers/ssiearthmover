@@ -364,6 +364,7 @@ export const brands: BrandInfo[] = [
       "Draw Bar Parts",
     ],
     parts: [
+      { name: "Adjuster (L.H)", partNo: "380400858", model: "XCMG 165", category: "general", img: "/images/adjuster-lh-xcmg-380400858.png" },
       { name: "Guide Thin", partNo: "83640006", model: "XCMG 165", category: "general" },
       { name: "King Pin", partNo: "380400474", model: "XCMG 165", category: "pin" },
       { name: "Nut", partNo: "805238929", model: "XCMG 165", category: "general" },
