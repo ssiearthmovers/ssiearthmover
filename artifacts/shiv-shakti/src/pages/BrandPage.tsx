@@ -160,6 +160,7 @@ export default function BrandPage() {
 
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("all");
+  const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
 
   useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
 
@@ -385,12 +386,19 @@ export default function BrandPage() {
                 <FadeIn key={i} delay={i * 0.08} className={isLastOdd ? "sm:col-span-2" : ""}>
                   <div className="rounded-2xl overflow-hidden border border-[#2A2E37] hover:border-[#F5A623]/50 hover:shadow-[0_8px_40px_rgba(245,166,35,0.1)] transition-all group">
                     {/* Image on true white — catalogue sheets are already white bg */}
-                    <div className="bg-white flex items-center justify-center" style={{ height: "260px" }}>
+                    <div
+                      className="bg-white flex items-center justify-center relative cursor-zoom-in"
+                      style={{ height: "260px" }}
+                      onClick={() => setZoomImg({ src: fp.img, name: fp.name })}
+                    >
                       <img
                         src={fp.img}
                         alt={fp.name}
                         className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
                       />
+                      <div className="absolute bottom-2 right-2 bg-black/60 rounded px-2 py-0.5 text-[10px] text-[#F5A623] font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Click to zoom
+                      </div>
                     </div>
                     {/* Footer label */}
                     <div className="bg-[#1A1D24] px-5 py-3 flex items-center justify-between border-t border-[#2A2E37]">
@@ -718,6 +726,33 @@ export default function BrandPage() {
           </div>
         </motion.div>
       </a>
+
+      {/* ─── IMAGE ZOOM LIGHTBOX ─── */}
+      {zoomImg && (
+        <div
+          className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setZoomImg(null)}
+        >
+          <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setZoomImg(null)}
+              className="absolute -top-10 right-0 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-wide"
+            >
+              ✕ Close
+            </button>
+            <div className="bg-white rounded-xl p-4 flex flex-col items-center gap-3">
+              <img
+                src={zoomImg.src}
+                alt={zoomImg.name}
+                className="max-h-[70vh] w-auto object-contain rounded"
+              />
+              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest bg-[#1A1D24] px-4 py-1.5 rounded-full">
+                {zoomImg.name}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <SiteFooter />
     </div>

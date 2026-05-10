@@ -139,6 +139,7 @@ export const brands: BrandInfo[] = [
         { name: "Sprockets, Sprockets, Sleeves & Ball",     img: "/images/parts/cat-sheet-2.png" },
         { name: "Gear, Housing, Levers, Pins & Plates",     img: "/images/parts/cat-sheet-3.png" },
         { name: "Shafts, Shoes, Spindle & Strip Wear",      img: "/images/parts/cat-sheet-4.png" },
+        { name: "Ring Gear — CAT 6G5533",                   img: "/images/ring-gear-cat-6g5533.png" },
       ],
       collageParts: [],
     },
