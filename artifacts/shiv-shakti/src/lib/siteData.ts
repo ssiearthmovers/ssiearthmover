@@ -451,7 +451,7 @@ export const brands: BrandInfo[] = [
       { name: "Yoke Propeller Shaft", partNo: "—", model: "Leeboy 785/985", category: "shaft" },
       { name: "Plate Slide Shim (L Type)", partNo: "10010188", model: "Leeboy 785/985", category: "plate" },
       { name: "Assembly Wheel Hub", partNo: "10018448", model: "Leeboy 785/985", category: "hub" },
-      { name: "Brake Disc Drum", partNo: "3350003", model: "Leeboy 785/985", category: "brake" },
+      { name: "Brake Disc Drum", partNo: "3350003", model: "Leeboy 785/985", category: "brake", img: "/images/brake-disc-drum-leeboy-3350003.png" },
       { name: "Sprocket Z22", partNo: "3349483", model: "Leeboy 785/985", category: "sprocket" },
       { name: "Sheer Pin", partNo: "10010246", model: "Leeboy 785/985", category: "pin" },
       { name: "Guide Blade", partNo: "10010190", model: "Leeboy 785/985", category: "general" },
