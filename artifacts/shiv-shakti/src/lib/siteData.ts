@@ -445,6 +445,7 @@ export const brands: BrandInfo[] = [
       { name: "Side Cutter / End Bit", partNo: "10011358", model: "Leeboy 785/985", category: "end-bit" },
       { name: "Brake Piston", partNo: "3349973", model: "Leeboy 785/985", category: "brake" },
       { name: "Flange (34 teeth)", partNo: "4656.303.016", model: "Leeboy 785/985", category: "hub" },
+      { name: "Flange Gear (27 Teeth)", partNo: "10010245", model: "Leeboy 785/985", category: "gear", img: "/images/flange-gear-27t-leeboy-10010245.png" },
       { name: "T-Lock", partNo: "10018233", model: "Leeboy 785/985", category: "general" },
       { name: "Tooth", partNo: "10018178", model: "Leeboy 785/985", category: "general" },
       { name: "Gear Worm", partNo: "—", model: "Leeboy 785/985", category: "gear" },
