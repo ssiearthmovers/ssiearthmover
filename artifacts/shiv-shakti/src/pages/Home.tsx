@@ -457,24 +457,24 @@ export default function Home() {
             : "bg-[#0F1014]/60 backdrop-blur-sm py-4"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-10 flex justify-between items-center gap-6">
+        <div className="max-w-screen-2xl mx-auto px-4 md:px-8 flex justify-between items-center gap-3">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="text-lg md:text-xl font-black tracking-tight text-white uppercase shrink-0"
+            className="text-base md:text-lg font-black tracking-tight text-white uppercase shrink-0 whitespace-nowrap"
             data-testid="link-logo"
           >
             Shiv Shakti <span className="text-[#F5A623]">International</span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-1 text-sm font-semibold tracking-wide">
+          <nav className="hidden md:flex items-center text-xs font-bold tracking-wide text-gray-300">
             {/* Products dropdown */}
             <div className="relative group">
               <button
                 onClick={() => scrollTo("products")}
-                className="flex items-center gap-1 px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase"
+                className="flex items-center gap-1 px-2.5 py-2 rounded hover:text-[#F5A623] transition-colors uppercase whitespace-nowrap"
                 data-testid="link-nav-products"
               >
-                Products <ChevronDown className="w-3.5 h-3.5" />
+                Products <ChevronDown className="w-3 h-3" />
               </button>
               <div className="absolute top-full left-0 mt-1 w-56 bg-[#0F1014] border border-[#2A2E37] rounded-lg shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
                 {productCategories.map((p) => (
@@ -490,8 +490,8 @@ export default function Home() {
             </div>
             {/* Brands dropdown */}
             <div className="relative group">
-              <button className="flex items-center gap-1 px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase">
-                Brands <ChevronDown className="w-3.5 h-3.5" />
+              <button className="flex items-center gap-1 px-2.5 py-2 rounded hover:text-[#F5A623] transition-colors uppercase whitespace-nowrap">
+                Brands <ChevronDown className="w-3 h-3" />
               </button>
               <div className="absolute top-full left-0 mt-1 w-52 bg-[#0F1014] border border-[#2A2E37] rounded-lg shadow-2xl py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150">
                 {allBrands.map((b) => (
@@ -511,7 +511,7 @@ export default function Home() {
                 <button
                   key={l.id}
                   onClick={() => scrollTo(l.id)}
-                  className="px-3 py-2 rounded text-gray-300 hover:text-[#F5A623] transition-colors uppercase"
+                  className="px-2.5 py-2 rounded hover:text-[#F5A623] transition-colors uppercase whitespace-nowrap"
                   data-testid={`link-nav-${l.id}`}
                 >
                   {l.label}
@@ -519,26 +519,18 @@ export default function Home() {
               ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            <a
-              href="tel:+919953105738"
-              className="flex items-center gap-2 text-sm font-bold text-gray-200 hover:text-[#F5A623] transition-colors border border-white/10 hover:border-[#F5A623]/40 px-4 py-2 rounded"
-              data-testid="link-phone-nav"
-            >
-              <Phone className="w-4 h-4 text-[#F5A623]" />
-              +91-9953105738
-            </a>
+          <div className="hidden md:flex items-center gap-2 shrink-0">
             <a
               href="/ssi-catalogue.pdf"
               download="SSI-Earthmovers-Catalogue.pdf"
-              className="hidden lg:flex items-center gap-1.5 border border-[#F5A623]/50 text-[#F5A623] px-4 py-2.5 rounded font-bold uppercase tracking-wide hover:bg-[#F5A623] hover:text-black transition-all text-sm"
+              className="hidden lg:flex items-center gap-1.5 border border-[#F5A623]/50 text-[#F5A623] px-3 py-2 rounded font-bold uppercase tracking-wide hover:bg-[#F5A623] hover:text-black transition-all text-xs whitespace-nowrap"
               data-testid="button-download-catalogue-nav"
             >
-              <Download className="w-4 h-4" /> Catalogue
+              <Download className="w-3.5 h-3.5" /> Catalogue
             </a>
             <button
               onClick={() => scrollTo("contact")}
-              className="bg-[#F5A623] text-black px-5 py-2.5 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all text-sm"
+              className="bg-[#F5A623] text-black px-4 py-2 rounded font-black uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all text-xs whitespace-nowrap"
               data-testid="button-get-quote-nav"
             >
               Get a Quote
@@ -632,7 +624,7 @@ export default function Home() {
         {/* Dust / haze particles feel */}
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#16181D] to-transparent z-10 pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-12 items-center relative z-20">
+        <div className="w-full max-w-screen-2xl mx-auto px-6 md:px-10 grid lg:grid-cols-2 gap-12 items-center relative z-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
