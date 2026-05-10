@@ -431,6 +431,7 @@ export const brands: BrandInfo[] = [
       "Draw Bar Pins",
     ],
     parts: [
+      { name: "Housing", partNo: "3493583", model: "Leeboy 785/985", category: "general", img: "/images/housing-leeboy-3493583.png" },
       { name: "Lock Washer", partNo: "10018375", model: "Leeboy 785/985", category: "general" },
       { name: "Propeller Shaft Assembly", partNo: "10012786", model: "Leeboy 785/985", category: "shaft" },
       { name: "Shaft Worm Gear", partNo: "983134", model: "Leeboy 785/985", category: "gear" },
