@@ -871,6 +871,766 @@ function TemplatesPanel({ auth }: { auth: AuthInfo }) {
   );
 }
 
+// ─── Inventory helpers ────────────────────────────────────────────────────────
+
+function parseImportText(text: string): { rows: ImportRow[]; error: string } {
+  const lines = text.trim().split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return { rows: [], error: "Need at least a header row and one data row." };
+  const first = lines[0];
+  const delim = first.includes("\t") ? "\t" : ",";
+
+  function parseLine(line: string): string[] {
+    const result: string[] = [];
+    let current = "";
+    let inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQuote && line[i + 1] === '"') { current += '"'; i++; }
+        else inQuote = !inQuote;
+      } else if (ch === delim && !inQuote) {
+        result.push(current.trim()); current = "";
+      } else { current += ch; }
+    }
+    result.push(current.trim());
+    return result;
+  }
+
+  const FIELD: Record<string, string> = {
+    "partnumber": "partNumber", "part_number": "partNumber", "partno": "partNumber",
+    "part no": "partNumber", "part": "partNumber", "ssi part no": "partNumber", "ssi part": "partNumber",
+    "name": "name", "partname": "name", "part name": "name", "part_name": "name", "description": "description",
+    "brand": "brand", "make": "brand", "oem brand": "brand",
+    "model": "model", "machine": "model", "machine model": "model", "applicable model": "model",
+    "category": "category", "cat": "category", "type": "category",
+    "oem": "oemNumber", "oemnumber": "oemNumber", "oem number": "oemNumber", "oemno": "oemNumber",
+    "oem no": "oemNumber", "oem part no": "oemNumber", "oem part number": "oemNumber",
+    "unit": "unit", "uom": "unit",
+    "rack": "rackLocation", "racklocation": "rackLocation", "rack location": "rackLocation",
+    "rack_location": "rackLocation", "bin": "rackLocation", "shelf": "rackLocation",
+    "quantity": "quantity", "qty": "quantity", "stock": "quantity", "stock qty": "quantity",
+    "reorderlevel": "reorderLevel", "reorder level": "reorderLevel", "reorder": "reorderLevel",
+    "reorder_level": "reorderLevel", "min stock": "reorderLevel", "min qty": "reorderLevel",
+  };
+
+  const rawH = parseLine(first);
+  const headers = rawH.map((h) => {
+    const k = h.toLowerCase().replace(/['"]/g, "").trim().replace(/\s+/g, " ");
+    return FIELD[k] ?? k;
+  });
+
+  const rows: ImportRow[] = [];
+  for (const line of lines.slice(1)) {
+    if (!line.trim()) continue;
+    const cols = parseLine(line);
+    const row: ImportRow = {};
+    headers.forEach((f, i) => { if (cols[i] !== undefined && cols[i] !== "") row[f] = cols[i]; });
+    if (Object.keys(row).length > 0) rows.push(row);
+  }
+
+  if (rows.length === 0) return { rows: [], error: "No valid data rows found." };
+  if (!headers.includes("partNumber") && !headers.includes("name")) {
+    return { rows, error: "Warning: Could not detect 'Part Number' column. Check your headers." };
+  }
+  return { rows, error: "" };
+}
+
+function stockStatusStyle(status: string) {
+  if (status === "in-stock") return { tw: "bg-green-500/15 text-green-400 border-green-500/30", label: "In Stock", dot: "bg-green-400" };
+  if (status === "low-stock") return { tw: "bg-amber-500/15 text-amber-400 border-amber-500/30", label: "Low Stock", dot: "bg-amber-400" };
+  if (status === "out-of-stock") return { tw: "bg-red-500/15 text-red-400 border-red-500/30", label: "Out of Stock", dot: "bg-red-400" };
+  if (status === "reserved") return { tw: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30", label: "Reserved", dot: "bg-indigo-400" };
+  if (status === "dispatched") return { tw: "bg-blue-500/15 text-blue-400 border-blue-500/30", label: "Dispatched", dot: "bg-blue-400" };
+  return { tw: "bg-gray-500/15 text-gray-400 border-gray-500/30", label: status, dot: "bg-gray-400" };
+}
+
+function downloadImportTemplate() {
+  const csv = [
+    "Part Number,Name,Brand,Model,Category,OEM Number,Description,Unit,Rack Location,Quantity,Reorder Level",
+    "CAT-1R0714,Engine Oil Filter,CAT,140H,Filters,1R-0714,Heavy duty oil filter for motor grader,pcs,A-12,10,3",
+    "KOM-421-20-31100,Sprocket Assembly,Komatsu,GD555,Sprockets,421-20-31100,Drive sprocket for tandem,pcs,B-05,5,2",
+    "GD140-RH-EB,Right Hand End Bit,Generic,GD140 Series,End Bits,,Bolt-on end bit for grader blade,pcs,C-08,20,5",
+  ].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "ssi-products-import-template.csv";
+  a.click();
+}
+
+const PREVIEW_COLS = ["partNumber", "name", "brand", "model", "category", "quantity"] as const;
+
+// ─── Inventory Panel ───────────────────────────────────────────────────────────
+
+function InventoryPanel({ auth }: { auth: AuthInfo }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [subTab, setSubTab] = useState<"products" | "import" | "history">("products");
+
+  // Products state
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // Stock update modal
+  const [stockModal, setStockModal] = useState<{
+    product: Product; action: "add" | "remove" | "set"; amount: string; reason: string;
+  } | null>(null);
+  const [stockSaving, setStockSaving] = useState(false);
+  const [stockError, setStockError] = useState("");
+
+  // Add product modal
+  const [showAdd, setShowAdd] = useState(false);
+  const [addForm, setAddForm] = useState({
+    partNumber: "", name: "", brand: "", model: "", category: "",
+    oemNumber: "", description: "", unit: "pcs", rackLocation: "", quantity: "0", reorderLevel: "5",
+  });
+  const [addSaving, setAddSaving] = useState(false);
+  const [addError, setAddError] = useState("");
+
+  // Import state
+  const [importText, setImportText] = useState("");
+  const [importRows, setImportRows] = useState<ImportRow[]>([]);
+  const [importError, setImportError] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState<{
+    inserted: number; updated: number; skipped: number; errors: string[]; total: number;
+  } | null>(null);
+  const [importFileName, setImportFileName] = useState("paste-import");
+
+  // History state
+  const [importHistory, setImportHistory] = useState<ImportHistoryItem[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  const loadProducts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await fetch(`${API_BASE}/stock/products`, { headers: authHeader(auth.token) });
+      if (r.ok) setProducts((await r.json()) as Product[]);
+    } finally { setLoading(false); }
+  }, [auth.token]);
+
+  const loadHistory = useCallback(async () => {
+    setHistoryLoading(true);
+    try {
+      const r = await fetch(`${API_BASE}/stock/import-history`, { headers: authHeader(auth.token) });
+      if (r.ok) setImportHistory((await r.json()) as ImportHistoryItem[]);
+    } finally { setHistoryLoading(false); }
+  }, [auth.token]);
+
+  useEffect(() => { void loadProducts(); }, [loadProducts]);
+  useEffect(() => { if (subTab === "history") void loadHistory(); }, [subTab, loadHistory]);
+
+  const stats = {
+    total: products.length,
+    inStock: products.filter((p) => p.status === "in-stock").length,
+    lowStock: products.filter((p) => p.status === "low-stock").length,
+    outOfStock: products.filter((p) => p.status === "out-of-stock").length,
+  };
+
+  const filtered = products.filter((p) => {
+    if (statusFilter !== "all" && p.status !== statusFilter) return false;
+    if (!search.trim()) return true;
+    const q = search.trim().toLowerCase();
+    return (
+      p.partNumber.toLowerCase().includes(q) ||
+      p.name.toLowerCase().includes(q) ||
+      (p.brand ?? "").toLowerCase().includes(q) ||
+      (p.category ?? "").toLowerCase().includes(q) ||
+      (p.oemNumber ?? "").toLowerCase().includes(q) ||
+      (p.rackLocation ?? "").toLowerCase().includes(q)
+    );
+  });
+
+  const handleStockSave = async () => {
+    if (!stockModal) return;
+    const amt = parseInt(stockModal.amount, 10);
+    if (isNaN(amt) || amt < 0) { setStockError("Enter a valid non-negative number"); return; }
+    setStockSaving(true); setStockError("");
+    try {
+      const r = await fetch(`${API_BASE}/stock/products/${stockModal.product.id}/stock`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+        body: JSON.stringify({ action: stockModal.action, amount: amt, reason: stockModal.reason.trim() || undefined }),
+      });
+      if (!r.ok) { const d = (await r.json()) as { error?: string }; setStockError(d.error ?? "Failed"); return; }
+      const updated = (await r.json()) as Product;
+      setProducts((prev) => prev.map((p) => p.id === updated.id ? updated : p));
+      setStockModal(null);
+    } finally { setStockSaving(false); }
+  };
+
+  const handleDelete = async (id: number, name: string) => {
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    setDeletingId(id);
+    try {
+      await fetch(`${API_BASE}/stock/products/${id}`, { method: "DELETE", headers: authHeader(auth.token) });
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } finally { setDeletingId(null); }
+  };
+
+  const handleAddProduct = async (e: React.FormEvent) => {
+    e.preventDefault(); setAddSaving(true); setAddError("");
+    try {
+      const r = await fetch(`${API_BASE}/stock/products`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+        body: JSON.stringify({
+          ...addForm,
+          quantity: parseInt(addForm.quantity, 10) || 0,
+          reorderLevel: parseInt(addForm.reorderLevel, 10) || 5,
+        }),
+      });
+      if (!r.ok) { const d = (await r.json()) as { error?: string }; setAddError(d.error ?? "Failed"); return; }
+      const created = (await r.json()) as Product;
+      setProducts((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name)));
+      setShowAdd(false);
+      setAddForm({ partNumber: "", name: "", brand: "", model: "", category: "", oemNumber: "", description: "", unit: "pcs", rackLocation: "", quantity: "0", reorderLevel: "5" });
+    } finally { setAddSaving(false); }
+  };
+
+  const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImportFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string;
+      setImportText(text);
+      const { rows, error } = parseImportText(text);
+      setImportRows(rows); setImportError(error); setImportResult(null);
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const handleParseText = () => {
+    setImportResult(null);
+    const { rows, error } = parseImportText(importText);
+    setImportRows(rows); setImportError(error);
+  };
+
+  const handleImport = async () => {
+    if (!importRows.length) return;
+    setImporting(true); setImportResult(null);
+    try {
+      const r = await fetch(`${API_BASE}/stock/import`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+        body: JSON.stringify({ rows: importRows, fileName: importFileName }),
+      });
+      const result = (await r.json()) as { inserted: number; updated: number; skipped: number; errors: string[]; total: number };
+      setImportResult(result);
+      if (r.ok) { setImportText(""); setImportRows([]); void loadProducts(); }
+    } finally { setImporting(false); }
+  };
+
+  return (
+    <div>
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="text-lg font-black text-white uppercase tracking-wide">Inventory Management</h2>
+            <p className="text-gray-500 text-sm mt-0.5">Manage stock, import from Excel/CSV, track all changes.</p>
+          </div>
+          <button onClick={() => void loadProducts()} disabled={loading}
+            className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-40">
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+          </button>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          {([
+            ["all", "Total Products", stats.total, Database, "text-[#F5A623]", "bg-[#F5A623]/10"],
+            ["in-stock", "In Stock", stats.inStock, CheckCircle2, "text-green-400", "bg-green-500/10"],
+            ["low-stock", "Low Stock", stats.lowStock, AlertTriangle, "text-amber-400", "bg-amber-500/10"],
+            ["out-of-stock", "Out of Stock", stats.outOfStock, AlertCircle, "text-red-400", "bg-red-500/10"],
+          ] as const).map(([filter, label, value, Icon, cls, bg]) => (
+            <button key={filter}
+              onClick={() => { setStatusFilter(statusFilter === filter && filter !== "all" ? "all" : filter); setSubTab("products"); }}
+              className={`rounded-xl p-4 flex items-center gap-3 border transition-all text-left ${statusFilter === filter && filter !== "all" ? "border-[#F5A623]/40 bg-[#F5A623]/5" : "bg-[#16181D] border-[#2A2E37] hover:border-[#3A3E47]"}`}>
+              <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center shrink-0`}>
+                <Icon className={`w-5 h-5 ${cls}`} />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-white leading-none">{value}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Low Stock Alert Banner */}
+        {stats.lowStock > 0 && subTab === "products" && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-center gap-3 text-sm">
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+            <span className="text-amber-300">{stats.lowStock} product{stats.lowStock !== 1 ? "s" : ""} below reorder level — replenishment recommended.</span>
+          </div>
+        )}
+      </div>
+
+      {/* Sub Tabs */}
+      <div className="flex gap-1 mb-6 bg-[#16181D] border border-[#2A2E37] rounded-xl p-1">
+        {([
+          ["products", "Products", Package],
+          ["import", "Import from Excel / CSV", Upload],
+          ["history", "Import History", FileText],
+        ] as const).map(([t, label, Icon]) => (
+          <button key={t} onClick={() => setSubTab(t)}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${subTab === t ? "bg-[#F5A623] text-black" : "text-gray-400 hover:text-white"}`}>
+            <Icon className="w-4 h-4" /><span className="hidden sm:inline">{label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* ── Products Tab ─────────────────────────────────────────────────────── */}
+      {subTab === "products" && (
+        <div>
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input type="text" placeholder="Search part number, name, brand, OEM…" value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-10 pr-4 py-2.5 text-white placeholder-gray-600 text-sm transition-colors" />
+              {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"><X className="w-3.5 h-3.5" /></button>}
+            </div>
+            <div className="relative">
+              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+                className="appearance-none bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-4 pr-9 py-2.5 text-white text-sm cursor-pointer">
+                <option value="all">All Status</option>
+                <option value="in-stock">In Stock</option>
+                <option value="low-stock">Low Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+                <option value="reserved">Reserved</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+            <button onClick={() => setShowAdd(true)}
+              className="flex items-center gap-2 bg-[#F5A623] text-black px-4 py-2.5 rounded-lg font-black text-sm hover:brightness-110 transition-all whitespace-nowrap">
+              <Plus className="w-4 h-4" /> Add Product
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center py-16"><RefreshCw className="w-6 h-6 text-[#F5A623] animate-spin" /></div>
+          ) : filtered.length === 0 ? (
+            <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl p-16 text-center">
+              <Package className="w-10 h-10 text-gray-600 mx-auto mb-3" />
+              <p className="text-white font-bold">{products.length === 0 ? "No products yet" : "No matching products"}</p>
+              <p className="text-gray-500 text-sm mt-1">
+                {products.length === 0
+                  ? <button onClick={() => setSubTab("import")} className="text-[#F5A623] hover:underline">Import from Excel/CSV →</button>
+                  : "Try adjusting your search or filter."}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#2A2E37] text-gray-500 text-xs uppercase tracking-widest">
+                      {["Part No", "Name / OEM", "Brand / Model", "Category", "Qty", "Reorder", "Status", ""].map((h) => (
+                        <th key={h} className="text-left px-4 py-3.5 font-semibold whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((p, i) => {
+                      const s = stockStatusStyle(p.status);
+                      return (
+                        <tr key={p.id} className={`border-b border-[#2A2E37]/40 hover:bg-white/[0.025] transition-colors ${i === filtered.length - 1 ? "border-b-0" : ""}`}>
+                          <td className="px-4 py-3 font-mono text-xs text-[#F5A623] whitespace-nowrap">{p.partNumber}</td>
+                          <td className="px-4 py-3">
+                            <p className="font-semibold text-white text-xs leading-tight">{p.name}</p>
+                            {p.oemNumber && <p className="text-gray-600 text-[10px] mt-0.5 font-mono">OEM: {p.oemNumber}</p>}
+                          </td>
+                          <td className="px-4 py-3">
+                            <p className="text-gray-300 text-xs">{p.brand ?? "—"}</p>
+                            {p.model && <p className="text-gray-500 text-[10px] mt-0.5">{p.model}</p>}
+                          </td>
+                          <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{p.category ?? "—"}</td>
+                          <td className="px-4 py-3">
+                            <span className={`font-black text-sm ${p.quantity === 0 ? "text-red-400" : p.quantity <= p.reorderLevel ? "text-amber-400" : "text-white"}`}>
+                              {p.quantity}
+                            </span>
+                            <span className="text-gray-600 text-[10px] ml-1">{p.unit}</span>
+                          </td>
+                          <td className="px-4 py-3 text-gray-500 text-xs">{p.reorderLevel}</td>
+                          <td className="px-4 py-3">
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold border ${s.tw} whitespace-nowrap`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
+                              {s.label}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => setStockModal({ product: p, action: "add", amount: "", reason: "" })}
+                                className="px-2.5 py-1.5 rounded-lg bg-[#F5A623]/10 text-[#F5A623] text-xs font-bold hover:bg-[#F5A623]/20 transition-colors whitespace-nowrap">
+                                Stock
+                              </button>
+                              <button onClick={() => void handleDelete(p.id, p.name)} disabled={deletingId === p.id}
+                                className="p-1.5 rounded-lg text-gray-600 hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-40">
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div className="px-4 py-3 border-t border-[#2A2E37] text-xs text-gray-600">
+                Showing {filtered.length} of {products.length} products
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Import Tab ──────────────────────────────────────────────────────── */}
+      {subTab === "import" && (
+        <div className="space-y-5">
+          {/* Instructions */}
+          <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl p-5">
+            <div className="flex items-start justify-between gap-4 mb-3">
+              <div>
+                <h3 className="font-black text-white text-sm mb-1">Import Stock from Excel or CSV</h3>
+                <p className="text-gray-500 text-xs leading-relaxed">
+                  Open your Excel file → select all rows (including header) → copy → paste below. Or export as CSV and upload the file.
+                  The first row must be column headers. Columns can be in any order.
+                  Existing part numbers will be <span className="text-sky-400 font-semibold">updated</span>; new ones will be <span className="text-green-400 font-semibold">inserted</span>.
+                </p>
+              </div>
+              <button onClick={downloadImportTemplate}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#2A2E37] text-gray-400 hover:text-[#F5A623] hover:border-[#F5A623]/40 text-xs font-bold whitespace-nowrap transition-colors shrink-0">
+                <Download className="w-3.5 h-3.5" /> Template
+              </button>
+            </div>
+            <div className="bg-[#0D0F12] rounded-lg p-3 overflow-x-auto">
+              <p className="font-mono text-[10px] text-gray-500 whitespace-nowrap">Part Number | Name | Brand | Model | Category | OEM Number | Description | Unit | Rack Location | Quantity | Reorder Level</p>
+            </div>
+          </div>
+
+          {/* Upload + Paste */}
+          <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl p-5 space-y-4">
+            <div className="flex items-center gap-3 flex-wrap">
+              <button onClick={() => fileRef.current?.click()}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#2A2E37] text-gray-300 hover:text-white hover:border-[#F5A623]/40 text-sm font-bold transition-colors">
+                <Upload className="w-4 h-4" /> Upload CSV File
+              </button>
+              {importFileName !== "paste-import" && (
+                <span className="text-xs text-[#F5A623] font-mono bg-[#F5A623]/10 px-2 py-1 rounded">{importFileName}</span>
+              )}
+              <input ref={fileRef} type="file" accept=".csv,.tsv,.txt" className="hidden" onChange={handleFilePick} />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
+                Or paste rows directly from Excel / Google Sheets
+              </label>
+              <textarea
+                value={importText}
+                onChange={(e) => { setImportText(e.target.value); setImportRows([]); setImportResult(null); }}
+                rows={9}
+                placeholder={"Part Number\tName\tBrand\tModel\tQuantity\n4110001903072\tRetarder Hub\tSHANTUI\tSG21-3\t3\nCAT-1R0714\tEngine Oil Filter\tCAT\t140H\t10"}
+                className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-4 py-3 text-white placeholder-gray-700 text-xs font-mono resize-y transition-colors"
+              />
+            </div>
+
+            {importError && (
+              <div className="flex items-center gap-2 text-amber-400 text-xs">
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> {importError}
+              </div>
+            )}
+
+            <div className="flex gap-3 flex-wrap">
+              <button onClick={handleParseText} disabled={!importText.trim()}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#2A2E37] text-gray-300 hover:text-white hover:border-[#F5A623]/40 text-sm font-bold transition-colors disabled:opacity-40">
+                <Search className="w-4 h-4" /> Preview {importRows.length > 0 ? `(${importRows.length} rows)` : "Rows"}
+              </button>
+              <button onClick={() => void handleImport()} disabled={importing || importRows.length === 0}
+                className="flex items-center gap-2 bg-[#F5A623] text-black px-5 py-2.5 rounded-lg font-black text-sm hover:brightness-110 transition-all disabled:opacity-50">
+                {importing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                {importing ? "Importing…" : `Import ${importRows.length > 0 ? `${importRows.length} Rows` : "Now"}`}
+              </button>
+            </div>
+          </div>
+
+          {/* Preview Table */}
+          {importRows.length > 0 && !importResult && (
+            <div className="bg-[#16181D] border border-[#F5A623]/20 rounded-xl p-5">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#F5A623] mb-3">
+                Preview — {importRows.length} rows detected
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-[#2A2E37] text-gray-500 uppercase tracking-wide">
+                      {PREVIEW_COLS.map((c) => <th key={c} className="text-left px-3 py-2 font-semibold">{c}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {importRows.slice(0, 8).map((row, i) => (
+                      <tr key={i} className="border-b border-[#2A2E37]/40">
+                        {PREVIEW_COLS.map((c) => (
+                          <td key={c} className={`px-3 py-2 ${c === "partNumber" ? "font-mono text-[#F5A623]" : "text-gray-300"}`}>
+                            {row[c] ?? <span className="text-gray-700">—</span>}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {importRows.length > 8 && (
+                  <p className="text-gray-600 text-[10px] mt-2 text-center">…and {importRows.length - 8} more rows</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Import Result */}
+          {importResult && (
+            <div className={`border rounded-xl p-5 ${importResult.errors.length > 0 ? "bg-amber-500/5 border-amber-500/30" : "bg-green-500/5 border-green-500/30"}`}>
+              <div className="flex items-center gap-3 mb-4">
+                {importResult.errors.length === 0
+                  ? <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0" />
+                  : <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />}
+                <p className="font-black text-white">Import Complete</p>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+                {([
+                  ["Total Rows", importResult.total, "text-white"],
+                  ["Inserted", importResult.inserted, "text-green-400"],
+                  ["Updated", importResult.updated, "text-sky-400"],
+                  ["Skipped", importResult.skipped, "text-gray-400"],
+                ] as const).map(([label, value, cls]) => (
+                  <div key={label} className="bg-[#0D0F12] rounded-lg p-3 text-center">
+                    <p className={`text-xl font-black ${cls}`}>{value}</p>
+                    <p className="text-gray-600 text-xs">{label}</p>
+                  </div>
+                ))}
+              </div>
+              {importResult.errors.length > 0 && (
+                <div className="bg-[#0D0F12] rounded-lg p-3 mb-3">
+                  <p className="text-xs font-bold text-amber-400 mb-1">Errors:</p>
+                  {importResult.errors.map((e, i) => <p key={i} className="text-xs text-gray-500 font-mono">{e}</p>)}
+                </div>
+              )}
+              <div className="flex gap-3">
+                <button onClick={() => { setImportResult(null); setImportRows([]); setImportText(""); }}
+                  className="text-xs text-gray-500 hover:text-white transition-colors underline">
+                  Import more
+                </button>
+                <button onClick={() => setSubTab("products")}
+                  className="text-xs text-[#F5A623] hover:underline transition-colors">
+                  View Products →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── History Tab ─────────────────────────────────────────────────────── */}
+      {subTab === "history" && (
+        <div>
+          {historyLoading ? (
+            <div className="flex justify-center py-16"><RefreshCw className="w-6 h-6 text-[#F5A623] animate-spin" /></div>
+          ) : importHistory.length === 0 ? (
+            <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl p-16 text-center">
+              <FileText className="w-10 h-10 text-gray-600 mx-auto mb-3" />
+              <p className="text-white font-bold">No imports yet</p>
+              <p className="text-gray-500 text-sm mt-1">Import history will appear here after your first import.</p>
+            </div>
+          ) : (
+            <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#2A2E37] text-gray-500 text-xs uppercase tracking-widest">
+                      {["Date", "File / Source", "Total", "Inserted", "Updated", "Skipped", "By"].map((h) => (
+                        <th key={h} className="text-left px-4 py-3.5 font-semibold whitespace-nowrap">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {importHistory.map((h, i) => (
+                      <tr key={h.id} className={`border-b border-[#2A2E37]/40 ${i === importHistory.length - 1 ? "border-b-0" : ""}`}>
+                        <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{formatDate(h.createdAt)}</td>
+                        <td className="px-4 py-3 font-mono text-xs text-[#F5A623] max-w-[180px] truncate">{h.fileName}</td>
+                        <td className="px-4 py-3 text-white font-bold text-xs">{h.totalRows}</td>
+                        <td className="px-4 py-3 text-green-400 font-bold text-xs">{h.inserted}</td>
+                        <td className="px-4 py-3 text-sky-400 font-bold text-xs">{h.updated}</td>
+                        <td className="px-4 py-3 text-gray-500 text-xs">{h.skipped}</td>
+                        <td className="px-4 py-3 text-gray-400 text-xs">{h.actorName}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Stock Update Modal ───────────────────────────────────────────────── */}
+      {stockModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setStockModal(null)}>
+          <div className="bg-[#16181D] border border-[#2A2E37] rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <p className="font-black text-white">{stockModal.product.name}</p>
+                <p className="font-mono text-xs text-[#F5A623] mt-0.5">{stockModal.product.partNumber}</p>
+              </div>
+              <button onClick={() => setStockModal(null)} className="p-2 text-gray-500 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+            </div>
+            <div className="bg-[#0D0F12] rounded-xl p-4 mb-5 flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-500 uppercase tracking-widest">Current Stock</p>
+                <p className="text-3xl font-black text-white mt-1">
+                  {stockModal.product.quantity} <span className="text-sm text-gray-500 font-normal">{stockModal.product.unit}</span>
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-gray-500">Reorder at</p>
+                <p className="text-lg font-black text-gray-400">{stockModal.product.reorderLevel}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {([
+                ["add", "Add Stock", "border-green-500/30 bg-green-500/15 text-green-400"],
+                ["remove", "Record Sale", "border-red-500/30 bg-red-500/15 text-red-400"],
+                ["set", "Set Exact", "border-[#F5A623]/30 bg-[#F5A623]/15 text-[#F5A623]"],
+              ] as const).map(([action, label, cls]) => (
+                <button key={action}
+                  onClick={() => setStockModal((m) => m ? { ...m, action } : null)}
+                  className={`py-2.5 px-2 rounded-lg text-xs font-black border transition-all ${stockModal.action === action ? cls : "bg-[#0D0F12] border-[#2A2E37] text-gray-500 hover:text-white"}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="space-y-3 mb-5">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1.5">
+                  {stockModal.action === "add" ? "Quantity to Add" : stockModal.action === "remove" ? "Quantity Sold / Removed" : "Set Stock To"}
+                </label>
+                <input type="number" min="0" value={stockModal.amount}
+                  onChange={(e) => setStockModal((m) => m ? { ...m, amount: e.target.value } : null)}
+                  placeholder="0" autoFocus
+                  className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-4 py-3 text-white text-lg font-black transition-colors" />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1.5">Reason (optional)</label>
+                <input type="text" value={stockModal.reason}
+                  onChange={(e) => setStockModal((m) => m ? { ...m, reason: e.target.value } : null)}
+                  placeholder="e.g. Sale to ABC Transport, Stock count…"
+                  className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-4 py-3 text-white placeholder-gray-600 text-sm transition-colors" />
+              </div>
+            </div>
+            {stockError && <div className="text-red-400 text-xs mb-3 flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5" />{stockError}</div>}
+            <div className="flex gap-3">
+              <button onClick={() => setStockModal(null)} className="flex-1 py-3 rounded-lg border border-[#2A2E37] text-gray-400 hover:text-white font-bold text-sm">Cancel</button>
+              <button onClick={() => void handleStockSave()} disabled={stockSaving || !stockModal.amount}
+                className="flex-1 py-3 rounded-lg bg-[#F5A623] text-black font-black text-sm hover:brightness-110 transition-all disabled:opacity-50">
+                {stockSaving ? "Saving…" : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Add Product Modal ────────────────────────────────────────────────── */}
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setShowAdd(false)}>
+          <div className="bg-[#16181D] border border-[#2A2E37] rounded-2xl p-6 w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-black text-white">Add New Product</h3>
+              <button onClick={() => setShowAdd(false)} className="p-2 text-gray-500 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+            </div>
+            <form onSubmit={(e) => void handleAddProduct(e)} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Part Number *</label>
+                  <input required value={addForm.partNumber} onChange={(e) => setAddForm((f) => ({ ...f, partNumber: e.target.value }))}
+                    placeholder="CAT-1R0714" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs font-mono" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">OEM Number</label>
+                  <input value={addForm.oemNumber} onChange={(e) => setAddForm((f) => ({ ...f, oemNumber: e.target.value }))}
+                    placeholder="1R-0714" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs font-mono" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Part Name *</label>
+                <input required value={addForm.name} onChange={(e) => setAddForm((f) => ({ ...f, name: e.target.value }))}
+                  placeholder="Engine Oil Filter" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Brand</label>
+                  <input value={addForm.brand} onChange={(e) => setAddForm((f) => ({ ...f, brand: e.target.value }))}
+                    placeholder="CAT, Komatsu…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Model</label>
+                  <input value={addForm.model} onChange={(e) => setAddForm((f) => ({ ...f, model: e.target.value }))}
+                    placeholder="140H, GD555…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Category</label>
+                  <input value={addForm.category} onChange={(e) => setAddForm((f) => ({ ...f, category: e.target.value }))}
+                    placeholder="Filters, Sprockets…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Unit</label>
+                  <input value={addForm.unit} onChange={(e) => setAddForm((f) => ({ ...f, unit: e.target.value }))}
+                    placeholder="pcs, set, kg…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Rack / Bin</label>
+                  <input value={addForm.rackLocation} onChange={(e) => setAddForm((f) => ({ ...f, rackLocation: e.target.value }))}
+                    placeholder="A-12" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Qty</label>
+                  <input type="number" min="0" value={addForm.quantity} onChange={(e) => setAddForm((f) => ({ ...f, quantity: e.target.value }))}
+                    className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white text-xs" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Reorder At</label>
+                  <input type="number" min="0" value={addForm.reorderLevel} onChange={(e) => setAddForm((f) => ({ ...f, reorderLevel: e.target.value }))}
+                    className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white text-xs" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Description</label>
+                <textarea value={addForm.description} onChange={(e) => setAddForm((f) => ({ ...f, description: e.target.value }))} rows={2}
+                  className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs resize-none" />
+              </div>
+              {addError && <div className="text-red-400 text-xs flex items-center gap-1.5"><AlertCircle className="w-3.5 h-3.5" />{addError}</div>}
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowAdd(false)} className="flex-1 py-3 rounded-lg border border-[#2A2E37] text-gray-400 hover:text-white font-bold text-sm">Cancel</button>
+                <button type="submit" disabled={addSaving} className="flex-1 py-3 rounded-lg bg-[#F5A623] text-black font-black text-sm hover:brightness-110 disabled:opacity-50">
+                  {addSaving ? "Adding…" : "Add Product"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main Admin Page ───────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -879,7 +1639,7 @@ export default function AdminPage() {
     try { return JSON.parse(localStorage.getItem(AUTH_KEY) ?? "null") as AuthInfo | null; }
     catch { return null; }
   });
-  const [view, setView] = useState<"enquiries" | "workers" | "templates">("enquiries");
+  const [view, setView] = useState<"enquiries" | "workers" | "templates" | "inventory">("enquiries");
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [loading, setLoading] = useState(false);
@@ -993,9 +1753,9 @@ export default function AdminPage() {
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-colors ${view === "templates" ? "bg-[#F5A623]/10 text-[#F5A623]" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
                   <Zap className="w-4 h-4" /><span className="hidden sm:inline">Templates</span>
                 </button>
-                <button onClick={() => navigate("/stock")}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-colors text-gray-400 hover:text-white hover:bg-white/5">
-                  <Box className="w-4 h-4" /><span className="hidden sm:inline">Stock</span>
+                <button onClick={() => setView("inventory")}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-colors ${view === "inventory" ? "bg-[#F5A623]/10 text-[#F5A623]" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
+                  <Package className="w-4 h-4" /><span className="hidden sm:inline">Inventory</span>
                 </button>
               </>
             )}
@@ -1016,6 +1776,7 @@ export default function AdminPage() {
 
         {view === "workers" && isAdmin && <WorkersPanel auth={auth} />}
         {view === "templates" && isAdmin && <TemplatesPanel auth={auth} />}
+        {view === "inventory" && isAdmin && <InventoryPanel auth={auth} />}
 
         {view === "enquiries" && (
           <>
