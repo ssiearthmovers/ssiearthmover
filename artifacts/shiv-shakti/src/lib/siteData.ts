@@ -107,7 +107,7 @@ export const brands: BrandInfo[] = [
       { name: "Bar Spreader (Balance Rod)", partNo: "8D5949",       model: "CAT 120K/H, 140H", category: "general" },
       { name: "Bearing Sleeve",     partNo: "2G7388",               model: "CAT 120K/H, 140H", category: "sleeve" },
       { name: "Bearing Sleeve",     partNo: "1461843",              model: "CAT 120K/H, 140H", category: "sleeve" },
-      { name: "Gear",               partNo: "6G5533",               model: "CAT 120K/H, 140H", category: "gear" },
+      { name: "Gear",               partNo: "6G5533",               model: "CAT 120K/H, 140H", category: "gear", img: "/images/ring-gear-cat-6g5533.png" },
       { name: "Housing",            partNo: "8X3395",               model: "CAT 120K/H, 140H", category: "hub" },
       { name: "Lever",              partNo: "3405470 / 1011970",    model: "CAT 120K/H, 140H", category: "general" },
       { name: "Lever",              partNo: "3405472",              model: "CAT 120K/H, 140H", category: "general" },

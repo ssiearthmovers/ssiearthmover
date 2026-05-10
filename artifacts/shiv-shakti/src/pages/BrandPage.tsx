@@ -74,7 +74,7 @@ const CAT_BADGE: Record<string, { label: string; cls: string }> = {
   general:     { label: "General",     cls: "bg-zinc-500/15 text-zinc-400 border-zinc-500/30" },
 };
 
-function PartRow({ part, index }: { part: BrandPart; index: number }) {
+function PartRow({ part, index, onImageClick }: { part: BrandPart; index: number; onImageClick?: (src: string, name: string) => void }) {
   const badge = CAT_BADGE[part.category] ?? CAT_BADGE.general;
   const waMsg = encodeURIComponent(
     `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
@@ -100,7 +100,7 @@ function PartRow({ part, index }: { part: BrandPart; index: number }) {
   return (
     <div className={`grid items-center gap-3 px-5 py-4 border-b border-[#2A2E37] hover:bg-[#F5A623]/5 transition-colors group
       ${index % 2 === 0 ? "bg-[#1A1D24]" : "bg-[#16181D]"}
-    `} style={{ gridTemplateColumns: "2rem 1fr auto auto" }}>
+    `} style={{ gridTemplateColumns: "2rem 1fr auto auto auto" }}>
       {/* Row number */}
       <span className="text-xs text-gray-600 font-mono tabular-nums">{index + 1}</span>
 
@@ -114,6 +114,19 @@ function PartRow({ part, index }: { part: BrandPart; index: number }) {
           <span className="text-gray-500 text-xs">{part.model}</span>
         </div>
       </div>
+
+      {/* Photo thumbnail (optional) */}
+      {part.img ? (
+        <button
+          onClick={() => onImageClick?.(part.img!, `${part.name} — ${part.partNo}`)}
+          className="shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
+          title="Click to zoom photo"
+        >
+          <img src={part.img} alt={part.name} className="w-full h-full object-contain p-0.5" />
+        </button>
+      ) : (
+        <span />
+      )}
 
       {/* Part number */}
       <div className="flex items-center gap-1.5 shrink-0">
@@ -502,14 +515,15 @@ export default function BrandPage() {
               <div className="rounded-xl overflow-hidden border border-[#2A2E37]">
                 {/* Table header */}
                 <div className="grid items-center gap-3 px-5 py-3 bg-[#111317] border-b border-[#2A2E37]"
-                  style={{ gridTemplateColumns: "2rem 1fr auto auto" }}>
+                  style={{ gridTemplateColumns: "2rem 1fr auto auto auto" }}>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">#</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Part Name / Category</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Photo</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">OEM Part No.</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 hidden md:block">Action</span>
                 </div>
                 {filteredParts.map((part, i) => (
-                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i} />
+                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i} onImageClick={(src, name) => setZoomImg({ src, name })} />
                 ))}
               </div>
             ) : (
