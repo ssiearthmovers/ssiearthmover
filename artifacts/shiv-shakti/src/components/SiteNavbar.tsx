@@ -35,8 +35,8 @@ export default function SiteNavbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center gap-4">
 
         {/* Logo */}
-        <Link href="/" className="text-base md:text-lg font-black tracking-tight text-white uppercase shrink-0 whitespace-nowrap">
-          Shiv Shakti <span className="text-[#F5A623]">International</span>
+        <Link href="/" className="shrink-0">
+          <img src="/images/ssi-logo.png" alt="SSI Earthmovers" className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}

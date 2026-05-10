@@ -333,6 +333,15 @@ function EnquiryDetailPanel({
   const [assigning, setAssigning] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
 
+  // Dispatch + inventory deduction modal
+  const [showDispatchModal, setShowDispatchModal] = useState(false);
+  const [dispatchSearch, setDispatchSearch] = useState(enquiry.part ?? "");
+  const [dispatchResults, setDispatchResults] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string }[]>([]);
+  const [dispatchProductId, setDispatchProductId] = useState<number | null>(null);
+  const [dispatchQty, setDispatchQty] = useState(1);
+  const [dispatchSearching, setDispatchSearching] = useState(false);
+  const [dispatchSaving, setDispatchSaving] = useState(false);
+
   useEffect(() => {
     setEnquiry(initialEnquiry);
   }, [initialEnquiry]);
@@ -379,6 +388,38 @@ function EnquiryDetailPanel({
       });
       if (res.ok) { const updated = (await res.json()) as Enquiry; setEnquiry(updated); onUpdate(updated); }
     } finally { setUpdatingStatus(false); }
+  };
+
+  const searchDispatchProduct = async (q: string) => {
+    if (!q.trim()) { setDispatchResults([]); return; }
+    setDispatchSearching(true);
+    try {
+      const res = await fetch(`${API_BASE}/products/search?q=${encodeURIComponent(q)}&limit=10`);
+      if (res.ok) {
+        const rows = (await res.json()) as { id: number; partNumber: string; name: string; unit: string }[];
+        // fetch quantities via admin stock endpoint
+        const stockRes = await fetch(`${API_BASE}/stock/products`, { headers: authHeader(auth.token) });
+        const stock: { id: number; quantity: number }[] = stockRes.ok ? (await stockRes.json()) : [];
+        const stockMap: Record<number, number> = {};
+        for (const s of stock) stockMap[s.id] = s.quantity;
+        setDispatchResults(rows.map((r) => ({ ...r, quantity: stockMap[r.id] ?? 0 })));
+      }
+    } finally { setDispatchSearching(false); }
+  };
+
+  const confirmDispatch = async () => {
+    setDispatchSaving(true);
+    try {
+      if (dispatchProductId !== null && dispatchQty > 0) {
+        await fetch(`${API_BASE}/stock/products/${dispatchProductId}/stock`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+          body: JSON.stringify({ action: "remove", amount: dispatchQty, reason: `Dispatched for enquiry #${enquiry.id} — ${enquiry.name}`, relatedEnquiryId: enquiry.id }),
+        });
+      }
+      await updateStatus("dispatched");
+      setShowDispatchModal(false);
+    } finally { setDispatchSaving(false); }
   };
 
   const assignWorker = async (workerId: number | null, workerName: string | null) => {
@@ -444,7 +485,17 @@ function EnquiryDetailPanel({
           )}
           <div className="flex gap-2 flex-wrap">
             <div className="relative">
-              <select value={enquiry.status} disabled={updatingStatus} onChange={(e) => { void updateStatus(e.target.value); }}
+              <select value={enquiry.status} disabled={updatingStatus} onChange={(e) => {
+                if (e.target.value === "dispatched") {
+                  setDispatchSearch(enquiry.part ?? "");
+                  setDispatchResults([]);
+                  setDispatchProductId(null);
+                  setDispatchQty(1);
+                  setShowDispatchModal(true);
+                } else {
+                  void updateStatus(e.target.value);
+                }
+              }}
                 className="appearance-none bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-3 pr-8 py-2 text-white text-xs cursor-pointer font-semibold disabled:opacity-50">
                 {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
@@ -470,6 +521,85 @@ function EnquiryDetailPanel({
             <StatusBadge status={enquiry.status} />
           </div>
         </div>
+
+        {/* Dispatch + Inventory Modal */}
+        {showDispatchModal && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+            <div className="bg-[#16181D] border border-[#2A2E37] rounded-2xl shadow-2xl w-full max-w-md flex flex-col gap-0 overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#2A2E37] bg-[#1C1F26]">
+                <div>
+                  <p className="font-black text-white text-sm">Mark as Dispatched</p>
+                  <p className="text-gray-500 text-xs mt-0.5">Optionally deduct from inventory</p>
+                </div>
+                <button onClick={() => setShowDispatchModal(false)} className="p-1.5 text-gray-500 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+              </div>
+              <div className="px-5 py-5 flex flex-col gap-4">
+                {/* Product search */}
+                <div>
+                  <label className="text-xs text-gray-400 font-semibold uppercase tracking-wide block mb-2">Search Inventory Product</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={dispatchSearch}
+                      onChange={(e) => setDispatchSearch(e.target.value)}
+                      placeholder="Part number or name…"
+                      className="flex-1 bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2 text-white text-sm placeholder-gray-600"
+                    />
+                    <button
+                      onClick={() => void searchDispatchProduct(dispatchSearch)}
+                      disabled={dispatchSearching}
+                      className="bg-[#F5A623] text-black px-4 py-2 rounded-lg font-bold text-xs hover:brightness-110 transition-all disabled:opacity-50"
+                    >
+                      {dispatchSearching ? "…" : "Search"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Results */}
+                {dispatchResults.length > 0 && (
+                  <div className="flex flex-col gap-1.5 max-h-40 overflow-y-auto">
+                    {dispatchResults.map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setDispatchProductId(p.id)}
+                        className={`text-left px-3 py-2.5 rounded-lg border text-xs transition-all ${dispatchProductId === p.id ? "border-[#F5A623] bg-[#F5A623]/10 text-white" : "border-[#2A2E37] bg-[#0D0F12] text-gray-300 hover:border-[#F5A623]/40"}`}
+                      >
+                        <span className="font-bold text-[#F5A623] mr-2">{p.partNumber}</span>{p.name}
+                        <span className="ml-2 text-gray-500">— {p.quantity} {p.unit} in stock</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Quantity */}
+                {dispatchProductId !== null && (
+                  <div>
+                    <label className="text-xs text-gray-400 font-semibold uppercase tracking-wide block mb-2">Quantity Dispatched</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={dispatchQty}
+                      onChange={(e) => setDispatchQty(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-32 bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2 text-white text-sm"
+                    />
+                    <p className="text-gray-600 text-xs mt-1">Set to 0 to skip inventory update.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-5 pb-5 flex gap-3">
+                <button
+                  onClick={() => void confirmDispatch()}
+                  disabled={dispatchSaving}
+                  className="flex-1 bg-indigo-500 hover:bg-indigo-400 text-white font-black text-sm py-3 rounded-xl transition-all disabled:opacity-50"
+                >
+                  {dispatchSaving ? "Saving…" : dispatchProductId !== null && dispatchQty > 0 ? `Dispatch & Deduct ${dispatchQty} unit${dispatchQty !== 1 ? "s" : ""}` : "Mark Dispatched (no stock change)"}
+                </button>
+                <button onClick={() => setShowDispatchModal(false)} className="px-4 py-3 rounded-xl border border-[#2A2E37] text-gray-400 hover:text-white text-sm font-bold transition-colors">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Conversation thread */}
         <div ref={threadRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-3">

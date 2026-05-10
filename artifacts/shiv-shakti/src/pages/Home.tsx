@@ -469,10 +469,10 @@ export default function Home() {
         <div className="max-w-screen-2xl mx-auto px-4 md:px-8 flex justify-between items-center gap-3">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="text-base md:text-lg font-black tracking-tight text-white uppercase shrink-0 whitespace-nowrap"
+            className="shrink-0"
             data-testid="link-logo"
           >
-            Shiv Shakti <span className="text-[#F5A623]">International</span>
+            <img src="/images/ssi-logo.png" alt="SSI Earthmovers" className="h-10 w-auto" />
           </button>
 
           <nav className="hidden md:flex items-center text-xs font-bold tracking-wide text-gray-300">
@@ -1909,8 +1909,8 @@ export default function Home() {
       <footer className="bg-[#0A0B0E] pt-16 pb-8 border-t border-[#2A2E37]">
         <div className="max-w-7xl mx-auto px-6 md:px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
-            <div className="text-xl font-black text-white uppercase mb-5">
-              Shiv Shakti <span className="text-[#F5A623]">International</span>
+            <div className="mb-5">
+              <img src="/images/ssi-logo.png" alt="SSI Earthmovers" className="h-12 w-auto" />
             </div>
             <p className="text-gray-500 mb-6 text-sm leading-relaxed">
               India's premier supplier of premium motor grader spare parts.
