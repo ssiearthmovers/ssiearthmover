@@ -1146,7 +1146,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Circle Wear Plates", desc: "Liner plates that protect the circle from wear. Extend circle life." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-circle-drawbar.jpg",
+    img: "/images/category-circle-drawbar.png",
     metaTitle: "Motor Grader Circle Segments Ring Gear Drawbar Parts India | SSI Earthmovers",
     metaDesc: "Buy motor grader circle segments, ring gear and drawbar parts in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
     faqs: [
