@@ -626,6 +626,7 @@ export const brands: BrandInfo[] = [
       "Draw Bar Parts",
     ],
     parts: [
+      { name: "Hub", partNo: "SP139664", model: "Liugong CG414", category: "hub", img: "/images/hub-liugong-sp139664.png" },
       { name: "Sprocket Z22", partNo: "334948", model: "Liugong CG414", category: "sprocket" },
       { name: "Break Drum", partNo: "80513002 / SP105976", model: "Liugong CG414", category: "brake" },
       { name: "Worm Gear", partNo: "52C0122 / 52C0291", model: "Liugong CG414", category: "gear" },
