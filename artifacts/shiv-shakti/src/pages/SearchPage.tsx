@@ -27,11 +27,6 @@ const CAT_BADGE: Record<string, { label: string; cls: string }> = {
   general:     { label: "General",     cls: "bg-zinc-500/15 text-zinc-400 border-zinc-500/30" },
 };
 
-const STATUS_BADGE: Record<string, { label: string; cls: string; dot: string }> = {
-  "in-stock":    { label: "In Stock",    cls: "bg-green-500/15 text-green-400 border-green-500/30",  dot: "bg-green-400" },
-  "low-stock":   { label: "Low Stock",   cls: "bg-amber-500/15 text-amber-400 border-amber-500/30",  dot: "bg-amber-400" },
-  "out-of-stock":{ label: "Out of Stock",cls: "bg-red-500/15 text-red-400 border-red-500/30",        dot: "bg-red-400" },
-};
 
 interface SearchResult {
   key: string;
@@ -372,7 +367,6 @@ export default function SearchPage() {
           <div className="grid gap-3">
             {showing.map((r) => {
               const badge = CAT_BADGE[r.part.category] ?? CAT_BADGE.general;
-              const statusBadge = r.dbStatus ? STATUS_BADGE[r.dbStatus] : null;
               const partNoDisplay = r.part.partNo === "—" ? "" : r.part.partNo;
               const waMsg = encodeURIComponent(
                 `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${r.part.name}\nPart No: ${partNoDisplay || r.oemNumber || "—"}\nMachine: ${r.part.model}\nBrand: ${r.brandFullName}\n\nPlease confirm availability and pricing.`
@@ -396,12 +390,6 @@ export default function SearchPage() {
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <p className="font-bold text-white text-sm">{r.part.name}</p>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badge.cls}`}>{badge.label}</span>
-                      {r.fromDb && statusBadge && (
-                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusBadge.cls}`}>
-                          <span className={`w-1 h-1 rounded-full ${statusBadge.dot}`} />
-                          {statusBadge.label}
-                        </span>
-                      )}
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-gray-500">
                       {partNoDisplay && (
