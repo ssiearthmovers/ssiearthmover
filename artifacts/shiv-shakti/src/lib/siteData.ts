@@ -377,7 +377,7 @@ export const brands: BrandInfo[] = [
       { name: "Shaft", partNo: "380400959", model: "XCMG 165", category: "shaft" },
       { name: "Shaft", partNo: "380906185", model: "XCMG 165", category: "shaft" },
       { name: "Sleeve", partNo: "380400489", model: "XCMG 165", category: "sleeve" },
-      { name: "Spindle Connect Plate", partNo: "380400470", model: "XCMG 165", category: "plate" },
+      { name: "Spindle Connect Plate", partNo: "380400470", model: "XCMG 165", category: "plate", img: "/images/spindle-connect-plate-xcmg-380400470.png" },
       { name: "Tyre Axle", partNo: "275400182", model: "XCMG 165", category: "shaft" },
       { name: "Pin Long (Centre Shaft)", partNo: "380400961", model: "XCMG 165", category: "pin" },
       { name: "Sleeve", partNo: "380400490", model: "XCMG 165", category: "sleeve" },
