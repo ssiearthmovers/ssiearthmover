@@ -133,6 +133,7 @@ export const brands: BrandInfo[] = [
       { name: "Strip Wear",         partNo: "333-0960",             model: "CAT 120K/H, 140H", category: "plate" },
       { name: "Gear Shifter",       partNo: "4529831",              model: "CAT 120K/H, 140H", category: "gear",  img: "/images/gear-shifter-cat-4529831.png" },
       { name: "Rim",                partNo: "2520104",              model: "CAT 120K/H, 140H", category: "hub",   img: "/images/rim-cat-2520104.png" },
+      { name: "Housing",            partNo: "8W8125",               model: "CAT 120K/H, 140H", category: "hub",   img: "/images/housing-cat-8w8125.png" },
     ],
     img: "/images/machines/cat-grader.jpg",
     gallery: {
