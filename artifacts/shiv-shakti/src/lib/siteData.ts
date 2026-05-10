@@ -286,6 +286,7 @@ export const brands: BrandInfo[] = [
     ],
     parts: [
       { name: "Axle", partNo: "87625353", model: "CASE 845B", category: "shaft", img: "/images/axle-case-87625353.png" },
+      { name: "Brake Housing", partNo: "87625372", model: "CASE 845B", category: "brake", img: "/images/brake-housing-case-87625372.png" },
       { name: "Worm Gear", partNo: "75215793", model: "CASE 845B", category: "gear" },
       { name: "Bushing (Big)", partNo: "73130969", model: "CASE 845B", category: "bushing" },
       { name: "Drum", partNo: "71103509", model: "CASE 845B", category: "brake" },
