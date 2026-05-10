@@ -12,6 +12,29 @@ function computeStatus(qty: number, reorderLevel: number): string {
 
 const router: IRouter = Router();
 
+/* ── Public availability endpoint — no auth required ─────────────────────
+   Returns { [partNumber]: "available" | "limited" | "unavailable" }
+   Never exposes actual quantities to the public.                         */
+router.get("/stock/availability", async (req, res) => {
+  try {
+    const products = await db
+      .select({ partNumber: productsTable.partNumber, status: productsTable.status })
+      .from(productsTable);
+
+    const map: Record<string, "available" | "limited" | "unavailable"> = {};
+    for (const p of products) {
+      if (p.status === "in-stock") map[p.partNumber] = "available";
+      else if (p.status === "low-stock") map[p.partNumber] = "limited";
+      else map[p.partNumber] = "unavailable";
+    }
+    res.setHeader("Cache-Control", "public, max-age=120");
+    res.json(map);
+  } catch (err) {
+    req.log.error({ err }, "Failed to fetch availability");
+    res.status(500).json({ error: "Failed to fetch availability" });
+  }
+});
+
 router.get("/stock/products", requireAuth, async (req, res) => {
   try {
     const products = await db.select().from(productsTable).orderBy(productsTable.name);

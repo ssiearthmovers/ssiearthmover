@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Phone, Download, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, Download, ChevronDown, Search } from "lucide-react";
 import { brands, productCategories } from "@/lib/siteData";
 
 export default function SiteNavbar() {
@@ -101,9 +101,9 @@ export default function SiteNavbar() {
             )}
           </div>
 
-          <button onClick={() => goHome("finder")} className="px-3 py-2 rounded hover:text-[#F5A623] transition-colors">
+          <Link href="/find-my-part" className="px-3 py-2 rounded hover:text-[#F5A623] transition-colors">
             Find My Part
-          </button>
+          </Link>
           <button onClick={() => goHome("about")} className="px-3 py-2 rounded hover:text-[#F5A623] transition-colors">
             About
           </button>
@@ -114,6 +114,13 @@ export default function SiteNavbar() {
 
         {/* Right side */}
         <div className="hidden lg:flex items-center gap-3">
+          <Link
+            href="/search"
+            className="flex items-center justify-center w-9 h-9 rounded-lg border border-[#2A2E37] text-gray-400 hover:text-[#F5A623] hover:border-[#F5A623]/40 transition-all"
+            title="Search parts"
+          >
+            <Search className="w-4 h-4" />
+          </Link>
           <a href="tel:+919953105738" className="flex items-center gap-2 text-sm font-semibold text-gray-300 hover:text-[#F5A623] transition-colors">
             <Phone className="w-4 h-4 text-[#F5A623]" />
             +91-9953105738
@@ -168,7 +175,10 @@ export default function SiteNavbar() {
             </Link>
           ))}
           <div className="mt-4 flex flex-col gap-3">
-            <button onClick={() => goHome("finder")} className="text-left py-2.5 text-gray-300 font-semibold hover:text-[#F5A623] transition-colors">Find My Part</button>
+            <Link href="/search" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 py-2.5 text-gray-300 font-semibold hover:text-[#F5A623] transition-colors">
+              <Search className="w-4 h-4" /> Search Parts
+            </Link>
+            <Link href="/find-my-part" onClick={() => setMobileMenuOpen(false)} className="text-left py-2.5 text-gray-300 font-semibold hover:text-[#F5A623] transition-colors block">Find My Part</Link>
             <button onClick={() => goHome("about")} className="text-left py-2.5 text-gray-300 font-semibold hover:text-[#F5A623] transition-colors">About</button>
             <button onClick={() => goHome("contact")} className="text-left py-2.5 text-gray-300 font-semibold hover:text-[#F5A623] transition-colors">Contact</button>
             <a

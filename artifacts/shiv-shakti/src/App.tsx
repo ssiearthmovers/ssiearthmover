@@ -10,6 +10,8 @@ import AdminPage from "@/pages/AdminPage";
 import StockPage from "@/pages/StockPage";
 import BlogListPage from "@/pages/BlogListPage";
 import BlogPostPage from "@/pages/BlogPostPage";
+import SearchPage from "@/pages/SearchPage";
+import FindMyPartPage from "@/pages/FindMyPartPage";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/brands/:slug" component={BrandPage} />
       <Route path="/products/:slug" component={ProductPage} />
+      <Route path="/search" component={SearchPage} />
+      <Route path="/find-my-part" component={FindMyPartPage} />
       <Route path="/blog" component={BlogListPage} />
       <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/admin" component={AdminPage} />

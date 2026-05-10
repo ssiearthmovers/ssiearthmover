@@ -74,7 +74,26 @@ const CAT_BADGE: Record<string, { label: string; cls: string }> = {
   general:     { label: "General",     cls: "bg-zinc-500/15 text-zinc-400 border-zinc-500/30" },
 };
 
-function PartRow({ part, index, onImageClick }: { part: BrandPart; index: number; onImageClick?: (src: string, name: string) => void }) {
+type AvailStatus = "available" | "limited" | "unavailable";
+
+function AvailBadge({ status }: { status: AvailStatus | undefined }) {
+  if (!status) return null;
+  const map: Record<AvailStatus, { label: string; cls: string }> = {
+    available:   { label: "In Stock",           cls: "bg-green-500/15 text-green-400 border-green-500/30" },
+    limited:     { label: "Limited Availability",cls: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30" },
+    unavailable: { label: "Out of Stock",        cls: "bg-red-500/15 text-red-400 border-red-500/30" },
+  };
+  const { label, cls } = map[status];
+  return (
+    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${cls}`}>{label}</span>
+  );
+}
+
+function PartRow({ part, index, onImageClick, availability }: {
+  part: BrandPart; index: number;
+  onImageClick?: (src: string, name: string) => void;
+  availability?: AvailStatus;
+}) {
   const badge = CAT_BADGE[part.category] ?? CAT_BADGE.general;
   const waMsg = encodeURIComponent(
     `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
@@ -111,6 +130,7 @@ function PartRow({ part, index, onImageClick }: { part: BrandPart; index: number
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${badge.cls}`}>
             {badge.label}
           </span>
+          <AvailBadge status={availability} />
           <span className="text-gray-500 text-xs">{part.model}</span>
         </div>
       </div>
@@ -185,8 +205,16 @@ export default function BrandPage() {
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("all");
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
+  const [availMap, setAvailMap] = useState<Record<string, AvailStatus>>({});
 
   useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
+
+  useEffect(() => {
+    fetch("/api/stock/availability")
+      .then(r => r.ok ? r.json() as Promise<Record<string, AvailStatus>> : Promise.resolve({}))
+      .then(data => setAvailMap(data))
+      .catch(() => {});
+  }, []);
 
   usePageMeta({
     title: brand?.metaTitle ?? "Motor Grader Spare Parts | SSI Earthmovers India",
@@ -535,7 +563,9 @@ export default function BrandPage() {
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 hidden md:block">Action</span>
                 </div>
                 {filteredParts.map((part, i) => (
-                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i} onImageClick={(src, name) => setZoomImg({ src, name })} />
+                  <PartRow key={`${part.partNo}-${i}`} part={part} index={i}
+                    onImageClick={(src, name) => setZoomImg({ src, name })}
+                    availability={availMap[part.partNo.toUpperCase()] ?? availMap[part.partNo]} />
                 ))}
               </div>
             ) : (
