@@ -631,7 +631,7 @@ export const brands: BrandInfo[] = [
       { name: "Break Drum", partNo: "80513002 / SP105976", model: "Liugong CG414", category: "brake" },
       { name: "Worm Gear", partNo: "52C0122 / 52C0291", model: "Liugong CG414", category: "gear" },
       { name: "Retarder Hub", partNo: "83763201", model: "Liugong CG414", category: "hub" },
-      { name: "Blade Side Shift Cylinder", partNo: "10C0887", model: "Liugong CG414", category: "hydraulic" },
+      { name: "Blade Side Shift Cylinder", partNo: "10C0887", model: "Liugong CG414", category: "hydraulic", img: "/images/blade-side-shift-cyl-liugong-10c0887.png" },
       { name: "Sprocket", partNo: "85513022 / SP105818", model: "Liugong CG414", category: "sprocket" },
       { name: "Sprocket (5 inch)", partNo: "85763003", model: "Liugong CG414", category: "sprocket" },
       { name: "Hub", partNo: "80513005 / SP109922", model: "Liugong CG414", category: "hub" },
