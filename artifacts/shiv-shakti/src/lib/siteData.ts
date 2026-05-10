@@ -194,7 +194,7 @@ export const brands: BrandInfo[] = [
       { name: "Bevel Gear Assembly (Crown-43T, Shaft-12T, 20T)", partNo: "23A-22-11200",    model: "Komatsu GD511/GD535", category: "gear" },
       { name: "Bracket",                                      partNo: "23A-27-11160",        model: "Komatsu GD511/GD535", category: "general" },
       { name: "Brake Shoe",                                   partNo: "23A-32-11230",        model: "Komatsu GD511/GD535", category: "brake" },
-      { name: "Break Drum",                                   partNo: "23-23-11242",         model: "Komatsu GD511/GD535", category: "brake" },
+      { name: "Break Drum",                                   partNo: "23A-23-11242",        model: "Komatsu GD511/GD535", category: "brake" },
       { name: "Bushing",                                      partNo: "23A-70-15150",        model: "Komatsu GD511/GD535", category: "bushing" },
       { name: "Bushing",                                      partNo: "23A-27-11610",        model: "Komatsu GD511/GD535", category: "bushing" },
       { name: "Bushing",                                      partNo: "23B-70-31730",        model: "Komatsu GD535",       category: "bushing" },
