@@ -366,6 +366,7 @@ export const brands: BrandInfo[] = [
     parts: [
       { name: "Adjuster (L.H)", partNo: "380400858", model: "XCMG 165", category: "general", img: "/images/adjuster-lh-xcmg-380400858.png" },
       { name: "Brake Drum", partNo: "275400302", model: "XCMG 165", category: "brake", img: "/images/brake-drum-xcmg-275400302.png" },
+      { name: "Carrier", partNo: "275400037", model: "XCMG 165", category: "hub", img: "/images/carrier-xcmg-275400037.png" },
       { name: "Guide Thin", partNo: "83640006", model: "XCMG 165", category: "general" },
       { name: "King Pin", partNo: "380400474", model: "XCMG 165", category: "pin" },
       { name: "Nut", partNo: "805238929", model: "XCMG 165", category: "general" },
