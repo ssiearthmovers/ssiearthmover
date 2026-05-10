@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { motion, useInView, animate } from "framer-motion";
 import {
   Menu,
@@ -140,6 +140,9 @@ export default function Home() {
   });
   const [formSent, setFormSent] = useState(false);
   const [zoomImgSrc, setZoomImgSrc] = useState<string | null>(null);
+
+  const [, navigate] = useLocation();
+  const [heroSearch, setHeroSearch] = useState("");
 
   /* Find-Your-Part state */
   const [finderTab, setFinderTab] = useState<"browse" | "search">("browse");
@@ -652,6 +655,36 @@ export default function Home() {
               scarifier teeth, end bits and circle parts for construction and
               mining companies across India.
             </p>
+
+            {/* Hero Search Bar */}
+            <div className="w-full max-w-xl">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (heroSearch.trim()) navigate(`/search?q=${encodeURIComponent(heroSearch.trim())}`);
+                  else navigate("/search");
+                }}
+                className="flex items-stretch gap-0 rounded-xl overflow-hidden border-2 border-[#F5A623]/40 focus-within:border-[#F5A623] transition-colors shadow-[0_4px_24px_rgba(245,166,35,0.15)]"
+              >
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={heroSearch}
+                    onChange={(e) => setHeroSearch(e.target.value)}
+                    placeholder="Search by part number, name or machine…"
+                    className="w-full bg-[#16181D] pl-11 pr-4 py-4 text-white placeholder-gray-500 text-sm outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#F5A623] text-black px-6 py-4 font-black text-sm uppercase tracking-wide hover:brightness-110 transition-all whitespace-nowrap shrink-0"
+                >
+                  Search Parts
+                </button>
+              </form>
+              <p className="text-gray-600 text-xs mt-2 ml-1">e.g. "4110001903072", "circle drive gear", "CAT 140H"</p>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-2">
               <button

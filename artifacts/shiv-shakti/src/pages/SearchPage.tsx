@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
-import { Link } from "wouter";
+import { Link, useSearch } from "wouter";
 import { Search, X, Filter, ArrowRight, Copy, Check, RefreshCw } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { brands, productCategories, WHATSAPP, type BrandPart, type PartCategory } from "@/lib/siteData";
@@ -99,7 +99,10 @@ function CopyBtn({ text }: { text: string }) {
 }
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("");
+  const searchString = useSearch();
+  const initialQ = new URLSearchParams(searchString).get("q") ?? "";
+
+  const [query, setQuery] = useState(initialQ);
   const [brandFilter, setBrandFilter] = useState("all");
   const [catFilter, setCatFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
