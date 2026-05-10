@@ -491,7 +491,7 @@ export const brands: BrandInfo[] = [
     name: "SANY",
     fullName: "Sany",
     country: "China",
-    models: ["Sany PQ190", "Sany PQ170", "Sany STG170"],
+    models: ["Sany PQ190", "Sany PQ170", "Sany STG170", "Sany 160", "Sany 170"],
     color: "#8a3ae8",
     tagline: "Spare parts for Sany PQ190 & STG170 motor graders — PAN India supply",
     description:
@@ -507,6 +507,7 @@ export const brands: BrandInfo[] = [
       "Draw Bar Components",
     ],
     parts: [
+      { name: "Shaft (61 Teeth)", partNo: "83513201", model: "Sany 160/170", category: "shaft", img: "/images/shaft-61t-sany-83513201.png" },
       { name: "Hub", partNo: "62682-21500", model: "Sany PQ190/170", category: "hub" },
       { name: "Plate Wear", partNo: "60382009006268201700", model: "Sany PQ190/170", category: "plate" },
       { name: "Ring Gear", partNo: "60331-01500", model: "Sany PQ190/170", category: "ring-gear" },
