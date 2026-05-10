@@ -456,7 +456,7 @@ export const brands: BrandInfo[] = [
       { name: "Sprocket Z22", partNo: "3349483", model: "Leeboy 785/985", category: "sprocket" },
       { name: "Sheer Pin", partNo: "10010246", model: "Leeboy 785/985", category: "pin" },
       { name: "Guide Blade", partNo: "10010190", model: "Leeboy 785/985", category: "general" },
-      { name: "Output Shaft Ass. (Spindle)", partNo: "3349943", model: "Leeboy 785/985", category: "shaft" },
+      { name: "Output Shaft Ass. (Spindle)", partNo: "3349943", model: "Leeboy 785/985", category: "shaft", img: "/images/output-shaft-spindle-leeboy-3349943.png" },
       { name: "Gear Pinion Hole", partNo: "10010247", model: "Leeboy 785/985", category: "gear" },
       { name: "Pin Front Axle", partNo: "10010101", model: "Leeboy 785/985", category: "pin" },
       { name: "Plate Slide Shim Flat", partNo: "10010189-2", model: "Leeboy 785/985", category: "plate" },
