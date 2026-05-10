@@ -291,7 +291,7 @@ export const brands: BrandInfo[] = [
       { name: "End Bit (Side Cutter)", partNo: "7526-6800", model: "CASE 845B", category: "end-bit" },
       { name: "Gas Strut", partNo: "87559372", model: "CASE 845B", category: "hydraulic" },
       { name: "Gas Strut", partNo: "398767A1", model: "CASE 845B", category: "hydraulic" },
-      { name: "Gear", partNo: "47930482", model: "CASE 845B", category: "gear" },
+      { name: "Gear (Bronze)", partNo: "47930482", model: "CASE 845B", category: "gear", img: "/images/gear-bronze-case-47930482.png" },
       { name: "Ball Joint", partNo: "8438-5731", model: "CASE 845B", category: "joint" },
       { name: "Gear Ring (Couronne)", partNo: "85-2221", model: "CASE 845B", category: "ring-gear" },
       { name: "Guide Shoe", partNo: "84341599", model: "CASE 845B", category: "general" },
