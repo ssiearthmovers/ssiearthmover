@@ -116,42 +116,44 @@ export default function ProductPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#0F1014]/70 via-transparent to-[#0F1014]/90" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10">
-          <FadeIn>
-            <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
-              <Link href="/" className="hover:text-[#F5A623] transition-colors">Home</Link>
-              <span>/</span>
-              <span className="text-gray-500">Products</span>
-              <span>/</span>
-              <span className="text-[#F5A623]">{product.name}</span>
-            </div>
-          </FadeIn>
-          <FadeIn delay={0.05}>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="h-px w-10 bg-[#F5A623]" />
-              <span className="text-[#F5A623] text-sm font-bold uppercase tracking-widest">Motor Grader Wear Parts</span>
-            </div>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight text-white uppercase max-w-3xl mb-5">
-              <span className="text-[#F5A623]">{product.name}</span><br />
-              Supplier India
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.15}>
-            <p className="text-lg text-gray-300 max-w-xl leading-relaxed mb-8">{product.tagline}</p>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <div className="flex flex-wrap gap-4">
-              <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#25D366] text-white px-7 py-3.5 rounded font-black text-sm hover:brightness-110 transition-all">
-                <FaWhatsapp size={18} /> Enquire on WhatsApp
-              </a>
-              <a href={`tel:${PHONE1}`}
-                className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-7 py-3.5 rounded font-bold text-sm hover:bg-[#F5A623]/10 transition-colors">
-                <Phone className="w-4 h-4" /> Call Now
-              </a>
-            </div>
-          </FadeIn>
+          <div className="max-w-2xl">
+            <FadeIn>
+              <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+                <Link href="/" className="hover:text-[#F5A623] transition-colors">Home</Link>
+                <span>/</span>
+                <span className="text-gray-500">Products</span>
+                <span>/</span>
+                <span className="text-[#F5A623]">{product.name}</span>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.05}>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="h-px w-10 bg-[#F5A623]" />
+                <span className="text-[#F5A623] text-sm font-bold uppercase tracking-widest">Motor Grader Wear Parts</span>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight text-white uppercase mb-5">
+                <span className="text-[#F5A623]">{product.name}</span><br />
+                Supplier India
+              </h1>
+            </FadeIn>
+            <FadeIn delay={0.15}>
+              <p className="text-lg text-gray-300 max-w-xl leading-relaxed mb-8">{product.tagline}</p>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <div className="flex flex-wrap gap-4">
+                <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-[#25D366] text-white px-7 py-3.5 rounded font-black text-sm hover:brightness-110 transition-all">
+                  <FaWhatsapp size={18} /> Enquire on WhatsApp
+                </a>
+                <a href={`tel:${PHONE1}`}
+                  className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-7 py-3.5 rounded font-bold text-sm hover:bg-[#F5A623]/10 transition-colors">
+                  <Phone className="w-4 h-4" /> Call Now
+                </a>
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </section>
 
