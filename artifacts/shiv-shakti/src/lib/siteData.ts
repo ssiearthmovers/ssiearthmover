@@ -1012,6 +1012,120 @@ export const productCategories: ProductCategory[] = [
     ],
   },
   {
+    slug: "braking-system",
+    name: "Braking System",
+    tagline: "Brake drums, brake shafts, brake shoes & full braking assemblies",
+    description:
+      "SSI Earthmovers supplies complete braking system parts for all major motor grader brands — brake drums, brake shafts, brake shoes, retarder hubs and full braking assemblies for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong and more.",
+    longDescription:
+      "The braking system on a motor grader is critical for safe operation on slopes, construction sites and highways. Worn brake drums, damaged brake shafts or degraded brake shoes reduce braking effectiveness and increase stopping distances. SSI Earthmovers maintains a ready stock of all braking system components — brake drums, brake shafts, retarder hubs, brake shoes and complete braking assemblies — for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are manufactured to OEM dimensional specifications for a perfect, safe fit.",
+    specs: [
+      { label: "Brake Drums", value: "All standard sizes for major brands" },
+      { label: "Brake Shafts", value: "OEM-spec dimensions" },
+      { label: "Retarder Hubs", value: "For CAT, SDLG, Liugong, Sany & more" },
+      { label: "Brake Shoes", value: "High-friction lining for maximum stopping power" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "Brake Drums", desc: "Heavy-duty cast iron brake drums for all motor grader brands." },
+      { name: "Brake Shafts", desc: "OEM-spec brake shafts for safe, reliable braking." },
+      { name: "Retarder Hubs", desc: "Retarder hubs for CAT, SDLG, Liugong, Sany and more." },
+      { name: "Brake Shoes", desc: "High-friction brake shoes for maximum stopping power." },
+    ],
+    compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
+    img: "/images/braking-system-brake-shaft.png",
+    metaTitle: "Motor Grader Braking System Parts India | Brake Drums Shafts | SSI Earthmovers",
+    metaDesc: "Buy motor grader brake drums, brake shafts, retarder hubs and braking assemblies in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
+    faqs: [
+      { q: "Which braking system parts do you stock for motor graders?", a: "We stock brake drums, brake shafts, retarder hubs, brake shoes and complete braking assemblies for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders." },
+    ],
+  },
+  {
+    slug: "ball-joints",
+    name: "Ball Joints & Tie Rod Ends",
+    tagline: "Precision steering ball joints and tie rod ends for all motor grader brands",
+    description:
+      "SSI Earthmovers supplies OEM-spec ball joints, tie rod ends and steering linkage parts for all major motor grader brands. Precision-manufactured for safe, accurate steering on construction sites and highways.",
+    longDescription:
+      "Worn ball joints and tie rod ends cause imprecise steering, uneven blade control and unsafe handling on slopes and highways. SSI Earthmovers stocks precision ball joints and tie rod ends for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are manufactured to OEM dimensional tolerances to ensure a perfect fit and safe, accurate steering response. Available for same-day dispatch from our Mori Gate, New Delhi warehouse.",
+    specs: [
+      { label: "Ball Joints", value: "OEM-spec for all major brands" },
+      { label: "Tie Rod Ends", value: "Forged steel, all standard sizes" },
+      { label: "Steering Pins", value: "Hardened steel" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "Steering Ball Joints", desc: "Precision ball joints for accurate steering control." },
+      { name: "Tie Rod Ends", desc: "Forged steel tie rod ends for all motor grader models." },
+      { name: "Steering Pins & Bushings", desc: "Hardened steering pins and bronze bushings for long service life." },
+    ],
+    compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
+    img: "/images/ball-joint-tie-rod-end.png",
+    metaTitle: "Motor Grader Ball Joints Tie Rod Ends India | Steering Parts | SSI Earthmovers",
+    metaDesc: "Buy motor grader ball joints, tie rod ends and steering parts in India. All brands. Same-day dispatch from New Delhi. Call +91-9953105738.",
+    faqs: [
+      { q: "How do I know when to replace ball joints on a motor grader?", a: "Signs of worn ball joints include play or looseness in the steering, uneven blade control, clunking noises when turning, and difficulty maintaining a straight grading line. Replace worn ball joints immediately to ensure safe operation." },
+    ],
+  },
+  {
+    slug: "sprockets-gears",
+    name: "Sprockets, Worm Gears & Ring Gears",
+    tagline: "High-strength sprockets, worm gears and ring gears for all motor grader models",
+    description:
+      "SSI Earthmovers stocks sprockets, worm gears, ring gears and transmission components for all major motor grader brands including CAT 6G5533 Ring Gear, Liugong CG414 sprockets, SDLG worm gears and more.",
+    longDescription:
+      "Transmission and drive components like sprockets, worm gears and ring gears are subject to constant high-load wear. Using substandard replacement parts leads to premature failure, costly downtime and damage to related components. SSI Earthmovers supplies precision-manufactured sprockets, worm gears and ring gears — including the popular CAT 6G5533 ring gear, Liugong CG414 sprocket and SDLG worm gear — for all major motor grader brands. All parts are manufactured to OEM specifications for a precise fit and long service life.",
+    specs: [
+      { label: "Ring Gears", value: "CAT 6G5533 and all major brands" },
+      { label: "Worm Gears", value: "OEM-spec for SDLG, Liugong and more" },
+      { label: "Sprockets", value: "All tooth counts and sizes" },
+      { label: "Material", value: "Case-hardened alloy steel" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "Ring Gears", desc: "Complete ring gear assemblies — incl. CAT 6G5533, Komatsu, CASE and more." },
+      { name: "Worm Gears", desc: "OEM-spec worm gears for SDLG, Liugong, XCMG and other brands." },
+      { name: "Sprockets", desc: "Drive sprockets in all tooth counts for all motor grader models." },
+      { name: "Transmission Gears", desc: "All transmission gear components for major motor grader brands." },
+    ],
+    compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
+    img: "/images/ring-gear-cat-6g5533.png",
+    metaTitle: "Motor Grader Sprockets Ring Gears Worm Gears India | SSI Earthmovers Delhi",
+    metaDesc: "Buy motor grader sprockets, ring gears and worm gears in India. CAT 6G5533, Komatsu, SDLG, Liugong and all brands. Same-day dispatch from New Delhi.",
+    faqs: [
+      { q: "Do you stock the CAT 6G5533 ring gear?", a: "Yes, we maintain ready stock of the CAT 6G5533 ring gear for same-day dispatch from our New Delhi warehouse. We also stock ring gears for Komatsu, CASE, XCMG and other major motor grader brands." },
+    ],
+  },
+  {
+    slug: "hydraulic-cylinders",
+    name: "Hydraulic Cylinders",
+    tagline: "Centre shift cylinders, lift cylinders & hydraulic components for all motor graders",
+    description:
+      "SSI Earthmovers supplies hydraulic cylinders and hydraulic components for all major motor grader brands — centre shift cylinders, blade lift cylinders, steering cylinders and more. Including CAT 6E1634 and all major part numbers.",
+    longDescription:
+      "Hydraulic cylinders are the heart of a motor grader's blade movement system. A leaking or damaged cylinder causes loss of blade control, hydraulic oil waste and costly downtime. SSI Earthmovers stocks centre shift cylinders, blade lift cylinders, steering cylinders and all associated hydraulic components for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All cylinders are manufactured to OEM specifications and pressure-tested before dispatch.",
+    specs: [
+      { label: "Centre Shift Cylinders", value: "Incl. CAT 6E1634 and all major brands" },
+      { label: "Blade Lift Cylinders", value: "All standard bore/stroke sizes" },
+      { label: "Steering Cylinders", value: "OEM-spec for all brands" },
+      { label: "Pressure Testing", value: "All cylinders tested before dispatch" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "Centre Shift Cylinders", desc: "Including CAT 6E1634 and equivalent for all brands." },
+      { name: "Blade Lift Cylinders", desc: "All standard bore and stroke sizes for major grader models." },
+      { name: "Steering Cylinders", desc: "OEM-spec hydraulic steering cylinders for safe handling." },
+      { name: "Blade Side Shift Cylinders", desc: "For lateral blade movement — all brands and models." },
+    ],
+    compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
+    img: "/images/hydraulic-center-shift-cylinder-6e1634.png",
+    metaTitle: "Motor Grader Hydraulic Cylinders India | Centre Shift Lift Cylinders | SSI Earthmovers",
+    metaDesc: "Buy motor grader hydraulic cylinders in India. Centre shift, blade lift, steering cylinders — CAT 6E1634 and all brands. Same-day dispatch from New Delhi.",
+    faqs: [
+      { q: "Do you supply the CAT 6E1634 centre shift cylinder?", a: "Yes, we stock the CAT 6E1634 centre shift cylinder and equivalent hydraulic cylinders for all major motor grader brands including Komatsu, CASE, XCMG, Leeboy, Sany, SDLG and Liugong." },
+    ],
+  },
+  {
     slug: "circle-drawbar-parts",
     name: "Circle & Drawbar Parts",
     tagline: "Circle segments, ring gear, drawbar pins & wear parts",
