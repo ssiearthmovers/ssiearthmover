@@ -1,13 +1,13 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { Link } from "wouter";
-import { Search, X, Filter, ArrowRight, Copy, Check } from "lucide-react";
+import { Search, X, Filter, ArrowRight, Copy, Check, RefreshCw } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { brands, productCategories, WHATSAPP, type BrandPart, type PartCategory } from "@/lib/siteData";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
 
-usePageMeta;
+const API_BASE = "/api";
 
 const CAT_BADGE: Record<string, { label: string; cls: string }> = {
   sprocket:    { label: "Sprocket",    cls: "bg-amber-500/15 text-amber-400 border-amber-500/30" },
@@ -27,12 +27,67 @@ const CAT_BADGE: Record<string, { label: string; cls: string }> = {
   general:     { label: "General",     cls: "bg-zinc-500/15 text-zinc-400 border-zinc-500/30" },
 };
 
+const STATUS_BADGE: Record<string, { label: string; cls: string; dot: string }> = {
+  "in-stock":    { label: "In Stock",    cls: "bg-green-500/15 text-green-400 border-green-500/30",  dot: "bg-green-400" },
+  "low-stock":   { label: "Low Stock",   cls: "bg-amber-500/15 text-amber-400 border-amber-500/30",  dot: "bg-amber-400" },
+  "out-of-stock":{ label: "Out of Stock",cls: "bg-red-500/15 text-red-400 border-red-500/30",        dot: "bg-red-400" },
+};
+
 interface SearchResult {
+  key: string;
   part: BrandPart;
   brandSlug: string;
   brandName: string;
   brandFullName: string;
   brandColor: string;
+  fromDb: boolean;
+  dbStatus?: string;
+  oemNumber?: string;
+}
+
+interface DbProduct {
+  id: number;
+  partNumber: string;
+  name: string;
+  brand: string | null;
+  model: string | null;
+  category: string | null;
+  oemNumber: string | null;
+  description: string | null;
+  unit: string;
+  status: string;
+}
+
+function brandFromName(name: string | null): { slug: string; brandName: string; brandFullName: string; brandColor: string } {
+  if (name) {
+    const n = name.trim().toLowerCase();
+    const match = brands.find(
+      (b) => b.name.toLowerCase() === n || b.fullName.toLowerCase() === n || n.includes(b.name.toLowerCase())
+    );
+    if (match) return { slug: match.slug, brandName: match.name, brandFullName: match.fullName, brandColor: match.color };
+  }
+  return { slug: "inventory", brandName: name ?? "—", brandFullName: name ?? "Inventory", brandColor: "#F5A623" };
+}
+
+function mapDbProduct(p: DbProduct): SearchResult {
+  const { slug, brandName, brandFullName, brandColor } = brandFromName(p.brand);
+  const part: BrandPart = {
+    name: p.name,
+    partNo: p.partNumber,
+    model: p.model ?? "",
+    category: (p.category ?? "general") as PartCategory,
+  };
+  return {
+    key: `db-${p.id}`,
+    part,
+    brandSlug: slug,
+    brandName,
+    brandFullName,
+    brandColor,
+    fromDb: true,
+    dbStatus: p.status,
+    oemNumber: p.oemNumber ?? undefined,
+  };
 }
 
 function CopyBtn({ text }: { text: string }) {
@@ -53,6 +108,9 @@ export default function SearchPage() {
   const [brandFilter, setBrandFilter] = useState("all");
   const [catFilter, setCatFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [dbResults, setDbResults] = useState<DbProduct[]>([]);
+  const [dbLoading, setDbLoading] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -62,19 +120,52 @@ export default function SearchPage() {
     canonical: "https://ssiearthmovers.in/search",
   });
 
-  const allParts = useMemo<SearchResult[]>(() => {
+  /* ── Fetch from DB whenever query or filters change ─────────────────────── */
+  const fetchDb = useCallback(async (q: string, brand: string, cat: string) => {
+    setDbLoading(true);
+    try {
+      const params = new URLSearchParams({ limit: "200" });
+      if (q) params.set("q", q);
+      if (brand !== "all") params.set("brand", brand);
+      if (cat !== "all") params.set("category", cat);
+      const r = await fetch(`${API_BASE}/products/search?${params.toString()}`);
+      if (r.ok) setDbResults((await r.json()) as DbProduct[]);
+    } catch { /* silently fail — static results still show */ }
+    finally { setDbLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const hasFilters = query.trim() || brandFilter !== "all" || catFilter !== "all";
+    if (!hasFilters) { setDbResults([]); return; }
+    debounceRef.current = setTimeout(() => {
+      void fetchDb(query.trim(), brandFilter, catFilter);
+    }, 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [query, brandFilter, catFilter, fetchDb]);
+
+  /* ── Static parts ────────────────────────────────────────────────────────── */
+  const allStaticParts = useMemo<SearchResult[]>(() => {
     const results: SearchResult[] = [];
     for (const brand of brands) {
       for (const part of brand.parts) {
-        results.push({ part, brandSlug: brand.slug, brandName: brand.name, brandFullName: brand.fullName, brandColor: brand.color });
+        results.push({
+          key: `static-${brand.slug}-${part.partNo}`,
+          part,
+          brandSlug: brand.slug,
+          brandName: brand.name,
+          brandFullName: brand.fullName,
+          brandColor: brand.color,
+          fromDb: false,
+        });
       }
     }
     return results;
   }, []);
 
-  const filtered = useMemo(() => {
+  const staticFiltered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return allParts.filter((r) => {
+    return allStaticParts.filter((r) => {
       if (brandFilter !== "all" && r.brandSlug !== brandFilter) return false;
       if (catFilter !== "all" && r.part.category !== catFilter) return false;
       if (!q) return true;
@@ -86,16 +177,26 @@ export default function SearchPage() {
         r.brandFullName.toLowerCase().includes(q)
       );
     });
-  }, [allParts, query, brandFilter, catFilter]);
+  }, [allStaticParts, query, brandFilter, catFilter]);
 
-  const hasFilters = query || brandFilter !== "all" || catFilter !== "all";
-  const showing = hasFilters ? filtered : [];
+  /* ── Merge DB + static, DB wins on duplicate partNumber ─────────────────── */
+  const combined = useMemo<SearchResult[]>(() => {
+    const mapped = dbResults.map(mapDbProduct);
+    const dbPartNos = new Set(dbResults.map((p) => p.partNumber.toLowerCase()));
+    const staticOnly = staticFiltered.filter((r) => !dbPartNos.has(r.part.partNo.toLowerCase()));
+    return [...mapped, ...staticOnly];
+  }, [dbResults, staticFiltered]);
+
+  const hasFilters = !!(query.trim() || brandFilter !== "all" || catFilter !== "all");
+  const showing = hasFilters ? combined : [];
 
   const uniqueCats = useMemo(() => {
-    const cats = new Set<PartCategory>();
-    allParts.forEach(r => cats.add(r.part.category));
+    const cats = new Set<string>();
+    allStaticParts.forEach(r => cats.add(r.part.category));
     return Array.from(cats).sort();
-  }, [allParts]);
+  }, [allStaticParts]);
+
+  const dbCount = combined.filter((r) => r.fromDb).length;
 
   return (
     <div className="min-h-screen bg-[#0D0F12] text-white">
@@ -223,21 +324,32 @@ export default function SearchPage() {
           </div>
         )}
 
-        {/* Results count */}
+        {/* Results count + live indicator */}
         {hasFilters && (
-          <div className="flex items-center justify-between mb-5 mt-2">
-            <p className="text-sm text-gray-400">
-              <span className="font-black text-white">{filtered.length}</span> part{filtered.length !== 1 ? "s" : ""} found
-              {query && <span className="text-gray-500"> for "<span className="text-[#F5A623]">{query}</span>"</span>}
-            </p>
-            {filtered.length > 0 && (
+          <div className="flex items-center justify-between mb-5 mt-2 flex-wrap gap-2">
+            <div className="flex items-center gap-3 flex-wrap">
+              <p className="text-sm text-gray-400">
+                {dbLoading
+                  ? <span className="flex items-center gap-2"><RefreshCw className="w-3.5 h-3.5 animate-spin text-[#F5A623]" /> Searching…</span>
+                  : <><span className="font-black text-white">{showing.length}</span> part{showing.length !== 1 ? "s" : ""} found
+                    {query && <span className="text-gray-500"> for "<span className="text-[#F5A623]">{query}</span>"</span>}</>
+                }
+              </p>
+              {!dbLoading && dbCount > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-green-400 bg-green-500/10 border border-green-500/25 px-2.5 py-1 rounded-full">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  {dbCount} live from inventory
+                </span>
+              )}
+            </div>
+            {showing.length > 0 && (
               <p className="text-xs text-gray-600">Tap any part to enquire on WhatsApp</p>
             )}
           </div>
         )}
 
         {/* No results */}
-        {hasFilters && filtered.length === 0 && (
+        {hasFilters && !dbLoading && showing.length === 0 && (
           <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl p-16 text-center">
             <Search className="w-10 h-10 text-gray-600 mx-auto mb-4" />
             <p className="text-white font-bold text-lg mb-2">No parts found</p>
@@ -256,16 +368,18 @@ export default function SearchPage() {
         )}
 
         {/* Results grid */}
-        {hasFilters && filtered.length > 0 && (
+        {hasFilters && showing.length > 0 && (
           <div className="grid gap-3">
-            {filtered.map((r, i) => {
+            {showing.map((r) => {
               const badge = CAT_BADGE[r.part.category] ?? CAT_BADGE.general;
+              const statusBadge = r.dbStatus ? STATUS_BADGE[r.dbStatus] : null;
+              const partNoDisplay = r.part.partNo === "—" ? "" : r.part.partNo;
               const waMsg = encodeURIComponent(
-                `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${r.part.name}\nPart No: ${r.part.partNo}\nMachine: ${r.part.model}\nBrand: ${r.brandFullName}\n\nPlease confirm availability and pricing.`
+                `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${r.part.name}\nPart No: ${partNoDisplay || r.oemNumber || "—"}\nMachine: ${r.part.model}\nBrand: ${r.brandFullName}\n\nPlease confirm availability and pricing.`
               );
               return (
-                <div key={`${r.brandSlug}-${r.part.partNo}-${i}`}
-                  className="bg-[#16181D] border border-[#2A2E37] rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-[#F5A623]/30 transition-all">
+                <div key={r.key}
+                  className={`bg-[#16181D] border rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 hover:border-[#F5A623]/30 transition-all ${r.fromDb ? "border-[#2A2E37] hover:border-green-500/30" : "border-[#2A2E37]"}`}>
 
                   {/* Brand badge */}
                   <div className="shrink-0">
@@ -282,26 +396,32 @@ export default function SearchPage() {
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <p className="font-bold text-white text-sm">{r.part.name}</p>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badge.cls}`}>{badge.label}</span>
+                      {r.fromDb && statusBadge && (
+                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${statusBadge.cls}`}>
+                          <span className={`w-1 h-1 rounded-full ${statusBadge.dot}`} />
+                          {statusBadge.label}
+                        </span>
+                      )}
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-gray-500">
-                      <span className="font-mono font-bold text-[#F5A623]">{r.part.partNo}<CopyBtn text={r.part.partNo} /></span>
-                      <span>{r.part.model}</span>
+                      {partNoDisplay && (
+                        <span className="font-mono font-bold text-[#F5A623]">{partNoDisplay}<CopyBtn text={partNoDisplay} /></span>
+                      )}
+                      {r.oemNumber && r.oemNumber !== partNoDisplay && (
+                        <span className="text-gray-600 font-mono">OEM: {r.oemNumber}</span>
+                      )}
+                      {r.part.model && <span>{r.part.model}</span>}
                     </div>
                   </div>
 
-                  {/* Photo */}
-                  {r.part.img && (
-                    <div className="shrink-0">
-                      <img src={r.part.img} alt={r.part.name} className="w-12 h-12 rounded-lg object-cover border border-[#2A2E37]" />
-                    </div>
-                  )}
-
                   {/* Actions */}
                   <div className="flex items-center gap-2 shrink-0">
-                    <Link href={`/brands/${r.brandSlug}`}
-                      className="text-xs text-gray-500 hover:text-white border border-[#2A2E37] hover:border-[#3A3E47] px-3 py-2 rounded-lg font-bold transition-colors hidden sm:block">
-                      View Catalogue
-                    </Link>
+                    {r.brandSlug !== "inventory" && (
+                      <Link href={`/brands/${r.brandSlug}`}
+                        className="text-xs text-gray-500 hover:text-white border border-[#2A2E37] hover:border-[#3A3E47] px-3 py-2 rounded-lg font-bold transition-colors hidden sm:block">
+                        View Catalogue
+                      </Link>
+                    )}
                     <a
                       href={`https://wa.me/${WHATSAPP}?text=${waMsg}`}
                       target="_blank"
@@ -318,7 +438,7 @@ export default function SearchPage() {
         )}
 
         {/* Bottom CTA */}
-        {hasFilters && filtered.length > 0 && (
+        {hasFilters && showing.length > 0 && (
           <div className="mt-10 bg-[#16181D] border border-[#2A2E37] rounded-xl p-8 text-center">
             <p className="text-white font-bold mb-2">Can't find your part?</p>
             <p className="text-gray-400 text-sm mb-5">Share the OEM part number via WhatsApp and we'll confirm availability within 2 hours.</p>
