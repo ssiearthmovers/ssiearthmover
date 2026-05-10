@@ -567,6 +567,7 @@ export const brands: BrandInfo[] = [
       "Draw Bar Parts",
     ],
     parts: [
+      { name: "Retarder Hub", partNo: "4110001903072", model: "SDLG 9138/9190", category: "hub", img: "/images/retarder-hub-sdlg-4110001903072.png" },
       { name: "Adjust Washer", partNo: "2601934538001", model: "SDLG 9138/9190", category: "general" },
       { name: "Chuk Nut", partNo: "260193449000", model: "SDLG 9138/9190", category: "general" },
       { name: "Side Cutter (LGG)", partNo: "LGG 28140007461", model: "SDLG 9138/9190", category: "end-bit" },
