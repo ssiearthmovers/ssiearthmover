@@ -139,6 +139,7 @@ export default function Home() {
     message: "",
   });
   const [formSent, setFormSent] = useState(false);
+  const [zoomImgSrc, setZoomImgSrc] = useState<string | null>(null);
 
   /* Find-Your-Part state */
   const [finderTab, setFinderTab] = useState<"browse" | "search">("browse");
@@ -228,11 +229,12 @@ export default function Home() {
     },
     {
       title: "Sprockets / Worm Gears / Ring Gears",
-      desc: "High-strength sprockets, worm gears and ring gears for all motor grader models",
-      img: "/images/sprocket-worm-gear.png",
+      desc: "High-strength sprockets, worm gears and ring gears for all motor grader models — incl. CAT 6G5533 Ring Gear",
+      img: "/images/ring-gear-cat-6g5533.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(0.8) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(0.85) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
+      zoomImg: "/images/ring-gear-cat-6g5533.png",
     },
     {
       title: "Hydraulic Cylinders",
@@ -314,12 +316,13 @@ export default function Home() {
       imgStyle: { filter: "brightness(1.05) contrast(1.2) saturate(0.9) drop-shadow(0 4px 12px rgba(245,166,35,0.2))" },
     },
     {
-      name: "Sprockets / Worm Gears / Ring Gears",
-      desc: "High-strength transmission gears and sprockets for all motor grader brands.",
-      img: "/images/sprocket-worm-gear.png",
+      name: "Ring Gear — CAT 6G5533",
+      desc: "Caterpillar 6G5533 ring gear and high-strength transmission gears for all major motor grader brands.",
+      img: "/images/ring-gear-cat-6g5533.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(0.8) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(0.85) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
+      zoomImg: "/images/ring-gear-cat-6g5533.png",
     },
     {
       name: "Centre Shift Cylinder — 6E1634",
@@ -1063,13 +1066,21 @@ export default function Home() {
                   className="bg-[#1A1D24] border border-[#2A2E37] rounded overflow-hidden group hover:border-[#F5A623]/60 hover:shadow-[0_0_24px_rgba(245,166,35,0.15)] transition-all duration-300 flex flex-col h-full"
                   data-testid={`card-category-${i}`}
                 >
-                  <div className="h-44 overflow-hidden relative bg-[#1A1D24] flex items-center justify-center">
+                  <div
+                    className={`h-44 overflow-hidden relative bg-[#1A1D24] flex items-center justify-center ${cat.zoomImg ? "cursor-zoom-in" : ""}`}
+                    onClick={() => cat.zoomImg && setZoomImgSrc(cat.zoomImg)}
+                  >
                     <img
                       src={cat.img}
                       alt={cat.title}
                       className={`w-full h-full group-hover:scale-110 transition-transform duration-700 ${cat.imgClass ?? "object-cover"}`}
                       style={cat.imgStyle}
                     />
+                    {cat.zoomImg && (
+                      <div className="absolute bottom-2 right-2 bg-black/60 rounded px-2 py-0.5 text-[10px] text-[#F5A623] font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Click to zoom
+                      </div>
+                    )}
                   </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-lg font-bold mb-2 text-white">
@@ -1203,13 +1214,21 @@ export default function Home() {
                   className="bg-[#1A1D24] border border-[#2A2E37] rounded overflow-hidden group hover:border-[#F5A623]/60 hover:shadow-[0_0_24px_rgba(245,166,35,0.12)] transition-all duration-300 flex flex-col h-full"
                   data-testid={`card-product-${i}`}
                 >
-                  <div className="h-44 overflow-hidden relative bg-[#1A1D24] flex items-center justify-center">
+                  <div
+                    className={`h-44 overflow-hidden relative bg-[#1A1D24] flex items-center justify-center ${p.zoomImg ? "cursor-zoom-in" : ""}`}
+                    onClick={() => p.zoomImg && setZoomImgSrc(p.zoomImg)}
+                  >
                     <img
                       src={p.img}
                       alt={p.name}
                       className={`w-full h-full group-hover:scale-110 transition-transform duration-700 ${p.imgClass ?? "object-cover"}`}
                       style={p.imgStyle}
                     />
+                    {p.zoomImg && (
+                      <div className="absolute bottom-2 right-2 bg-black/60 rounded px-2 py-0.5 text-[10px] text-[#F5A623] font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        Click to zoom
+                      </div>
+                    )}
                   </div>
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="text-base font-bold mb-2 text-white">
@@ -1845,6 +1864,33 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* ─── IMAGE ZOOM LIGHTBOX ─── */}
+      {zoomImgSrc && (
+        <div
+          className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setZoomImgSrc(null)}
+        >
+          <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setZoomImgSrc(null)}
+              className="absolute -top-10 right-0 text-gray-400 hover:text-white text-sm font-bold uppercase tracking-wide"
+            >
+              ✕ Close
+            </button>
+            <div className="bg-[#1A1D24] border border-[#F5A623]/30 rounded-xl p-4 flex flex-col items-center gap-3">
+              <img
+                src={zoomImgSrc}
+                alt="Product zoom"
+                className="max-h-[70vh] w-auto object-contain rounded"
+                style={{ filter: "brightness(1.1) contrast(1.15)" }}
+              />
+              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest">
+                CAT 6G5533 — Ring Gear
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* ─── FLOATING WHATSAPP BUTTON ─── */}
       <a
         href="https://wa.me/919953105738?text=Hello%2C%20I%20am%20interested%20in%20motor%20grader%20spare%20parts.%20Please%20share%20more%20details."
