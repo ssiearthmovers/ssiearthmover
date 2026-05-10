@@ -577,7 +577,7 @@ export const brands: BrandInfo[] = [
       { name: "Hub (LGG)", partNo: "LGG411001903014", model: "SDLG 9138/9190", category: "hub" },
       { name: "Shaft (LGG)", partNo: "LGG 28350002111", model: "SDLG 9138/9190", category: "shaft" },
       { name: "Nut", partNo: "28350002141", model: "SDLG 9138/9190", category: "general" },
-      { name: "Shaft", partNo: "4110001903069", model: "SDLG 9138/9190", category: "shaft" },
+      { name: "Shaft", partNo: "4110001903069", model: "SDLG 9138/9190", category: "shaft", img: "/images/shaft-sdlg-4110001903069.png" },
       { name: "Seal Cage (LGG)", partNo: "4110001903018", model: "SDLG 9138/9190", category: "seal" },
       { name: "Duramide Slide", partNo: "28350002251", model: "SDLG 9138/9190", category: "plate" },
       { name: "Sliding Shoe", partNo: "260193454000", model: "SDLG 9138/9190", category: "general" },
