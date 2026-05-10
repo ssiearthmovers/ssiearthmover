@@ -192,6 +192,7 @@ export default function BrandPage() {
     title: brand?.metaTitle ?? "Motor Grader Spare Parts | SSI Earthmovers India",
     description: brand?.metaDesc ?? "Premium OEM-quality motor grader spare parts. Same-day dispatch from New Delhi. Call +91-9953105738.",
     canonical: brand ? `https://ssiearthmovers.in/brands/${brand.slug}` : undefined,
+    ogImage: brand?.img,
     schema: brand ? {
       "@context": "https://schema.org",
       "@type": "WebPage",
@@ -653,28 +654,107 @@ export default function BrandPage() {
       <section className="py-20 bg-[#111317]">
         <div className="max-w-7xl mx-auto px-6 md:px-10">
           <FadeIn className="mb-12 text-center">
-            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">All Categories</p>
+            <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Shop by Category</p>
             <h2 className="text-3xl font-black uppercase text-white">Browse Parts for {brand.fullName} Graders</h2>
+            <p className="text-gray-400 mt-3 max-w-2xl mx-auto text-sm">
+              We carry OEM-compatible {brand.fullName} grader parts across all major categories — cutting edges, braking systems, hydraulics, and more.
+            </p>
           </FadeIn>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-            {productCategories.map((cat, i) => (
-              <FadeIn key={cat.slug} delay={i * 0.07}>
-                <Link href={`/products/${cat.slug}`}
-                  className="group bg-[#1A1D24] border border-[#2A2E37] rounded-lg overflow-hidden hover:border-[#F5A623]/50 hover:shadow-[0_0_20px_rgba(245,166,35,0.1)] transition-all block">
-                  <div className="h-36 overflow-hidden">
-                    <img src={cat.img} alt={`${cat.name} for ${brand.fullName} motor grader`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+
+          {/* Highlighted: categories that match this brand's actual parts */}
+          {(() => {
+            const brandPartCats = new Set(brand.parts.map(p => p.category));
+            const CAT_TO_PRODUCT: Record<string, string> = {
+              "brake": "braking-system",
+              "sprocket": "sprockets-gears",
+              "gear": "sprockets-gears",
+              "ring-gear": "sprockets-gears",
+              "hydraulic": "hydraulic-cylinders",
+              "joint": "ball-joints",
+              "pin": "ball-joints",
+              "end-bit": "end-bits",
+              "bushing": "circle-drawbar-parts",
+              "hub": "braking-system",
+              "shaft": "sprockets-gears",
+            };
+            const relatedSlugs = new Set<string>();
+            brandPartCats.forEach(cat => {
+              if (CAT_TO_PRODUCT[cat]) relatedSlugs.add(CAT_TO_PRODUCT[cat]);
+            });
+            const relatedCats = productCategories.filter(c => relatedSlugs.has(c.slug));
+            const otherCats = productCategories.filter(c => !relatedSlugs.has(c.slug));
+
+            return (
+              <>
+                {relatedCats.length > 0 && (
+                  <div className="mb-8">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-px flex-1 bg-[#F5A623]/20" />
+                      <span className="text-[#F5A623] text-xs font-bold uppercase tracking-widest px-3">
+                        Stocked for {brand.fullName}
+                      </span>
+                      <div className="h-px flex-1 bg-[#F5A623]/20" />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-6">
+                      {relatedCats.map((cat, i) => (
+                        <FadeIn key={cat.slug} delay={i * 0.07}>
+                          <Link href={`/products/${cat.slug}`}
+                            className="group bg-[#1A1D24] border-2 border-[#F5A623]/30 rounded-lg overflow-hidden hover:border-[#F5A623] hover:shadow-[0_0_24px_rgba(245,166,35,0.15)] transition-all block relative">
+                            <div className="absolute top-2.5 right-2.5 z-10">
+                              <span className="bg-[#F5A623] text-black text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full">
+                                In Stock
+                              </span>
+                            </div>
+                            <div className="h-36 overflow-hidden">
+                              <img src={cat.img} alt={`${cat.name} for ${brand.fullName} motor grader`}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                            </div>
+                            <div className="p-4">
+                              <h3 className="font-bold text-white text-sm mb-2">{cat.name}</h3>
+                              <span className="text-[#F5A623] text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                View Parts <ArrowRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </Link>
+                        </FadeIn>
+                      ))}
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-white text-sm mb-2">{cat.name}</h3>
-                    <span className="text-[#F5A623] text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-                      View Parts <ArrowRight className="w-3 h-3" />
-                    </span>
+                )}
+
+                {otherCats.length > 0 && (
+                  <div>
+                    {relatedCats.length > 0 && (
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="h-px flex-1 bg-[#2A2E37]" />
+                        <span className="text-gray-500 text-xs font-bold uppercase tracking-widest px-3">More Categories</span>
+                        <div className="h-px flex-1 bg-[#2A2E37]" />
+                      </div>
+                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+                      {otherCats.map((cat, i) => (
+                        <FadeIn key={cat.slug} delay={i * 0.07}>
+                          <Link href={`/products/${cat.slug}`}
+                            className="group bg-[#1A1D24] border border-[#2A2E37] rounded-lg overflow-hidden hover:border-[#F5A623]/50 hover:shadow-[0_0_20px_rgba(245,166,35,0.1)] transition-all block">
+                            <div className="h-36 overflow-hidden">
+                              <img src={cat.img} alt={`${cat.name} for ${brand.fullName} motor grader`}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                            </div>
+                            <div className="p-4">
+                              <h3 className="font-bold text-white text-sm mb-2">{cat.name}</h3>
+                              <span className="text-[#F5A623] text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                                View Parts <ArrowRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </Link>
+                        </FadeIn>
+                      ))}
+                    </div>
                   </div>
-                </Link>
-              </FadeIn>
-            ))}
-          </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </section>
 

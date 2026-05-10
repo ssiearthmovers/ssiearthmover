@@ -4,10 +4,11 @@ interface PageMetaOptions {
   title: string;
   description: string;
   canonical?: string;
+  ogImage?: string;
   schema?: object;
 }
 
-export function usePageMeta({ title, description, canonical, schema }: PageMetaOptions) {
+export function usePageMeta({ title, description, canonical, ogImage, schema }: PageMetaOptions) {
   useEffect(() => {
     const setAttr = (sel: string, attr: string, val: string) => {
       const el = document.querySelector(sel);
@@ -21,6 +22,8 @@ export function usePageMeta({ title, description, canonical, schema }: PageMetaO
       ogTitle: document.querySelector('meta[property="og:title"]')?.getAttribute("content") ?? "",
       ogDesc: document.querySelector('meta[property="og:description"]')?.getAttribute("content") ?? "",
       ogUrl: document.querySelector('meta[property="og:url"]')?.getAttribute("content") ?? "",
+      ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute("content") ?? "",
+      twImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute("content") ?? "",
     };
 
     document.title = title;
@@ -31,6 +34,13 @@ export function usePageMeta({ title, description, canonical, schema }: PageMetaO
     }
     setAttr('meta[property="og:title"]', "content", title);
     setAttr('meta[property="og:description"]', "content", description);
+    setAttr('meta[name="twitter:title"]', "content", title);
+    setAttr('meta[name="twitter:description"]', "content", description);
+    if (ogImage) {
+      const absImg = ogImage.startsWith("http") ? ogImage : `https://ssiearthmovers.in${ogImage}`;
+      setAttr('meta[property="og:image"]', "content", absImg);
+      setAttr('meta[name="twitter:image"]', "content", absImg);
+    }
 
     let schemaEl: HTMLScriptElement | null = null;
     if (schema) {
@@ -48,7 +58,11 @@ export function usePageMeta({ title, description, canonical, schema }: PageMetaO
       setAttr('meta[property="og:title"]', "content", prev.ogTitle);
       setAttr('meta[property="og:description"]', "content", prev.ogDesc);
       setAttr('meta[property="og:url"]', "content", prev.ogUrl);
+      if (ogImage) {
+        setAttr('meta[property="og:image"]', "content", prev.ogImage);
+        setAttr('meta[name="twitter:image"]', "content", prev.twImage);
+      }
       schemaEl?.remove();
     };
-  }, [title, description, canonical]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [title, description, canonical, ogImage]); // eslint-disable-line react-hooks/exhaustive-deps
 }

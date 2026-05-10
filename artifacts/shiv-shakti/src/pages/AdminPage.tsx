@@ -987,7 +987,56 @@ export default function AdminPage() {
 
         {view === "enquiries" && (
           <>
-            {/* Stats */}
+            {/* Dashboard Summary */}
+            {(() => {
+              const today = new Date().toDateString();
+              const newToday = enquiries.filter(e => new Date(e.createdAt).toDateString() === today).length;
+              const openCount = enquiries.filter(e => !["closed", "dispatched"].includes(e.status)).length;
+              const closedCount = enquiries.filter(e => e.status === "closed" || e.status === "dispatched").length;
+              const convRate = enquiries.length > 0 ? Math.round((enquiries.filter(e => e.status === "order-confirmed" || e.status === "dispatched").length / enquiries.length) * 100) : 0;
+              return (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                  <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl px-4 py-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#F5A623]/10 flex items-center justify-center shrink-0">
+                      <ClipboardList className="w-5 h-5 text-[#F5A623]" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-black text-white leading-none">{enquiries.length}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">Total Enquiries</p>
+                    </div>
+                  </div>
+                  <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${newToday > 0 ? "border-[#F5A623]/40 bg-[#F5A623]/5" : "border-[#2A2E37]"}`}>
+                    <div className="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
+                      <Inbox className="w-5 h-5 text-sky-400" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-black text-white leading-none">{newToday}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">New Today</p>
+                    </div>
+                  </div>
+                  <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${openCount > 0 ? "border-amber-500/30" : "border-[#2A2E37]"}`}>
+                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                      <Clock className="w-5 h-5 text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-black text-white leading-none">{openCount}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">Open Pipeline</p>
+                    </div>
+                  </div>
+                  <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl px-4 py-4 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-5 h-5 text-green-400" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-black text-white leading-none">{convRate}%</p>
+                      <p className="text-xs text-gray-500 mt-0.5">Conversion Rate</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Status Breakdown */}
             <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mb-6">
               {stats.map((s) => (
                 <button key={s.value} onClick={() => setStatusFilter(statusFilter === s.value ? "all" : s.value)}

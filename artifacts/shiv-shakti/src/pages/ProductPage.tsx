@@ -64,6 +64,7 @@ export default function ProductPage() {
     title: product.metaTitle,
     description: product.metaDesc,
     canonical: `https://ssiearthmovers.in/products/${product.slug}`,
+    ogImage: product.img,
     schema: {
       "@context": "https://schema.org",
       "@type": "WebPage",
