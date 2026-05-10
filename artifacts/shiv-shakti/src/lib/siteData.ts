@@ -132,6 +132,7 @@ export const brands: BrandInfo[] = [
       { name: "Strip Wear (GMTL)",  partNo: "6G4524",               model: "CAT 120K/H, 140H", category: "plate" },
       { name: "Strip Wear",         partNo: "333-0960",             model: "CAT 120K/H, 140H", category: "plate" },
       { name: "Gear Shifter",       partNo: "4529831",              model: "CAT 120K/H, 140H", category: "gear",  img: "/images/gear-shifter-cat-4529831.png" },
+      { name: "Rim",                partNo: "2520104",              model: "CAT 120K/H, 140H", category: "hub",   img: "/images/rim-cat-2520104.png" },
     ],
     img: "/images/machines/cat-grader.jpg",
     gallery: {
