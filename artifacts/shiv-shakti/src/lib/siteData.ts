@@ -440,7 +440,7 @@ export const brands: BrandInfo[] = [
       { name: "Castel Nut", partNo: "10018519", model: "Leeboy 785/985", category: "general" },
       { name: "Guide", partNo: "90000335", model: "Leeboy 785/985", category: "general" },
       { name: "Ball Joint", partNo: "10018118", model: "Leeboy 785/985", category: "joint" },
-      { name: "Bevel Gear Assembly", partNo: "3265503", model: "Leeboy 785/985", category: "gear" },
+      { name: "Bevel Gear Assembly", partNo: "3265503", model: "Leeboy 785/985", category: "gear", img: "/images/bevel-gear-leeboy-3265503.png", img2: "/images/bevel-gear-leeboy-3265503b.png" },
       { name: "Shoe", partNo: "10010221", model: "Leeboy 785/985", category: "general" },
       { name: "Side Cutter / End Bit", partNo: "10011358", model: "Leeboy 785/985", category: "end-bit" },
       { name: "Brake Piston", partNo: "3349973", model: "Leeboy 785/985", category: "brake" },
