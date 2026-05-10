@@ -368,6 +368,7 @@ export const brands: BrandInfo[] = [
       { name: "Brake Drum", partNo: "275400302", model: "XCMG 165", category: "brake", img: "/images/brake-drum-xcmg-275400302.png" },
       { name: "Carrier", partNo: "275400037", model: "XCMG 165", category: "hub", img: "/images/carrier-xcmg-275400037.png" },
       { name: "Gear", partNo: "273100564", model: "XCMG 165", category: "gear", img: "/images/gear-xcmg-273100564.png", img2: "/images/gear-xcmg-273100564b.png" },
+      { name: "Ring Hub cum Ring Gear", partNo: "275400265", model: "XCMG 165", category: "ring-gear", img: "/images/ring-hub-ring-gear-xcmg-275400265.png" },
       { name: "Guide Thin", partNo: "83640006", model: "XCMG 165", category: "general" },
       { name: "King Pin", partNo: "380400474", model: "XCMG 165", category: "pin" },
       { name: "Nut", partNo: "805238929", model: "XCMG 165", category: "general" },
