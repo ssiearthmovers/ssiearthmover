@@ -26,6 +26,7 @@ export type BrandPart = {
   model: string;
   category: PartCategory;
   img?: string;
+  img2?: string;
 };
 
 export const PART_CATEGORY_IMG: Record<PartCategory, string> = {
@@ -286,7 +287,7 @@ export const brands: BrandInfo[] = [
     ],
     parts: [
       { name: "Axle", partNo: "87625353", model: "CASE 845B", category: "shaft", img: "/images/axle-case-87625353.png" },
-      { name: "Brake Housing", partNo: "87625372", model: "CASE 845B", category: "brake", img: "/images/brake-housing-case-87625372.png" },
+      { name: "Brake Housing", partNo: "87625372", model: "CASE 845B", category: "brake", img: "/images/brake-housing-case-87625372.png", img2: "/images/brake-housing-case-87625372b.png" },
       { name: "Cover", partNo: "87625344", model: "CASE 845B", category: "general", img: "/images/cover-case-87625344.png" },
       { name: "Worm Gear", partNo: "75215793", model: "CASE 845B", category: "gear" },
       { name: "Bushing (Big)", partNo: "73130969", model: "CASE 845B", category: "bushing" },

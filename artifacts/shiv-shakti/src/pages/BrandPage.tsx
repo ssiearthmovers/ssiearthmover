@@ -115,15 +115,26 @@ function PartRow({ part, index, onImageClick }: { part: BrandPart; index: number
         </div>
       </div>
 
-      {/* Photo thumbnail (optional) */}
+      {/* Photo thumbnail(s) (optional) */}
       {part.img ? (
-        <button
-          onClick={() => onImageClick?.(part.img!, `${part.name} — ${part.partNo}`)}
-          className="shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
-          title="Click to zoom photo"
-        >
-          <img src={part.img} alt={part.name} className="w-full h-full object-contain p-0.5" />
-        </button>
+        <div className="shrink-0 flex gap-1">
+          <button
+            onClick={() => onImageClick?.(part.img!, `${part.name} — ${part.partNo}`)}
+            className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
+            title="Click to zoom photo"
+          >
+            <img src={part.img} alt={part.name} className="w-full h-full object-contain p-0.5" />
+          </button>
+          {part.img2 && (
+            <button
+              onClick={() => onImageClick?.(part.img2!, `${part.name} — ${part.partNo} (view 2)`)}
+              className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
+              title="Click to zoom photo (view 2)"
+            >
+              <img src={part.img2} alt={`${part.name} view 2`} className="w-full h-full object-contain p-0.5" />
+            </button>
+          )}
+        </div>
       ) : (
         <span />
       )}
