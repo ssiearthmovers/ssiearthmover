@@ -1,0 +1,197 @@
+Upgrade my existing SSI Earthmovers website professionally without changing the current modern dark theme, branding, or overall UI style.
+
+IMPORTANT:
+- Keep current design language and layout style.
+- Do NOT redesign the whole website.
+- Improve the existing structure professionally.
+- Keep all existing admin, stock, enquiry, and authentication systems working.
+
+MAIN GOAL:
+Turn the website into a professional industrial earthmover parts platform with strong trust, product depth, SEO structure, and inventory-connected catalogue.
+
+========================
+1. HOMEPAGE IMPROVEMENTS
+========================
+
+Improve homepage clarity immediately.
+
+Replace generic headings with professional industrial content like:
+
+Main Heading:
+“Motor Grader & Earthmover Spare Parts Supplier”
+
+Subheading:
+“Hydraulic Parts, Cutting Edges, Transmission Components, Filters & Heavy Equipment Spare Parts”
+
+Add:
+- Strong CTA buttons
+- “Request Quote”
+- “View Catalogue”
+- “Contact Us”
+
+Add professional industrial business wording throughout homepage.
+
+========================
+2. TRUST & COMPANY SECTION
+========================
+
+Create a strong industrial trust section including:
+- Years of experience
+- Product categories count
+- Supported brands
+- Fast delivery
+- Quality assurance
+- Worldwide supply capability
+
+Add sections for:
+- Why Choose Us
+- Industrial Expertise
+- Product Quality
+- Customer Support
+
+Create placeholder areas for:
+- Warehouse photos
+- Dispatch images
+- Product closeups
+- Team/workshop photos
+
+IMPORTANT:
+Use professional placeholders for now because real workshop images will be added later manually.
+
+========================
+3. PRODUCT & CATALOGUE IMPROVEMENTS
+========================
+
+Upgrade product system professionally.
+
+Each product page should support:
+- Product title
+- Part number
+- Brand
+- Product category
+- Description
+- Specifications
+- Compatible machine models
+- Applications
+- Product image gallery
+- Inquiry button
+- Related products
+- SEO meta title
+- SEO meta description
+
+Add:
+- Product search
+- Category filters
+- Brand filters
+- Part number search
+
+========================
+4. STOCK SYSTEM INTEGRATION
+========================
+
+Connect stock inventory directly with public catalogue.
+
+Requirements:
+- When admin adds stock item → automatically create public product listing
+- When stock updates → product availability updates automatically
+- If stock = 0 → show “Out of Stock”
+- If low stock → show “Limited Availability”
+
+Add:
+- Inventory quantity tracking
+- Product activity logs
+- Sales history
+- Automatic stock deduction after sales
+
+IMPORTANT:
+Stock quantities remain visible ONLY to admin/staff.
+
+========================
+5. INDUSTRIAL FEATURES
+========================
+
+Add professional industrial business features:
+- RFQ (Request For Quote) system
+- Quick inquiry form
+- WhatsApp contact button
+- Related products section
+- Product recommendation section
+
+========================
+6. FOOTER IMPROVEMENT
+========================
+
+Create professional SEO-friendly footer with:
+- Company information
+- Product categories
+- Quick links
+- Contact details
+- Location
+- Social media links
+- Industrial business description
+
+========================
+7. SEO STRUCTURE
+========================
+
+Improve SEO without changing UI.
+
+Add:
+- Proper H1, H2, H3 structure
+- Dynamic meta titles
+- Meta descriptions
+- Open Graph tags
+- Schema markup
+- SEO-friendly URLs
+- Image ALT tags
+- Internal linking
+
+Add keyword-focused content naturally for:
+- motor grader spare parts
+- earthmover spare parts
+- hydraulic components
+- cutting edges
+- heavy equipment spare parts
+- CAT grader parts
+- Komatsu grader parts
+
+========================
+8. PERFORMANCE & UX
+========================
+
+Improve:
+- Mobile responsiveness
+- Loading speed
+- Image optimization
+- Lazy loading
+- Smooth UI transitions
+- Search performance
+
+========================
+9. ADMIN DASHBOARD IMPROVEMENTS
+========================
+
+Improve admin dashboard professionally.
+
+Add:
+- Stock statistics
+- Low stock alerts
+- Recent sales
+- Fast moving products
+- Product management tools
+- Search and filtering
+- Excel/CSV import support
+
+========================
+10. IMPORTANT
+========================
+
+- Keep current modern dark industrial style
+- Do NOT break current backend systems
+- Do NOT remove existing features
+- Keep website responsive
+- Keep website fast
+- Maintain premium industrial look
+
+FINAL GOAL:
+Make the website feel like a professional industrial inventory + catalogue platform for earthmover and grader spare parts businesses.
