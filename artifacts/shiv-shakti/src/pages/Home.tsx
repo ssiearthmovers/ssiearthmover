@@ -1644,7 +1644,7 @@ export default function Home() {
                   },
                   {
                     label: "Workshop",
-                    addr: "Plot 138, Phase-1, HSIDC, Rai, Sonipat – 131001",
+                    addr: "Plot 138, Phase-1, HSIIDC, Rai, Sonipat – 131001",
                   },
                 ].map((o) => (
                   <div
