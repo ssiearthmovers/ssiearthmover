@@ -628,7 +628,7 @@ export const brands: BrandInfo[] = [
     parts: [
       { name: "Hub", partNo: "SP139664", model: "Liugong CG414", category: "hub", img: "/images/hub-liugong-sp139664.png" },
       { name: "Sprocket Z22", partNo: "334948", model: "Liugong CG414", category: "sprocket" },
-      { name: "Break Drum", partNo: "80513002 / SP105976", model: "Liugong CG414", category: "brake" },
+      { name: "Break Drum", partNo: "80513002 / SP105976", model: "Liugong CG414", category: "brake", img: "/images/break-drum-liugong-80513002.png" },
       { name: "Worm Gear", partNo: "52C0122 / 52C0291", model: "Liugong CG414", category: "gear" },
       { name: "Retarder Hub", partNo: "83763201", model: "Liugong CG414", category: "hub" },
       { name: "Blade Side Shift Cylinder", partNo: "10C0887", model: "Liugong CG414", category: "hydraulic", img: "/images/blade-side-shift-cyl-liugong-10c0887.png" },
