@@ -211,12 +211,12 @@ export default function Home() {
       imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(1.5)" },
     },
     {
-      title: "Axle",
-      desc: "Heavy-duty motor grader axle assemblies and components for all major brands",
-      img: "/images/category-axle.png",
+      title: "Braking System",
+      desc: "Brake shafts, brake drums, brake shoes and braking assembly parts for all motor grader brands",
+      img: "/images/braking-system-brake-shaft.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.15) contrast(1.3) saturate(1.2)" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(0.85) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
     },
     {
       title: "Ball Joints & Tie Rod Ends",
@@ -298,12 +298,12 @@ export default function Home() {
       imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(1.5)" },
     },
     {
-      name: "Axle Assembly",
-      desc: "Heavy-duty axle assemblies and components for all major motor grader brands.",
-      img: "/images/category-axle.png",
+      name: "Braking System",
+      desc: "Brake shafts, brake drums, brake shoes and braking assembly parts for all motor grader brands.",
+      img: "/images/braking-system-brake-shaft.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.15) contrast(1.3) saturate(1.2)" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(0.85) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
     },
     {
       name: "Ball Joints & Tie Rod Ends",
