@@ -949,7 +949,7 @@ export const productCategories: ProductCategory[] = [
       { name: "Hardox 500 Blade", desc: "Maximum wear life for mining, quarry and rocky terrain applications." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
-    img: "/images/category-grader-blades.jpg",
+    img: "/images/category-grader-blades.png",
     metaTitle: "Motor Grader Blades India | All Brands & Sizes | SSI Earthmovers Delhi",
     metaDesc: "Buy motor grader moldboard blades in India. Mild steel, Hardox 400 & 500. All standard sizes. CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG. Same-day dispatch.",
     faqs: [
