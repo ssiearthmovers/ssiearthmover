@@ -11,6 +11,7 @@ import {
   brands, productCategories, WHATSAPP, PHONE1, PHONE2,
   PART_CATEGORY_IMG, type BrandPart,
 } from "@/lib/siteData";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -161,6 +162,27 @@ export default function BrandPage() {
   const [catFilter, setCatFilter] = useState("all");
 
   useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
+
+  usePageMeta({
+    title: brand?.metaTitle ?? "Motor Grader Spare Parts | SSI Earthmovers India",
+    description: brand?.metaDesc ?? "Premium OEM-quality motor grader spare parts. Same-day dispatch from New Delhi. Call +91-9953105738.",
+    canonical: brand ? `https://ssiearthmovers.in/brands/${brand.slug}` : undefined,
+    schema: brand ? {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": brand.metaTitle,
+      "description": brand.metaDesc,
+      "url": `https://ssiearthmovers.in/brands/${brand.slug}`,
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ssiearthmovers.in/" },
+          { "@type": "ListItem", "position": 2, "name": "Brands", "item": "https://ssiearthmovers.in/#products" },
+          { "@type": "ListItem", "position": 3, "name": brand.name, "item": `https://ssiearthmovers.in/brands/${brand.slug}` },
+        ],
+      },
+    } : undefined,
+  });
 
   const filteredParts = useMemo(() => {
     if (!brand?.parts.length) return [];

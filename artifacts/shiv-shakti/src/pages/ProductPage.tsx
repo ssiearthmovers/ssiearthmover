@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { productCategories, brands, WHATSAPP, PHONE1, PHONE2 } from "@/lib/siteData";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -59,9 +60,29 @@ export default function ProductPage() {
 
   const waMsg = `Hello SSI Earthmovers,%0A%0AI need ${encodeURIComponent(product.name)}%20for%20my%20motor%20grader.%0APlease%20share%20availability%20and%20pricing.`;
 
+  usePageMeta({
+    title: product.metaTitle,
+    description: product.metaDesc,
+    canonical: `https://ssiearthmovers.in/products/${product.slug}`,
+    schema: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": product.metaTitle,
+      "description": product.metaDesc,
+      "url": `https://ssiearthmovers.in/products/${product.slug}`,
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ssiearthmovers.in/" },
+          { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://ssiearthmovers.in/#products" },
+          { "@type": "ListItem", "position": 3, "name": product.name, "item": `https://ssiearthmovers.in/products/${product.slug}` },
+        ],
+      },
+    },
+  });
+
   return (
     <div className="min-h-screen text-[#F2F2F2] font-sans" style={{ background: "#16181D" }}>
-      {typeof document !== "undefined" && (document.title = product.metaTitle)}
 
       {/* Ticker */}
       <div className="fixed top-0 left-0 w-full z-[60] bg-[#F5A623] text-black text-xs font-bold overflow-hidden h-9 flex items-center">

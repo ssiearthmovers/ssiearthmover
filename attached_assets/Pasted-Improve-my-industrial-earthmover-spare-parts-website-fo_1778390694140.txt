@@ -1,0 +1,100 @@
+Improve my industrial earthmover spare parts website for SEO and Google ranking.
+
+IMPORTANT:
+Do NOT redesign the whole website. Keep the current design, theme, colors, layout, and branding. Only improve SEO structure, content organization, and performance.
+
+Add these SEO improvements professionally:
+
+1. Create dedicated SEO product/category pages:
+- CAT Motor Grader Parts
+- Komatsu Grader Parts
+- Volvo Grader Parts
+- Cutting Edges
+- End Bits
+- Hydraulic Pumps
+- Transmission Parts
+- Used Earthmover Spare Parts
+
+Each page should include:
+- SEO optimized title
+- Meta description
+- H1 heading
+- 700–1500 words of professional SEO content
+- Inquiry form
+- Product image section
+- FAQ section
+- Internal links to other pages
+- Mobile responsive layout
+
+2. Add proper SEO setup:
+- Dynamic meta titles
+- Meta descriptions
+- Open Graph tags
+- Canonical URLs
+- Schema markup for business/products
+- Proper heading hierarchy (H1, H2, H3)
+- Image ALT tags
+- robots.txt optimization
+- XML sitemap support
+
+3. Improve performance:
+- Compress and lazy-load images
+- Optimize loading speed
+- Improve Core Web Vitals
+- Mobile optimization
+- Reduce unnecessary animations if heavy
+
+4. Add blog system:
+Create SEO blog section with pages for articles like:
+- Top Motor Grader Spare Parts
+- How To Choose Cutting Edges
+- CAT vs Komatsu Grader Parts
+- Signs Hydraulic Pump Failure
+
+Blog pages should support:
+- SEO URLs
+- Meta tags
+- Featured images
+- Categories
+- Related posts
+
+5. Add trust-building business elements:
+- Company details
+- Contact information
+- WhatsApp button
+- Inquiry form
+- Testimonials section
+- Warehouse/gallery section
+- GST/business details section
+
+6. Internal SEO linking:
+Create internal links between:
+- products
+- blogs
+- categories
+- homepage
+
+7. Technical SEO:
+- Ensure sitemap.xml works correctly
+- Ensure robots.txt works correctly
+- Add breadcrumb navigation
+- Generate clean SEO-friendly URLs
+
+8. Important:
+- Keep website modern and professional
+- Maintain current UI style
+- Do not break existing admin system
+- Do not remove existing features
+- Keep website responsive
+
+Goal:
+Make the website rank better on Google for keywords related to:
+- motor grader spare parts
+- earthmover spare parts
+- grader cutting edges
+- CAT grader parts
+- Komatsu grader parts
+- hydraulic pumps
+- used grader parts
+
+Also make the website look trustworthy for international B2B customers.
