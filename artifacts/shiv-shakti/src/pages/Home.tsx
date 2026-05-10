@@ -229,10 +229,10 @@ export default function Home() {
     {
       title: "Sprockets / Worm Gears / Ring Gears",
       desc: "High-strength sprockets, worm gears and ring gears for all motor grader models",
-      img: "/images/category-sprockets.png",
+      img: "/images/sprocket-worm-gear.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.2) contrast(1.35) saturate(1.2)" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(0.8) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
     },
     {
       title: "Hydraulic Cylinders",
@@ -316,10 +316,10 @@ export default function Home() {
     {
       name: "Sprockets / Worm Gears / Ring Gears",
       desc: "High-strength transmission gears and sprockets for all motor grader brands.",
-      img: "/images/category-sprockets.png",
+      img: "/images/sprocket-worm-gear.png",
       slug: "circle-drawbar-parts",
       imgClass: "object-contain p-4",
-      imgStyle: { filter: "brightness(1.2) contrast(1.35) saturate(1.2)" },
+      imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(0.8) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
     },
     {
       name: "Centre Shift Cylinder — 6E1634",
