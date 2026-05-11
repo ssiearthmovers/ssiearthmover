@@ -75,7 +75,7 @@ interface Product {
   unit: string;
   rackLocation: string | null;
   warehouse: string | null;
-  warehouseBreakdown: Record<string, number>;
+  warehouseBreakdown?: Record<string, number>;
   quantity: number;
   reorderLevel: number;
   status: string;
@@ -1530,10 +1530,10 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                               {p.quantity}
                             </span>
                             <span className="text-gray-600 text-[10px] ml-1">{p.unit}</span>
-                            {Object.keys(p.warehouseBreakdown).length > 0 && (
+                            {Object.keys(p.warehouseBreakdown ?? {}).length > 0 && (
                               <div className="flex flex-col gap-0.5 mt-1">
                                 {(["rai", "rohini", "mori-gate"] as const).map((wh) => {
-                                  const qty = p.warehouseBreakdown[wh];
+                                  const qty = (p.warehouseBreakdown ?? {})[wh];
                                   if (qty === undefined) return null;
                                   return (
                                     <div key={wh} className="flex items-center gap-1">
@@ -1792,10 +1792,10 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                 </div>
               </div>
               {/* Per-warehouse breakdown */}
-              {Object.keys(stockModal.product.warehouseBreakdown).length > 0 && (
+              {Object.keys(stockModal.product.warehouseBreakdown ?? {}).length > 0 && (
                 <div className="flex gap-2 flex-wrap border-t border-[#2A2E37] pt-3">
                   {(["rai", "rohini", "mori-gate"] as const).map((wh) => {
-                    const qty = stockModal.product.warehouseBreakdown[wh];
+                    const qty = (stockModal.product.warehouseBreakdown ?? {})[wh];
                     if (qty === undefined) return null;
                     const colors = wh === "rai" ? "text-violet-400 bg-violet-500/10 border-violet-500/20"
                       : wh === "rohini" ? "text-sky-400 bg-sky-500/10 border-sky-500/20"
@@ -1830,7 +1830,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
               {stockModal.warehouse && (
                 <p className="text-[10px] text-gray-500 mt-1.5">
                   Current at {stockModal.warehouse === "mori-gate" ? "Mori Gate" : stockModal.warehouse === "rai" ? "Rai" : "Rohini"}:
-                  <span className="text-white font-bold ml-1">{stockModal.product.warehouseBreakdown[stockModal.warehouse] ?? 0} {stockModal.product.unit}</span>
+                  <span className="text-white font-bold ml-1">{(stockModal.product.warehouseBreakdown ?? {})[stockModal.warehouse] ?? 0} {stockModal.product.unit}</span>
                 </p>
               )}
             </div>
