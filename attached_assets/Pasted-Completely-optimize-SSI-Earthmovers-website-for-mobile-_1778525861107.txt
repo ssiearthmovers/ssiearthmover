@@ -1,0 +1,95 @@
+Completely optimize SSI Earthmovers website for mobile devices while preserving the strong desktop design.
+
+GOAL:
+Create a clean, professional, fast mobile experience for industrial spare parts customers using phones.
+
+MOBILE ISSUES TO FIX:
+- overlapping elements
+- duplicate WhatsApp buttons
+- broken spacing
+- horizontal scrolling
+- oversized tables
+- compressed text
+- inconsistent padding/margins
+- navbar responsiveness
+- catalogue readability
+- filter usability
+- enquiry form responsiveness
+
+REQUIREMENTS:
+
+1. MOBILE-FIRST RESPONSIVE DESIGN
+Redesign layouts using mobile-first approach:
+- xs
+- sm
+- md
+- lg
+- xl breakpoints
+
+2. RESPONSIVE NAVBAR
+- clean hamburger menu
+- proper spacing
+- fixed mobile header
+- smooth menu animations
+- prevent overflow
+
+3. MOBILE CATALOGUE OPTIMIZATION
+Convert large desktop tables into:
+- responsive cards
+OR
+- horizontal scroll containers
+
+Each part card should display:
+- part number
+- part name
+- machine model
+- stock badge
+- WhatsApp enquiry button
+
+4. FIX WHATSAPP BUTTONS
+- remove duplicate mobile WhatsApp buttons
+- ensure only one floating action button
+- proper bottom spacing
+- avoid overlap with forms/navigation
+
+5. TOUCH-FRIENDLY UI
+Ensure:
+- larger tap areas
+- proper button spacing
+- readable font sizes
+- smooth scrolling
+
+6. PERFORMANCE OPTIMIZATION
+Optimize for mobile speed:
+- lazy loading
+- optimized images
+- reduced animations on mobile
+- faster API loading
+
+7. ADMIN PANEL MOBILE SUPPORT
+Make admin dashboard usable on phones:
+- responsive enquiry cards
+- collapsible sections
+- stacked layouts
+- touch-friendly controls
+
+8. BLACK/YELLOW INDUSTRIAL THEME
+Maintain premium industrial appearance:
+- dark backgrounds
+- yellow highlights
+- modern heavy-equipment aesthetic
+
+9. MOBILE UX IMPROVEMENTS
+- sticky action buttons
+- quick WhatsApp access
+- easy search access
+- simplified filters
+- collapsible filter sections
+
+10. TEST RESPONSIVENESS
+Ensure compatibility for:
+- Android phones
+- iPhones
+- tablets
+- small screens
+- landscape orientation

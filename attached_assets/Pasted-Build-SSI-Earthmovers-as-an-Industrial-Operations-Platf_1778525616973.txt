@@ -1,0 +1,101 @@
+Build SSI Earthmovers as an Industrial Operations Platform focused on inventory, enquiries, customer management, and workflow efficiency — NOT accounting software.
+
+IMPORTANT:
+Do NOT add:
+- GST systems
+- accounting modules
+- ledger
+- balance sheet
+- tax calculations
+- Tally-like features
+- full invoicing/accounting ERP
+
+The platform should remain lightweight, fast, and operations-focused.
+
+CORE MODULES REQUIRED:
+
+1. INVENTORY MANAGEMENT
+- Central stock database
+- Add/edit/delete parts
+- Import stock from Excel/CSV
+- Auto-update catalogue pages when stock changes
+- Connect parts to:
+  - machine model
+  - brand
+  - category
+- Public stock badges:
+  - In Stock
+  - Limited
+  - Out of Stock
+- Do NOT show exact quantity publicly
+
+2. ENQUIRY MANAGEMENT
+- Store all enquiries in admin dashboard
+- Status workflow:
+  - New
+  - Contacted
+  - Quote Sent
+  - Closed
+- Assign enquiries to team members
+- Save:
+  - last contacted time
+  - assigned admin
+  - internal notes
+
+3. WHATSAPP WORKFLOW
+For every enquiry:
+- Reply on WhatsApp button
+- Call Customer button
+- Copy Number button
+
+WhatsApp button should:
+- open wa.me link
+- include prefilled enquiry details
+- auto-update enquiry status to "Contacted"
+
+4. CUSTOMER HISTORY
+Create lightweight CRM functionality:
+- previous enquiries
+- requested machine models
+- requested parts
+- follow-up history
+- repeat customer tracking
+
+5. FOLLOW-UP SYSTEM
+- reminder dates
+- priority labels
+- pending follow-up list
+- internal notes for team
+
+6. ADMIN DASHBOARD
+Dashboard widgets:
+- New Enquiries
+- Pending Follow-ups
+- Contacted Today
+- Low Stock Parts
+- Recently Added Parts
+
+7. SEARCH & CATALOGUE
+- fast global part search
+- filter by:
+  - brand
+  - machine
+  - category
+- dynamic machine pages
+- SEO-friendly URLs
+
+8. PERFORMANCE & MOBILE
+- optimize loading speed
+- responsive admin dashboard
+- fix duplicate WhatsApp button issue on mobile
+- ensure clean black/yellow industrial UI
+
+9. FUTURE READY STRUCTURE
+Keep architecture scalable for:
+- quotation PDFs
+- proforma invoices
+- export reports
+- inventory analytics
+- sales analytics
+
+BUT do NOT implement accounting/GST systems.

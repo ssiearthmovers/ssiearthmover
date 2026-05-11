@@ -13,8 +13,11 @@ export const enquiriesTable = pgTable("enquiries", {
   message: text("message"),
   source: text("source").notNull().default("contact-form"),
   status: text("status").notNull().default("new"),
+  priority: text("priority").notNull().default("normal"),
   assignedToId: integer("assigned_to_id").references(() => workersTable.id),
   assignedToName: text("assigned_to_name"),
+  followUpDate: timestamp("follow_up_date"),
+  lastContactedAt: timestamp("last_contacted_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -23,6 +26,9 @@ export const insertEnquirySchema = createInsertSchema(enquiriesTable).omit({
   createdAt: true,
   assignedToId: true,
   assignedToName: true,
+  priority: true,
+  followUpDate: true,
+  lastContactedAt: true,
 });
 export type InsertEnquiry = z.infer<typeof insertEnquirySchema>;
 export type Enquiry = typeof enquiriesTable.$inferSelect;
