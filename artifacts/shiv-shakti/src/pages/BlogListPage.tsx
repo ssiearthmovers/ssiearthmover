@@ -110,6 +110,7 @@ export default function BlogListPage() {
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden bg-[#0D0F12]">
                     <img src={article.featuredImage} alt={article.title}
+                      loading="lazy"
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       style={{ filter: "brightness(0.6) saturate(0.7)" }} />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1A1D24] via-transparent to-transparent" />

@@ -1061,6 +1061,7 @@ export default function Home() {
                     <img
                       src={cat.img}
                       alt={cat.title}
+                      loading="lazy"
                       className={`w-full h-full group-hover:scale-110 transition-transform duration-700 ${cat.imgClass ?? "object-cover"}`}
                       style={cat.imgStyle}
                     />
@@ -1152,6 +1153,7 @@ export default function Home() {
               <img
                 src="/images/about-warehouse.png"
                 alt="SSI Earthmovers motor grader spare parts warehouse — 5,000+ OEM parts in stock at Mori Gate New Delhi"
+                loading="lazy"
                 className="relative z-10 rounded-lg w-full h-auto object-cover aspect-[4/3] shadow-2xl"
               />
             </div>
@@ -1209,6 +1211,7 @@ export default function Home() {
                     <img
                       src={p.img}
                       alt={p.name}
+                      loading="lazy"
                       className={`w-full h-full group-hover:scale-110 transition-transform duration-700 ${p.imgClass ?? "object-cover"}`}
                       style={p.imgStyle}
                     />
@@ -1312,6 +1315,7 @@ export default function Home() {
                   <img
                     src={ind.img}
                     alt={ind.name}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

@@ -106,7 +106,7 @@ export default function ProductPage() {
       <SiteNavbar />
 
       {/* HERO */}
-      <section className="relative pt-48 pb-20 overflow-hidden">
+      <section className="relative pt-32 sm:pt-40 md:pt-48 pb-16 sm:pb-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={product.img}
             alt={`${product.name} for motor graders — SSI Earthmovers India`}

@@ -232,7 +232,6 @@ export default function SearchPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              autoFocus
               placeholder="Enter part number, part name or machine model…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -409,8 +408,9 @@ export default function SearchPage() {
                   <div className="flex items-center gap-2 shrink-0">
                     {r.brandSlug !== "inventory" && (
                       <Link href={`/brands/${r.brandSlug}`}
-                        className="text-xs text-gray-500 hover:text-white border border-[#2A2E37] hover:border-[#3A3E47] px-3 py-2 rounded-lg font-bold transition-colors hidden sm:block">
-                        View Catalogue
+                        className="text-xs text-gray-500 hover:text-white border border-[#2A2E37] hover:border-[#3A3E47] px-3 py-2 rounded-lg font-bold transition-colors">
+                        <span className="hidden sm:inline">View Catalogue</span>
+                        <span className="sm:hidden">Catalogue</span>
                       </Link>
                     )}
                     <a

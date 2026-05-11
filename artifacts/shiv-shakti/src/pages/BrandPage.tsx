@@ -291,7 +291,7 @@ export default function BrandPage() {
       <SiteNavbar />
 
       {/* HERO */}
-      <section className="relative pt-48 pb-20 overflow-hidden">
+      <section className="relative pt-32 sm:pt-40 md:pt-48 pb-16 sm:pb-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={brand.img}
             alt={`${brand.fullName} motor grader spare parts — SSI Earthmovers`}
@@ -395,10 +395,11 @@ export default function BrandPage() {
       {brand.gallery && (
         <section className="bg-[#0D0F13]">
           {/* ── Machine banner ── */}
-          <div className="relative w-full overflow-hidden" style={{ height: "420px" }}>
+          <div className="relative w-full overflow-hidden h-52 sm:h-80 md:h-[420px]">
             <img
               src={brand.img}
               alt={`${brand.fullName} Motor Grader`}
+              loading="lazy"
               className="absolute inset-0 w-full h-full object-contain object-right"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
@@ -447,6 +448,7 @@ export default function BrandPage() {
                       <img
                         src={fp.img}
                         alt={fp.name}
+                        loading="lazy"
                         className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
                       />
                       <div className="absolute bottom-2 right-2 bg-black/60 rounded px-2 py-0.5 text-[10px] text-[#F5A623] font-bold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
