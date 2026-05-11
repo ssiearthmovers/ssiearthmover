@@ -7,6 +7,7 @@ import {
   Bell, MessageSquare, Lock, Send, FileText, ArrowLeft,
   Mail, Zap, Edit3, ChevronRight, Box,
   Package, Upload, AlertTriangle, Database,
+  Copy, PhoneCall, Flag, CalendarDays, LayoutDashboard, History,
 } from "lucide-react";
 
 const API_BASE = "/api";
@@ -31,8 +32,11 @@ interface Enquiry {
   message: string | null;
   source: string;
   status: string;
+  priority: string;
   assignedToId: number | null;
   assignedToName: string | null;
+  followUpDate: string | null;
+  lastContactedAt: string | null;
   createdAt: string;
 }
 
@@ -121,6 +125,52 @@ const STATUSES: { value: string; label: string; tw: string; dot: string }[] = [
 
 function getStatus(value: string) {
   return STATUSES.find((s) => s.value === value) ?? { value, label: value, tw: "bg-gray-500/15 text-gray-400 border-gray-500/30", dot: "bg-gray-500" };
+}
+
+const PRIORITIES: { value: string; label: string; tw: string; icon: string }[] = [
+  { value: "normal",  label: "Normal",  tw: "text-gray-400 bg-gray-500/10 border-gray-500/20",    icon: "●" },
+  { value: "high",    label: "High",    tw: "text-[#F5A623] bg-[#F5A623]/10 border-[#F5A623]/30", icon: "▲" },
+  { value: "urgent",  label: "Urgent",  tw: "text-red-400 bg-red-500/10 border-red-500/25",        icon: "⚠" },
+];
+
+function getPriority(value: string) {
+  return PRIORITIES.find((p) => p.value === value) ?? PRIORITIES[0]!;
+}
+
+function PriorityBadge({ priority }: { priority: string }) {
+  if (!priority || priority === "normal") return null;
+  const p = getPriority(priority);
+  return (
+    <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-black border ${p.tw}`}>
+      {p.icon} {p.label}
+    </span>
+  );
+}
+
+function formatFollowUp(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const day = new Date(d); day.setHours(0,0,0,0);
+  if (day.getTime() === today.getTime()) return "Today";
+  if (day.getTime() === tomorrow.getTime()) return "Tomorrow";
+  if (day < today) return "Overdue";
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+}
+
+function isFollowUpOverdue(iso: string | null): boolean {
+  if (!iso) return false;
+  const d = new Date(iso); d.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  return d < today;
+}
+
+function isFollowUpToday(iso: string | null): boolean {
+  if (!iso) return false;
+  const d = new Date(iso); d.setHours(0,0,0,0);
+  const today = new Date(); today.setHours(0,0,0,0);
+  return d.getTime() === today.getTime();
 }
 
 function formatDate(iso: string) {
@@ -318,9 +368,10 @@ function NotificationBell({ auth, onSelectEnquiry }: { auth: AuthInfo; onSelectE
 // ─── Enquiry Detail Panel ─────────────────────────────────────────────────────
 
 function EnquiryDetailPanel({
-  enquiry: initialEnquiry, auth, workers, onClose, onUpdate,
+  enquiry: initialEnquiry, auth, workers, allEnquiries, onClose, onUpdate,
 }: {
   enquiry: Enquiry; auth: AuthInfo; workers: Worker[];
+  allEnquiries: Enquiry[];
   onClose: () => void; onUpdate: (e: Enquiry) => void;
 }) {
   const [enquiry, setEnquiry] = useState(initialEnquiry);
@@ -334,6 +385,23 @@ function EnquiryDetailPanel({
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [assigning, setAssigning] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
+
+  // Panel tabs
+  const [activeTab, setActiveTab] = useState<"thread" | "history">("thread");
+
+  // Customer history (same phone, different enquiry)
+  const customerHistory = (allEnquiries ?? []).filter(
+    (e) => e.phone === enquiry.phone && e.id !== enquiry.id
+  );
+
+  // Follow-up + priority
+  const [followUpInput, setFollowUpInput] = useState<string>(
+    enquiry.followUpDate ? new Date(enquiry.followUpDate).toISOString().slice(0,10) : ""
+  );
+  const [selectedPriority, setSelectedPriority] = useState(enquiry.priority ?? "normal");
+  const [savingFollowUp, setSavingFollowUp] = useState(false);
+  const [contactedSaving, setContactedSaving] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Stock match for the enquired part
   const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string; warehouse?: string | null; warehouseBreakdown?: Record<string, number> } | null | "loading">("loading");
@@ -461,6 +529,47 @@ function EnquiryDetailPanel({
     } finally { setAssigning(false); }
   };
 
+  const markContacted = async () => {
+    setContactedSaving(true);
+    try {
+      const res = await fetch(`${API_BASE}/enquiries/${enquiry.id}/contacted`, {
+        method: "PATCH", headers: authHeader(auth.token),
+      });
+      if (res.ok) { const updated = (await res.json()) as Enquiry; setEnquiry(updated); onUpdate(updated); }
+    } finally { setContactedSaving(false); }
+  };
+
+  const openWhatsApp = async () => {
+    const parts = [enquiry.part, enquiry.machine].filter(Boolean).join(" for ");
+    const msg = `Hello ${enquiry.name}, this is SSI Earthmovers. Regarding your enquiry about ${parts || "spare parts"} (Enquiry #${enquiry.id}) — how can we help?`;
+    window.open(`https://wa.me/91${enquiry.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`, "_blank");
+    await markContacted();
+  };
+
+  const callCustomer = async () => {
+    window.open(`tel:${enquiry.phone}`, "_self");
+    await markContacted();
+  };
+
+  const copyPhone = () => {
+    navigator.clipboard.writeText(enquiry.phone).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+  };
+
+  const saveFollowUp = async () => {
+    setSavingFollowUp(true);
+    try {
+      const res = await fetch(`${API_BASE}/enquiries/${enquiry.id}/followup`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+        body: JSON.stringify({
+          priority: selectedPriority,
+          followUpDate: followUpInput ? new Date(followUpInput).toISOString() : null,
+        }),
+      });
+      if (res.ok) { const updated = (await res.json()) as Enquiry; setEnquiry(updated); onUpdate(updated); }
+    } finally { setSavingFollowUp(false); }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex" onClick={onClose}>
       <div className="flex-1 bg-black/60 backdrop-blur-sm" />
@@ -486,13 +595,46 @@ function EnquiryDetailPanel({
 
         {/* Customer info + controls */}
         <div className="px-5 py-4 border-b border-[#2A2E37] bg-[#16181D] shrink-0 space-y-3">
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="flex items-center gap-2">
+          {/* Contact action buttons */}
+          <div className="flex items-center gap-2">
+            <div className="flex-1 flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-              <a href={`tel:${enquiry.phone}`} className="text-[#F5A623] hover:underline font-semibold">{enquiry.phone}</a>
+              <span className="text-[#F5A623] font-semibold text-sm">{enquiry.phone}</span>
+              {enquiry.lastContactedAt && (
+                <span className="text-[10px] text-gray-600 ml-1">
+                  · Last: {timeAgo(enquiry.lastContactedAt)}
+                </span>
+              )}
             </div>
+            <button
+              onClick={() => void openWhatsApp()}
+              disabled={contactedSaving}
+              title="Open WhatsApp & mark contacted"
+              className="flex items-center gap-1 bg-[#25D366] text-white text-xs font-black px-2.5 py-1.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.556 4.116 1.527 5.845L0 24l6.335-1.504A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.865 0-3.614-.495-5.127-1.362l-.367-.218-3.76.893.924-3.663-.239-.381A9.945 9.945 0 012 12c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10z"/></svg>
+              WA
+            </button>
+            <button
+              onClick={() => void callCustomer()}
+              disabled={contactedSaving}
+              title="Call & mark contacted"
+              className="flex items-center gap-1 bg-[#1A1D24] border border-[#2A2E37] text-gray-300 text-xs font-black px-2.5 py-1.5 rounded-lg hover:border-[#F5A623]/40 hover:text-[#F5A623] transition-all disabled:opacity-50"
+            >
+              <PhoneCall className="w-3.5 h-3.5" /> Call
+            </button>
+            <button
+              onClick={copyPhone}
+              title="Copy phone number"
+              className="flex items-center gap-1 bg-[#1A1D24] border border-[#2A2E37] text-gray-300 text-xs font-black px-2.5 py-1.5 rounded-lg hover:border-[#F5A623]/40 hover:text-[#F5A623] transition-all"
+            >
+              <Copy className="w-3.5 h-3.5" /> {copied ? "Copied!" : "Copy"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 text-sm">
             {enquiry.email && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 col-span-2">
                 <Mail className="w-3.5 h-3.5 text-gray-500 shrink-0" />
                 <a href={`mailto:${enquiry.email}`} className="text-sky-400 hover:underline truncate text-xs">{enquiry.email}</a>
               </div>
@@ -615,6 +757,46 @@ function EnquiryDetailPanel({
             )}
             <StatusBadge status={enquiry.status} />
           </div>
+
+          {/* Priority + Follow-up row */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Priority selector */}
+            <div className="flex items-center gap-1.5">
+              <Flag className="w-3.5 h-3.5 text-gray-500" />
+              <span className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Priority:</span>
+              <div className="flex gap-1">
+                {PRIORITIES.map((p) => (
+                  <button
+                    key={p.value}
+                    onClick={() => setSelectedPriority(p.value)}
+                    className={`px-2 py-0.5 rounded text-[11px] font-black border transition-all ${selectedPriority === p.value ? p.tw : "text-gray-600 bg-transparent border-transparent hover:border-[#2A2E37]"}`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Follow-up date */}
+            <div className="flex items-center gap-1.5 ml-auto">
+              <CalendarDays className="w-3.5 h-3.5 text-gray-500" />
+              <span className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Follow-up:</span>
+              <input
+                type="date"
+                value={followUpInput}
+                onChange={(e) => setFollowUpInput(e.target.value)}
+                className="bg-[#0D0F12] border border-[#2A2E37] text-white text-xs rounded-lg px-2 py-1 outline-none focus:border-[#F5A623] transition-colors"
+              />
+            </div>
+
+            <button
+              onClick={() => void saveFollowUp()}
+              disabled={savingFollowUp}
+              className="bg-[#F5A623] text-black text-[11px] font-black px-3 py-1.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
+            >
+              {savingFollowUp ? "Saving…" : "Save"}
+            </button>
+          </div>
         </div>
 
         {/* Dispatch + Inventory Modal */}
@@ -696,7 +878,26 @@ function EnquiryDetailPanel({
           </div>
         )}
 
+        {/* Tab switcher */}
+        <div className="flex border-b border-[#2A2E37] bg-[#13151A] shrink-0">
+          <button
+            onClick={() => setActiveTab("thread")}
+            className={`flex items-center gap-1.5 px-5 py-3 text-xs font-black uppercase tracking-wide border-b-2 transition-colors ${activeTab === "thread" ? "border-[#F5A623] text-[#F5A623]" : "border-transparent text-gray-500 hover:text-gray-300"}`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" /> Thread
+            {replies.length > 0 && <span className="bg-[#F5A623]/20 text-[#F5A623] text-[10px] px-1.5 py-0.5 rounded-full font-black">{replies.length}</span>}
+          </button>
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`flex items-center gap-1.5 px-5 py-3 text-xs font-black uppercase tracking-wide border-b-2 transition-colors ${activeTab === "history" ? "border-[#F5A623] text-[#F5A623]" : "border-transparent text-gray-500 hover:text-gray-300"}`}
+          >
+            <History className="w-3.5 h-3.5" /> History
+            {customerHistory.length > 0 && <span className="bg-sky-500/20 text-sky-400 text-[10px] px-1.5 py-0.5 rounded-full font-black">{customerHistory.length}</span>}
+          </button>
+        </div>
+
         {/* Conversation thread */}
+        {activeTab === "thread" && (
         <div ref={threadRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
           {loadingReplies ? (
             <div className="flex justify-center py-8"><RefreshCw className="w-5 h-5 text-[#F5A623] animate-spin" /></div>
@@ -723,9 +924,44 @@ function EnquiryDetailPanel({
             </div>
           ))}
         </div>
+        )}
 
-        {/* Reply composer */}
-        <div className="px-5 pb-5 pt-3 border-t border-[#2A2E37] bg-[#16181D] shrink-0">
+        {/* Customer history tab */}
+        {activeTab === "history" && (
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+          {customerHistory.length === 0 ? (
+            <div className="text-center py-10">
+              <History className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+              <p className="text-gray-600 text-sm">No other enquiries from {enquiry.name}.</p>
+            </div>
+          ) : (
+            <>
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-1">{customerHistory.length} past enquir{customerHistory.length === 1 ? "y" : "ies"} from {enquiry.phone}</p>
+              {customerHistory.map((h) => {
+                const st = getStatus(h.status);
+                return (
+                  <div key={h.id} className="bg-[#1C1F26] border border-[#2A2E37] rounded-xl px-4 py-3 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs text-gray-500">#{h.id} · {formatDate(h.createdAt)}</span>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black border ${st.tw}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${st.dot}`} />
+                        {st.label}
+                      </span>
+                    </div>
+                    {h.machine && <p className="text-xs text-gray-300"><span className="text-gray-600">Machine:</span> {h.machine}</p>}
+                    {h.part && <p className="text-xs text-gray-300"><span className="text-gray-600">Part:</span> {h.part}</p>}
+                    {h.message && <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{h.message}</p>}
+                    {h.priority && h.priority !== "normal" && <PriorityBadge priority={h.priority} />}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+        )}
+
+        {/* Reply composer — only on thread tab */}
+        {activeTab === "thread" && <div className="px-5 pb-5 pt-3 border-t border-[#2A2E37] bg-[#16181D] shrink-0">
           <div className="flex gap-2 mb-2">
             <button onClick={() => setIsInternal(false)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${!isInternal ? "bg-sky-500/20 text-sky-400 border border-sky-500/30" : "text-gray-500 hover:text-gray-300 border border-transparent"}`}>
@@ -778,7 +1014,7 @@ function EnquiryDetailPanel({
               </button>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
@@ -2155,47 +2391,73 @@ export default function AdminPage() {
           <>
             {/* Dashboard Summary */}
             {(() => {
-              const today = new Date().toDateString();
-              const newToday = enquiries.filter(e => new Date(e.createdAt).toDateString() === today).length;
+              const today = new Date(); today.setHours(0,0,0,0);
+              const todayStr = today.toDateString();
+              const newToday = enquiries.filter(e => new Date(e.createdAt).toDateString() === todayStr).length;
               const openCount = enquiries.filter(e => !["closed", "dispatched"].includes(e.status)).length;
-              const closedCount = enquiries.filter(e => e.status === "closed" || e.status === "dispatched").length;
               const convRate = enquiries.length > 0 ? Math.round((enquiries.filter(e => e.status === "order-confirmed" || e.status === "dispatched").length / enquiries.length) * 100) : 0;
+              const pendingFollowUps = enquiries.filter(e => {
+                if (!e.followUpDate) return false;
+                if (["closed","dispatched"].includes(e.status)) return false;
+                const d = new Date(e.followUpDate); d.setHours(0,0,0,0);
+                return d <= today;
+              }).length;
+              const contactedToday = enquiries.filter(e => e.lastContactedAt && new Date(e.lastContactedAt).toDateString() === todayStr).length;
+              const urgentCount = enquiries.filter(e => e.priority === "urgent" && !["closed","dispatched"].includes(e.status)).length;
               return (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
                   <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl px-4 py-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#F5A623]/10 flex items-center justify-center shrink-0">
-                      <ClipboardList className="w-5 h-5 text-[#F5A623]" />
+                    <div className="w-9 h-9 rounded-lg bg-[#F5A623]/10 flex items-center justify-center shrink-0">
+                      <ClipboardList className="w-4 h-4 text-[#F5A623]" />
                     </div>
                     <div>
-                      <p className="text-2xl font-black text-white leading-none">{enquiries.length}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">Total Enquiries</p>
+                      <p className="text-xl font-black text-white leading-none">{enquiries.length}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">Total</p>
                     </div>
                   </div>
                   <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${newToday > 0 ? "border-[#F5A623]/40 bg-[#F5A623]/5" : "border-[#2A2E37]"}`}>
-                    <div className="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
-                      <Inbox className="w-5 h-5 text-sky-400" />
+                    <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
+                      <Inbox className="w-4 h-4 text-sky-400" />
                     </div>
                     <div>
-                      <p className="text-2xl font-black text-white leading-none">{newToday}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">New Today</p>
+                      <p className="text-xl font-black text-white leading-none">{newToday}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">New Today</p>
                     </div>
                   </div>
                   <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${openCount > 0 ? "border-amber-500/30" : "border-[#2A2E37]"}`}>
-                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
-                      <Clock className="w-5 h-5 text-amber-400" />
+                    <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4 text-amber-400" />
                     </div>
                     <div>
-                      <p className="text-2xl font-black text-white leading-none">{openCount}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">Open Pipeline</p>
+                      <p className="text-xl font-black text-white leading-none">{openCount}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">Open</p>
+                    </div>
+                  </div>
+                  <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${pendingFollowUps > 0 ? "border-violet-500/30 bg-violet-500/5" : "border-[#2A2E37]"}`}>
+                    <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
+                      <CalendarDays className="w-4 h-4 text-violet-400" />
+                    </div>
+                    <div>
+                      <p className={`text-xl font-black leading-none ${pendingFollowUps > 0 ? "text-violet-400" : "text-white"}`}>{pendingFollowUps}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">Follow-ups Due</p>
+                    </div>
+                  </div>
+                  <div className={`bg-[#16181D] border rounded-xl px-4 py-4 flex items-center gap-3 ${urgentCount > 0 ? "border-red-500/30 bg-red-500/5" : "border-[#2A2E37]"}`}>
+                    <div className="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+                      <AlertTriangle className="w-4 h-4 text-red-400" />
+                    </div>
+                    <div>
+                      <p className={`text-xl font-black leading-none ${urgentCount > 0 ? "text-red-400" : "text-white"}`}>{urgentCount}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">Urgent</p>
                     </div>
                   </div>
                   <div className="bg-[#16181D] border border-[#2A2E37] rounded-xl px-4 py-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-5 h-5 text-green-400" />
+                    <div className="w-9 h-9 rounded-lg bg-green-500/10 flex items-center justify-center shrink-0">
+                      <PhoneCall className="w-4 h-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-2xl font-black text-white leading-none">{convRate}%</p>
-                      <p className="text-xs text-gray-500 mt-0.5">Conversion Rate</p>
+                      <p className="text-xl font-black text-white leading-none">{contactedToday}</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wide">Contacted Today</p>
                     </div>
                   </div>
                 </div>
@@ -2298,7 +2560,17 @@ export default function AdminPage() {
                             {e.part && <p className="text-gray-400 text-xs mt-0.5">{e.part}</p>}
                             {!e.machine && !e.part && <span className="text-gray-600">—</span>}
                           </td>
-                          <td className="px-4 py-3.5"><StatusBadge status={e.status} /></td>
+                          <td className="px-4 py-3.5">
+                            <div className="flex flex-col gap-1">
+                              <StatusBadge status={e.status} />
+                              {e.priority && e.priority !== "normal" && <PriorityBadge priority={e.priority} />}
+                              {e.followUpDate && !["closed","dispatched"].includes(e.status) && (
+                                <span className={`inline-flex items-center gap-1 text-[10px] font-semibold ${isFollowUpOverdue(e.followUpDate) ? "text-red-400" : isFollowUpToday(e.followUpDate) ? "text-violet-400" : "text-gray-600"}`}>
+                                  <CalendarDays className="w-2.5 h-2.5" />{formatFollowUp(e.followUpDate)}
+                                </span>
+                              )}
+                            </div>
+                          </td>
                           {isAdmin && (
                             <td className="px-4 py-3.5">
                               {e.assignedToName
@@ -2323,18 +2595,33 @@ export default function AdminPage() {
                     <button key={e.id} onClick={() => setSelectedEnquiry(e)} className="w-full text-left p-4 hover:bg-white/[0.02] transition-colors">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div>
-                          <p className="font-bold text-white">{e.name}</p>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <p className="font-bold text-white">{e.name}</p>
+                            {e.priority && e.priority !== "normal" && <PriorityBadge priority={e.priority} />}
+                          </div>
                           <p className="text-gray-500 text-xs mt-0.5">{timeAgo(e.createdAt)}</p>
                         </div>
-                        <StatusBadge status={e.status} />
+                        <div className="flex flex-col items-end gap-1 shrink-0">
+                          <StatusBadge status={e.status} />
+                          {e.followUpDate && !["closed","dispatched"].includes(e.status) && (
+                            <span className={`text-[10px] font-semibold flex items-center gap-0.5 ${isFollowUpOverdue(e.followUpDate) ? "text-red-400" : isFollowUpToday(e.followUpDate) ? "text-violet-400" : "text-gray-600"}`}>
+                              <CalendarDays className="w-2.5 h-2.5" />{formatFollowUp(e.followUpDate)}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex gap-4 text-xs">
-                        <span className="text-[#F5A623]">{e.phone}</span>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+                        <span className="text-[#F5A623] font-semibold">{e.phone}</span>
                         {e.machine && <span className="text-gray-400">{e.machine}</span>}
                         {e.part && <span className="text-gray-500">{e.part}</span>}
                       </div>
                       {e.message && <p className="text-gray-500 text-xs mt-1.5 line-clamp-2">{e.message}</p>}
                       {e.assignedToName && <p className="text-xs text-gray-600 mt-1.5">Assigned → <span className="text-gray-400 font-semibold">{e.assignedToName}</span></p>}
+                      {e.lastContactedAt && (
+                        <p className="text-xs text-gray-700 mt-1">
+                          Last contacted {timeAgo(e.lastContactedAt)}
+                        </p>
+                      )}
                       <div className="flex items-center gap-1 mt-2 text-xs text-gray-600">
                         <MessageSquare className="w-3 h-3" /> Tap to open conversation
                       </div>
@@ -2353,6 +2640,7 @@ export default function AdminPage() {
           enquiry={selectedEnquiry}
           auth={auth}
           workers={workers}
+          allEnquiries={enquiries}
           onClose={() => setSelectedEnquiry(null)}
           onUpdate={(updated) => {
             setEnquiries((prev) => prev.map((e) => (e.id === updated.id ? updated : e)));

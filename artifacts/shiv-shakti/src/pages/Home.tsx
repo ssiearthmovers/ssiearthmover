@@ -613,7 +613,7 @@ export default function Home() {
         )}
       </header>
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex items-center pt-44 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center pt-28 sm:pt-36 lg:pt-44 pb-16 overflow-hidden">
         {/* Full-bleed background image with sand/road vibe */}
         <div className="absolute inset-0 z-0">
           <img
@@ -684,25 +684,26 @@ export default function Home() {
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#F5A623] text-black px-6 py-4 font-black text-sm uppercase tracking-wide hover:brightness-110 transition-all whitespace-nowrap shrink-0"
+                  className="bg-[#F5A623] text-black px-4 sm:px-6 py-4 font-black text-sm uppercase tracking-wide hover:brightness-110 transition-all whitespace-nowrap shrink-0"
                 >
-                  Search Parts
+                  <span className="hidden sm:inline">Search Parts</span>
+                  <span className="sm:hidden">Search</span>
                 </button>
               </form>
               <p className="text-gray-600 text-xs mt-2 ml-1">e.g. "4110001903072", "circle drive gear", "CAT 140H"</p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 mt-2">
+            <div className="flex flex-col sm:flex-row gap-3 mt-2">
               <button
                 onClick={() => scrollTo("contact")}
-                className="bg-[#F5A623] text-black px-8 py-4 rounded font-black text-base uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_24px_rgba(245,166,35,0.5)] transition-all"
+                className="bg-[#F5A623] text-black px-6 py-3.5 sm:px-8 sm:py-4 rounded font-black text-sm sm:text-base uppercase tracking-wide hover:brightness-110 hover:shadow-[0_0_24px_rgba(245,166,35,0.5)] transition-all"
                 data-testid="button-request-quote-hero"
               >
                 Request Bulk Quote
               </button>
               <button
                 onClick={() => scrollTo("products")}
-                className="border-2 border-white/30 hover:border-[#F5A623] hover:text-[#F5A623] px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all backdrop-blur-sm bg-black/20"
+                className="border-2 border-white/30 hover:border-[#F5A623] hover:text-[#F5A623] px-6 py-3.5 sm:px-8 sm:py-4 rounded font-bold text-sm sm:text-base uppercase tracking-wide transition-all backdrop-blur-sm bg-black/20"
                 data-testid="button-browse-categories"
               >
                 Browse Categories
@@ -710,7 +711,7 @@ export default function Home() {
               <a
                 href="/ssi-catalogue.pdf"
                 download="SSI-Earthmovers-Catalogue.pdf"
-                className="flex items-center gap-2 border-2 border-[#F5A623]/60 text-[#F5A623] hover:bg-[#F5A623] hover:text-black px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all"
+                className="hidden sm:flex items-center gap-2 border-2 border-[#F5A623]/60 text-[#F5A623] hover:bg-[#F5A623] hover:text-black px-8 py-4 rounded font-bold text-base uppercase tracking-wide transition-all"
                 data-testid="button-download-catalogue-hero"
               >
                 <Download className="w-5 h-5" /> Download Catalogue
@@ -1727,7 +1728,7 @@ export default function Home() {
               ) : (
                 <form
                   onSubmit={handleFormSubmit}
-                  className="bg-[#1A1D24] border border-[#2A2E37] rounded p-8 flex flex-col gap-5"
+                  className="bg-[#1A1D24] border border-[#2A2E37] rounded p-5 sm:p-8 flex flex-col gap-5"
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
