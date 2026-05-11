@@ -333,6 +333,30 @@ function EnquiryDetailPanel({
   const [assigning, setAssigning] = useState(false);
   const threadRef = useRef<HTMLDivElement>(null);
 
+  // Stock match for the enquired part
+  const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string } | null | "loading">("loading");
+
+  useEffect(() => {
+    if (!enquiry.part) { setStockMatch(null); return; }
+    setStockMatch("loading");
+    void (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/products/search?q=${encodeURIComponent(enquiry.part!)}&limit=5`);
+        if (!res.ok) { setStockMatch(null); return; }
+        const rows = (await res.json()) as { id: number; partNumber: string; name: string; unit: string }[];
+        if (rows.length === 0) { setStockMatch(null); return; }
+        // fetch stock quantities
+        const stockRes = await fetch(`${API_BASE}/stock/products`, { headers: authHeader(auth.token) });
+        const stock: { id: number; quantity: number; status: string }[] = stockRes.ok ? (await stockRes.json()) : [];
+        const stockMap: Record<number, { quantity: number; status: string }> = {};
+        for (const s of stock) stockMap[s.id] = { quantity: s.quantity, status: s.status };
+        const best = rows[0]!;
+        const info = stockMap[best.id] ?? { quantity: 0, status: "out-of-stock" };
+        setStockMatch({ ...best, quantity: info.quantity, status: info.status });
+      } catch { setStockMatch(null); }
+    })();
+  }, [enquiry.part, enquiry.id]);
+
   // Dispatch + inventory deduction modal
   const [showDispatchModal, setShowDispatchModal] = useState(false);
   const [dispatchSearch, setDispatchSearch] = useState(enquiry.part ?? "");
@@ -478,6 +502,58 @@ function EnquiryDetailPanel({
               <div><span className="text-gray-500 text-xs uppercase tracking-wide block mb-0.5">Part</span><span className="text-gray-200 text-xs">{enquiry.part}</span></div>
             )}
           </div>
+
+          {/* Stock availability card */}
+          {enquiry.part && (
+            <div className={`rounded-lg border px-3 py-2.5 flex items-center gap-3 ${
+              stockMatch === "loading"
+                ? "border-[#2A2E37] bg-[#0D0F12]"
+                : stockMatch === null
+                ? "border-[#2A2E37]/50 bg-[#0D0F12]"
+                : stockMatch.status === "in-stock"
+                ? "border-emerald-500/30 bg-emerald-500/5"
+                : stockMatch.status === "low-stock"
+                ? "border-amber-500/30 bg-amber-500/5"
+                : "border-red-500/30 bg-red-500/5"
+            }`}>
+              <div className={`w-2 h-2 rounded-full shrink-0 ${
+                stockMatch === "loading" ? "bg-gray-600 animate-pulse"
+                : stockMatch === null ? "bg-gray-600"
+                : stockMatch.status === "in-stock" ? "bg-emerald-400"
+                : stockMatch.status === "low-stock" ? "bg-amber-400"
+                : "bg-red-400"
+              }`} />
+              <div className="flex-1 min-w-0">
+                {stockMatch === "loading" && <p className="text-gray-500 text-xs">Checking inventory…</p>}
+                {stockMatch === null && <p className="text-gray-500 text-xs">Part not found in inventory</p>}
+                {stockMatch && stockMatch !== "loading" && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-[#F5A623]">{stockMatch.partNumber}</span>
+                    <span className="text-xs text-gray-300 truncate">{stockMatch.name}</span>
+                    <span className={`ml-auto text-xs font-black shrink-0 ${
+                      stockMatch.status === "in-stock" ? "text-emerald-400"
+                      : stockMatch.status === "low-stock" ? "text-amber-400"
+                      : "text-red-400"
+                    }`}>
+                      {stockMatch.status === "out-of-stock"
+                        ? "OUT OF STOCK"
+                        : `${stockMatch.quantity} ${stockMatch.unit}`}
+                    </span>
+                  </div>
+                )}
+              </div>
+              {stockMatch && stockMatch !== "loading" && (
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded shrink-0 ${
+                  stockMatch.status === "in-stock" ? "bg-emerald-500/20 text-emerald-400"
+                  : stockMatch.status === "low-stock" ? "bg-amber-500/20 text-amber-400"
+                  : "bg-red-500/20 text-red-400"
+                }`}>
+                  {stockMatch.status === "in-stock" ? "IN STOCK" : stockMatch.status === "low-stock" ? "LOW STOCK" : "OUT OF STOCK"}
+                </span>
+              )}
+            </div>
+          )}
+
           {enquiry.message && (
             <div className="bg-[#0D0F12] rounded-lg px-3 py-2.5 text-gray-300 text-sm leading-relaxed border border-[#2A2E37]/50">
               {enquiry.message}
