@@ -75,6 +75,7 @@ interface Product {
   unit: string;
   rackLocation: string | null;
   warehouse: string | null;
+  warehouseBreakdown: Record<string, number>;
   quantity: number;
   reorderLevel: number;
   status: string;
@@ -335,7 +336,7 @@ function EnquiryDetailPanel({
   const threadRef = useRef<HTMLDivElement>(null);
 
   // Stock match for the enquired part
-  const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string; warehouse?: string | null } | null | "loading">("loading");
+  const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string; warehouse?: string | null; warehouseBreakdown?: Record<string, number> } | null | "loading">("loading");
 
   useEffect(() => {
     if (!enquiry.part) { setStockMatch(null); return; }
@@ -528,7 +529,7 @@ function EnquiryDetailPanel({
                 {stockMatch === "loading" && <p className="text-gray-500 text-xs">Checking inventory…</p>}
                 {stockMatch === null && <p className="text-gray-500 text-xs">Part not found in inventory</p>}
                 {stockMatch && stockMatch !== "loading" && (
-                  <div className="flex flex-col gap-0.5 w-full">
+                  <div className="flex flex-col gap-1 w-full">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-bold text-[#F5A623]">{stockMatch.partNumber}</span>
                       <span className="text-xs text-gray-300 truncate">{stockMatch.name}</span>
@@ -537,21 +538,24 @@ function EnquiryDetailPanel({
                         : stockMatch.status === "low-stock" ? "text-amber-400"
                         : "text-red-400"
                       }`}>
-                        {stockMatch.status === "out-of-stock"
-                          ? "OUT OF STOCK"
-                          : `${stockMatch.quantity} ${stockMatch.unit}`}
+                        {stockMatch.status === "out-of-stock" ? "OUT OF STOCK" : `${stockMatch.quantity} ${stockMatch.unit} total`}
                       </span>
                     </div>
-                    {stockMatch.warehouse && (
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-gray-500">Location:</span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
-                          stockMatch.warehouse === "rai" ? "text-violet-400 bg-violet-500/15 border-violet-500/30"
-                          : stockMatch.warehouse === "rohini" ? "text-sky-400 bg-sky-500/15 border-sky-500/30"
-                          : "text-teal-400 bg-teal-500/15 border-teal-500/30"
-                        }`}>
-                          {stockMatch.warehouse === "mori-gate" ? "Mori Gate" : stockMatch.warehouse === "rai" ? "Rai" : "Rohini"}
-                        </span>
+                    {stockMatch.warehouseBreakdown && Object.keys(stockMatch.warehouseBreakdown).length > 0 && (
+                      <div className="flex gap-1.5 flex-wrap">
+                        {(["rai", "rohini", "mori-gate"] as const).map((wh) => {
+                          const qty = (stockMatch.warehouseBreakdown as Record<string, number>)[wh];
+                          if (qty === undefined) return null;
+                          return (
+                            <span key={wh} className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                              wh === "rai" ? "text-violet-400 bg-violet-500/15 border-violet-500/30"
+                              : wh === "rohini" ? "text-sky-400 bg-sky-500/15 border-sky-500/30"
+                              : "text-teal-400 bg-teal-500/15 border-teal-500/30"
+                            }`}>
+                              {wh === "mori-gate" ? "Mori Gate" : wh === "rai" ? "Rai" : "Rohini"}: {qty}
+                            </span>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -1196,7 +1200,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
 
   // Stock update modal
   const [stockModal, setStockModal] = useState<{
-    product: Product; action: "add" | "remove" | "set"; amount: string; reason: string;
+    product: Product; action: "add" | "remove" | "set"; amount: string; reason: string; warehouse: string;
   } | null>(null);
   const [stockSaving, setStockSaving] = useState(false);
   const [stockError, setStockError] = useState("");
@@ -1283,7 +1287,11 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
       const r = await fetch(`${API_BASE}/stock/products/${stockModal.product.id}/stock`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
-        body: JSON.stringify({ action: stockModal.action, amount: amt, reason: stockModal.reason.trim() || undefined }),
+        body: JSON.stringify({
+          action: stockModal.action, amount: amt,
+          reason: stockModal.reason.trim() || undefined,
+          warehouse: stockModal.warehouse || undefined,
+        }),
       });
       if (!r.ok) { const d = (await r.json()) as { error?: string }; setStockError(d.error ?? "Failed"); return; }
       const updated = (await r.json()) as Product;
@@ -1522,6 +1530,22 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                               {p.quantity}
                             </span>
                             <span className="text-gray-600 text-[10px] ml-1">{p.unit}</span>
+                            {Object.keys(p.warehouseBreakdown).length > 0 && (
+                              <div className="flex flex-col gap-0.5 mt-1">
+                                {(["rai", "rohini", "mori-gate"] as const).map((wh) => {
+                                  const qty = p.warehouseBreakdown[wh];
+                                  if (qty === undefined) return null;
+                                  return (
+                                    <div key={wh} className="flex items-center gap-1">
+                                      <span className={`text-[9px] font-bold px-1 py-px rounded ${wh === "rai" ? "text-violet-400 bg-violet-500/15" : wh === "rohini" ? "text-sky-400 bg-sky-500/15" : "text-teal-400 bg-teal-500/15"}`}>
+                                        {wh === "mori-gate" ? "MG" : wh === "rai" ? "Rai" : "Roh"}
+                                      </span>
+                                      <span className="text-[9px] text-gray-500">{qty}</span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
                           </td>
                           <td className="px-4 py-3 text-gray-500 text-xs">{p.reorderLevel}</td>
                           <td className="px-4 py-3">
@@ -1533,7 +1557,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1">
                               <button
-                                onClick={() => setStockModal({ product: p, action: "add", amount: "", reason: "" })}
+                                onClick={() => setStockModal({ product: p, action: "add", amount: "", reason: "", warehouse: "" })}
                                 className="px-2.5 py-1.5 rounded-lg bg-[#F5A623]/10 text-[#F5A623] text-xs font-bold hover:bg-[#F5A623]/20 transition-colors whitespace-nowrap">
                                 Stock
                               </button>
@@ -1754,17 +1778,61 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
               </div>
               <button onClick={() => setStockModal(null)} className="p-2 text-gray-500 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
             </div>
-            <div className="bg-[#0D0F12] rounded-xl p-4 mb-5 flex items-center justify-between">
-              <div>
-                <p className="text-xs text-gray-500 uppercase tracking-widest">Current Stock</p>
-                <p className="text-3xl font-black text-white mt-1">
-                  {stockModal.product.quantity} <span className="text-sm text-gray-500 font-normal">{stockModal.product.unit}</span>
+            <div className="bg-[#0D0F12] rounded-xl p-4 mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-widest">Total Stock</p>
+                  <p className="text-3xl font-black text-white mt-1">
+                    {stockModal.product.quantity} <span className="text-sm text-gray-500 font-normal">{stockModal.product.unit}</span>
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-500">Reorder at</p>
+                  <p className="text-lg font-black text-gray-400">{stockModal.product.reorderLevel}</p>
+                </div>
+              </div>
+              {/* Per-warehouse breakdown */}
+              {Object.keys(stockModal.product.warehouseBreakdown).length > 0 && (
+                <div className="flex gap-2 flex-wrap border-t border-[#2A2E37] pt-3">
+                  {(["rai", "rohini", "mori-gate"] as const).map((wh) => {
+                    const qty = stockModal.product.warehouseBreakdown[wh];
+                    if (qty === undefined) return null;
+                    const colors = wh === "rai" ? "text-violet-400 bg-violet-500/10 border-violet-500/20"
+                      : wh === "rohini" ? "text-sky-400 bg-sky-500/10 border-sky-500/20"
+                      : "text-teal-400 bg-teal-500/10 border-teal-500/20";
+                    return (
+                      <div key={wh} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold ${colors}`}>
+                        <span>{wh === "mori-gate" ? "Mori Gate" : wh === "rai" ? "Rai" : "Rohini"}</span>
+                        <span className="opacity-70">·</span>
+                        <span>{qty} {stockModal.product.unit}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            {/* Location selector */}
+            <div className="mb-4">
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-1.5">Update at Location</label>
+              <div className="grid grid-cols-4 gap-2">
+                {([["", "All / Total"], ["rai", "Rai"], ["rohini", "Rohini"], ["mori-gate", "Mori Gate"]] as const).map(([val, label]) => (
+                  <button key={val} onClick={() => setStockModal((m) => m ? { ...m, warehouse: val } : null)}
+                    className={`py-2 px-1 rounded-lg text-[10px] font-black border transition-all ${stockModal.warehouse === val
+                      ? val === "" ? "border-gray-400/40 bg-gray-400/15 text-gray-300"
+                        : val === "rai" ? "border-violet-500/40 bg-violet-500/15 text-violet-400"
+                        : val === "rohini" ? "border-sky-500/40 bg-sky-500/15 text-sky-400"
+                        : "border-teal-500/40 bg-teal-500/15 text-teal-400"
+                      : "bg-[#0D0F12] border-[#2A2E37] text-gray-500 hover:text-white"}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              {stockModal.warehouse && (
+                <p className="text-[10px] text-gray-500 mt-1.5">
+                  Current at {stockModal.warehouse === "mori-gate" ? "Mori Gate" : stockModal.warehouse === "rai" ? "Rai" : "Rohini"}:
+                  <span className="text-white font-bold ml-1">{stockModal.product.warehouseBreakdown[stockModal.warehouse] ?? 0} {stockModal.product.unit}</span>
                 </p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-gray-500">Reorder at</p>
-                <p className="text-lg font-black text-gray-400">{stockModal.product.reorderLevel}</p>
-              </div>
+              )}
             </div>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {([

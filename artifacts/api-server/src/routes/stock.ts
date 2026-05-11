@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { db } from "@workspace/db";
 import {
-  productsTable, stockHistoryTable, notificationsTable, importHistoryTable
+  productsTable, stockHistoryTable, notificationsTable, importHistoryTable, warehouseStockTable
 } from "@workspace/db/schema";
 import { eq, desc, ilike, or, sql } from "drizzle-orm";
 import { requireAuth, requireAdmin, type AuthPayload } from "../middlewares/adminAuth.js";
@@ -127,7 +127,15 @@ router.get("/admin/stats", requireAdmin, async (req, res) => {
 router.get("/stock/products", requireAuth, async (req, res) => {
   try {
     const products = await db.select().from(productsTable).orderBy(productsTable.name);
-    res.json(products);
+    const warehouseRows = await db.select().from(warehouseStockTable);
+    // build breakdown map keyed by productId
+    const breakdown: Record<number, Record<string, number>> = {};
+    for (const r of warehouseRows) {
+      if (!breakdown[r.productId]) breakdown[r.productId] = {};
+      breakdown[r.productId]![r.warehouse] = r.quantity;
+    }
+    const result = products.map((p) => ({ ...p, warehouseBreakdown: breakdown[p.id] ?? {} }));
+    res.json(result);
   } catch (err) {
     req.log.error({ err }, "Failed to fetch products");
     res.status(500).json({ error: "Failed to fetch products" });
@@ -227,43 +235,79 @@ router.patch("/stock/products/:id/stock", requireAuth, async (req, res) => {
   const id = parseInt(String(req.params["id"] ?? ""), 10);
   if (isNaN(id)) { res.status(400).json({ error: "Invalid ID" }); return; }
   const auth = res.locals["auth"] as AuthPayload;
-  const { action, amount, reason, relatedEnquiryId, manualStatus } = req.body as {
+  const { action, amount, reason, relatedEnquiryId, manualStatus, warehouse } = req.body as {
     action?: "add" | "remove" | "set"; amount?: number; reason?: string;
-    relatedEnquiryId?: number | null; manualStatus?: string;
+    relatedEnquiryId?: number | null; manualStatus?: string; warehouse?: string;
   };
   if (!action || amount === undefined || amount < 0) {
     res.status(400).json({ error: "Action and non-negative amount required" });
     return;
   }
+  const VALID_WAREHOUSES = ["rai", "rohini", "mori-gate"];
+  const wh = warehouse && VALID_WAREHOUSES.includes(warehouse) ? warehouse : null;
   try {
     const rows = await db.select().from(productsTable).where(eq(productsTable.id, id));
     const product = rows[0];
     if (!product) { res.status(404).json({ error: "Product not found" }); return; }
-    const prevQty = product.quantity;
-    let newQty: number;
-    if (action === "add") newQty = prevQty + amount;
-    else if (action === "remove") newQty = Math.max(0, prevQty - amount);
-    else newQty = amount;
-    const MANUAL = ["reserved", "dispatched"];
-    const newStatus = manualStatus && MANUAL.includes(manualStatus)
-      ? manualStatus : computeStatus(newQty, product.reorderLevel);
     const actorName = auth.role === "admin" ? "Admin" : (auth.workerName ?? "Team Member");
+
+    let newTotalQty: number;
+
+    if (wh) {
+      // ── Per-warehouse stock update ─────────────────────────────────────────
+      const whRows = await db.select().from(warehouseStockTable)
+        .where(eq(warehouseStockTable.productId, id));
+      const existing = whRows.find((r) => r.warehouse === wh);
+      const prevWhQty = existing?.quantity ?? 0;
+      let newWhQty: number;
+      if (action === "add") newWhQty = prevWhQty + amount;
+      else if (action === "remove") newWhQty = Math.max(0, prevWhQty - amount);
+      else newWhQty = amount;
+
+      if (existing) {
+        await db.update(warehouseStockTable)
+          .set({ quantity: newWhQty, updatedAt: new Date() })
+          .where(eq(warehouseStockTable.id, existing.id));
+      } else {
+        await db.insert(warehouseStockTable).values({ productId: id, warehouse: wh, quantity: newWhQty });
+      }
+      // recompute total from all warehouses
+      const allWh = await db.select().from(warehouseStockTable).where(eq(warehouseStockTable.productId, id));
+      newTotalQty = allWh.reduce((s, r) => s + r.quantity, 0);
+    } else {
+      // ── Whole-product stock update (legacy, no warehouse) ──────────────────
+      const prevQty = product.quantity;
+      if (action === "add") newTotalQty = prevQty + amount;
+      else if (action === "remove") newTotalQty = Math.max(0, prevQty - amount);
+      else newTotalQty = amount;
+    }
+
+    const MANUAL = ["reserved", "dispatched"];
+    const prevQty = product.quantity;
+    const newStatus = manualStatus && MANUAL.includes(manualStatus)
+      ? manualStatus : computeStatus(newTotalQty, product.reorderLevel);
+
     await db.insert(stockHistoryTable).values({
-      productId: id, previousQty: prevQty, newQty, change: newQty - prevQty,
-      reason: reason?.trim() || null,
+      productId: id, previousQty: prevQty, newQty: newTotalQty, change: newTotalQty - prevQty,
+      reason: (wh ? `[${wh.toUpperCase()}] ` : "") + (reason?.trim() || ""),
       relatedEnquiryId: relatedEnquiryId ?? null,
       actorName, actorRole: auth.role,
     });
     const updated = await db.update(productsTable)
-      .set({ quantity: newQty, status: newStatus, updatedAt: new Date() })
+      .set({ quantity: newTotalQty, status: newStatus, updatedAt: new Date() })
       .where(eq(productsTable.id, id)).returning();
+
     if ((newStatus === "low-stock" || newStatus === "out-of-stock") && prevQty > product.reorderLevel) {
       await db.insert(notificationsTable).values({
         workerId: null, enquiryId: null, type: "low_stock",
-        message: `Stock alert: ${product.name} (${product.partNumber}) is ${newStatus === "out-of-stock" ? "OUT OF STOCK" : "LOW STOCK"} — ${newQty} ${product.unit} remaining`,
+        message: `Stock alert: ${product.name} (${product.partNumber}) is ${newStatus === "out-of-stock" ? "OUT OF STOCK" : "LOW STOCK"} — ${newTotalQty} ${product.unit} remaining`,
       });
     }
-    res.json(updated[0]);
+    // return product with warehouse breakdown
+    const whRows = await db.select().from(warehouseStockTable).where(eq(warehouseStockTable.productId, id));
+    const wbMap: Record<string, number> = {};
+    for (const r of whRows) wbMap[r.warehouse] = r.quantity;
+    res.json({ ...updated[0], warehouseBreakdown: wbMap });
   } catch (err) {
     req.log.error({ err }, "Failed to update stock");
     res.status(500).json({ error: "Failed to update stock" });

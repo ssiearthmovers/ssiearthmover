@@ -5,4 +5,5 @@ export * from "./quickReplyTemplates";
 export * from "./notifications";
 export * from "./products";
 export * from "./stockHistory";
+export * from "./warehouseStock";
 export * from "./importHistory";
