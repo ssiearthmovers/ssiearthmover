@@ -137,7 +137,7 @@ router.get("/stock/products", requireAuth, async (req, res) => {
 router.post("/stock/products", requireAdmin, async (req, res) => {
   const {
     partNumber, brand, model, category, categorySlug, oemNumber,
-    name, description, unit, rackLocation, photoUrl, quantity, reorderLevel,
+    name, description, unit, rackLocation, warehouse, photoUrl, quantity, reorderLevel,
   } = req.body as Record<string, string | number | undefined>;
 
   if (!String(partNumber ?? "").trim() || !String(name ?? "").trim()) {
@@ -158,6 +158,7 @@ router.post("/stock/products", requireAdmin, async (req, res) => {
       description: String(description ?? "").trim() || null,
       unit: String(unit ?? "").trim() || "pcs",
       rackLocation: String(rackLocation ?? "").trim() || null,
+      warehouse: String(warehouse ?? "").trim() || null,
       photoUrl: String(photoUrl ?? "").trim() || null,
       quantity: qty,
       reorderLevel: rl,
@@ -181,7 +182,7 @@ router.patch("/stock/products/:id", requireAdmin, async (req, res) => {
   const updates: Record<string, unknown> = { updatedAt: new Date() };
   const strFields = [
     "partNumber", "brand", "model", "category", "categorySlug", "oemNumber",
-    "name", "description", "unit", "rackLocation", "photoUrl",
+    "name", "description", "unit", "rackLocation", "warehouse", "photoUrl",
   ];
   for (const f of strFields) {
     if (body[f] !== undefined) {
@@ -322,6 +323,7 @@ router.post("/stock/import", requireAdmin, async (req, res) => {
       description: String(row["description"] ?? row["Description"] ?? "").trim() || null,
       unit: String(row["unit"] ?? row["Unit"] ?? "").trim() || "pcs",
       rackLocation: String(row["rackLocation"] ?? row["rack_location"] ?? row["RackLocation"] ?? row["rack"] ?? "").trim() || null,
+      warehouse: String(row["warehouse"] ?? row["Warehouse"] ?? row["location"] ?? row["Location"] ?? "").trim() || null,
       quantity: isNaN(qty) ? 0 : qty,
       reorderLevel: isNaN(rl) ? 5 : rl,
       status: computeStatus(isNaN(qty) ? 0 : qty, isNaN(rl) ? 5 : rl),

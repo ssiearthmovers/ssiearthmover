@@ -74,6 +74,7 @@ interface Product {
   description: string | null;
   unit: string;
   rackLocation: string | null;
+  warehouse: string | null;
   quantity: number;
   reorderLevel: number;
   status: string;
@@ -334,7 +335,7 @@ function EnquiryDetailPanel({
   const threadRef = useRef<HTMLDivElement>(null);
 
   // Stock match for the enquired part
-  const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string } | null | "loading">("loading");
+  const [stockMatch, setStockMatch] = useState<{ id: number; partNumber: string; name: string; quantity: number; unit: string; status: string; warehouse?: string | null } | null | "loading">("loading");
 
   useEffect(() => {
     if (!enquiry.part) { setStockMatch(null); return; }
@@ -527,18 +528,32 @@ function EnquiryDetailPanel({
                 {stockMatch === "loading" && <p className="text-gray-500 text-xs">Checking inventory…</p>}
                 {stockMatch === null && <p className="text-gray-500 text-xs">Part not found in inventory</p>}
                 {stockMatch && stockMatch !== "loading" && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-bold text-[#F5A623]">{stockMatch.partNumber}</span>
-                    <span className="text-xs text-gray-300 truncate">{stockMatch.name}</span>
-                    <span className={`ml-auto text-xs font-black shrink-0 ${
-                      stockMatch.status === "in-stock" ? "text-emerald-400"
-                      : stockMatch.status === "low-stock" ? "text-amber-400"
-                      : "text-red-400"
-                    }`}>
-                      {stockMatch.status === "out-of-stock"
-                        ? "OUT OF STOCK"
-                        : `${stockMatch.quantity} ${stockMatch.unit}`}
-                    </span>
+                  <div className="flex flex-col gap-0.5 w-full">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-[#F5A623]">{stockMatch.partNumber}</span>
+                      <span className="text-xs text-gray-300 truncate">{stockMatch.name}</span>
+                      <span className={`ml-auto text-xs font-black shrink-0 ${
+                        stockMatch.status === "in-stock" ? "text-emerald-400"
+                        : stockMatch.status === "low-stock" ? "text-amber-400"
+                        : "text-red-400"
+                      }`}>
+                        {stockMatch.status === "out-of-stock"
+                          ? "OUT OF STOCK"
+                          : `${stockMatch.quantity} ${stockMatch.unit}`}
+                      </span>
+                    </div>
+                    {stockMatch.warehouse && (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] text-gray-500">Location:</span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                          stockMatch.warehouse === "rai" ? "text-violet-400 bg-violet-500/15 border-violet-500/30"
+                          : stockMatch.warehouse === "rohini" ? "text-sky-400 bg-sky-500/15 border-sky-500/30"
+                          : "text-teal-400 bg-teal-500/15 border-teal-500/30"
+                        }`}>
+                          {stockMatch.warehouse === "mori-gate" ? "Mori Gate" : stockMatch.warehouse === "rai" ? "Rai" : "Rohini"}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1190,8 +1205,9 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({
     partNumber: "", name: "", brand: "", model: "", category: "",
-    oemNumber: "", description: "", unit: "pcs", rackLocation: "", quantity: "0", reorderLevel: "5",
+    oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5",
   });
+  const [warehouseFilter, setWarehouseFilter] = useState("all");
   const [addSaving, setAddSaving] = useState(false);
   const [addError, setAddError] = useState("");
 
@@ -1235,8 +1251,16 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
     outOfStock: products.filter((p) => p.status === "out-of-stock").length,
   };
 
+  const WAREHOUSES = [
+    { value: "rai", label: "Rai", color: "text-violet-400 bg-violet-500/15 border-violet-500/30" },
+    { value: "rohini", label: "Rohini", color: "text-sky-400 bg-sky-500/15 border-sky-500/30" },
+    { value: "mori-gate", label: "Mori Gate", color: "text-teal-400 bg-teal-500/15 border-teal-500/30" },
+  ];
+  const warehouseStyle = (w: string | null) => WAREHOUSES.find((x) => x.value === w) ?? { label: "—", color: "text-gray-500 bg-transparent border-transparent" };
+
   const filtered = products.filter((p) => {
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
+    if (warehouseFilter !== "all" && (p.warehouse ?? "") !== warehouseFilter) return false;
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
     return (
@@ -1245,7 +1269,8 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
       (p.brand ?? "").toLowerCase().includes(q) ||
       (p.category ?? "").toLowerCase().includes(q) ||
       (p.oemNumber ?? "").toLowerCase().includes(q) ||
-      (p.rackLocation ?? "").toLowerCase().includes(q)
+      (p.rackLocation ?? "").toLowerCase().includes(q) ||
+      (p.warehouse ?? "").toLowerCase().includes(q)
     );
   });
 
@@ -1292,7 +1317,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
       const created = (await r.json()) as Product;
       setProducts((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name)));
       setShowAdd(false);
-      setAddForm({ partNumber: "", name: "", brand: "", model: "", category: "", oemNumber: "", description: "", unit: "pcs", rackLocation: "", quantity: "0", reorderLevel: "5" });
+      setAddForm({ partNumber: "", name: "", brand: "", model: "", category: "", oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5" });
     } finally { setAddSaving(false); }
   };
 
@@ -1414,6 +1439,16 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
+            <div className="relative">
+              <select value={warehouseFilter} onChange={(e) => setWarehouseFilter(e.target.value)}
+                className="appearance-none bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-4 pr-9 py-2.5 text-white text-sm cursor-pointer">
+                <option value="all">All Locations</option>
+                <option value="rai">Rai</option>
+                <option value="rohini">Rohini</option>
+                <option value="mori-gate">Mori Gate</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
             <button onClick={() => setShowAdd(true)}
               className="flex items-center gap-2 bg-[#F5A623] text-black px-4 py-2.5 rounded-lg font-black text-sm hover:brightness-110 transition-all whitespace-nowrap">
               <Plus className="w-4 h-4" /> Add Product
@@ -1438,7 +1473,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[#2A2E37] text-gray-500 text-xs uppercase tracking-widest">
-                      {["Part No", "Name / OEM", "Brand / Model", "Category", "Qty", "Reorder", "Status", ""].map((h) => (
+                      {["Part No", "Name / OEM", "Brand / Model", "Category", "Location", "Qty", "Reorder", "Status", ""].map((h) => (
                         <th key={h} className="text-left px-4 py-3.5 font-semibold whitespace-nowrap">{h}</th>
                       ))}
                     </tr>
@@ -1458,6 +1493,30 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                             {p.model && <p className="text-gray-500 text-[10px] mt-0.5">{p.model}</p>}
                           </td>
                           <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{p.category ?? "—"}</td>
+                          <td className="px-4 py-3">
+                            <select
+                              value={p.warehouse ?? ""}
+                              onChange={(e) => {
+                                const val = e.target.value || null;
+                                void fetch(`${API_BASE}/stock/products/${p.id}`, {
+                                  method: "PATCH",
+                                  headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
+                                  body: JSON.stringify({ warehouse: val }),
+                                }).then(async (r) => {
+                                  if (r.ok) {
+                                    const updated = (await r.json()) as Product;
+                                    setProducts((prev) => prev.map((x) => x.id === p.id ? updated : x));
+                                  }
+                                });
+                              }}
+                              className={`appearance-none text-[10px] font-bold px-2 py-1 rounded border cursor-pointer outline-none bg-transparent ${warehouseStyle(p.warehouse ?? null).color}`}
+                            >
+                              <option value="">— None —</option>
+                              <option value="rai">Rai</option>
+                              <option value="rohini">Rohini</option>
+                              <option value="mori-gate">Mori Gate</option>
+                            </select>
+                          </td>
                           <td className="px-4 py-3">
                             <span className={`font-black text-sm ${p.quantity === 0 ? "text-red-400" : p.quantity <= p.reorderLevel ? "text-amber-400" : "text-white"}`}>
                               {p.quantity}
@@ -1799,6 +1858,16 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                   <input value={addForm.unit} onChange={(e) => setAddForm((f) => ({ ...f, unit: e.target.value }))}
                     placeholder="pcs, set, kg…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
                 </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Storage Location</label>
+                <select value={addForm.warehouse} onChange={(e) => setAddForm((f) => ({ ...f, warehouse: e.target.value }))}
+                  className="w-full appearance-none bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white text-xs cursor-pointer">
+                  <option value="">— Not assigned —</option>
+                  <option value="rai">Rai</option>
+                  <option value="rohini">Rohini</option>
+                  <option value="mori-gate">Mori Gate</option>
+                </select>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
