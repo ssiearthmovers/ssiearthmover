@@ -1189,7 +1189,7 @@ const PREVIEW_COLS = ["partNumber", "name", "brand", "model", "category", "quant
 
 function InventoryPanel({ auth }: { auth: AuthInfo }) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [subTab, setSubTab] = useState<"products" | "import" | "history">("products");
+  const [subTab, setSubTab] = useState<"catalogue" | "rai" | "rohini" | "mori-gate" | "import" | "history">("catalogue");
 
   // Products state
   const [products, setProducts] = useState<Product[]>([]);
@@ -1211,7 +1211,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
     partNumber: "", name: "", brand: "", model: "", category: "",
     oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5",
   });
-  const [warehouseFilter, setWarehouseFilter] = useState("all");
+  const activeWarehouse = (["rai", "rohini", "mori-gate"] as const).includes(subTab as "rai" | "rohini" | "mori-gate") ? subTab as "rai" | "rohini" | "mori-gate" : null;
   const [addSaving, setAddSaving] = useState(false);
   const [addError, setAddError] = useState("");
 
@@ -1264,7 +1264,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
 
   const filtered = products.filter((p) => {
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
-    if (warehouseFilter !== "all" && (p.warehouse ?? "") !== warehouseFilter) return false;
+    if (activeWarehouse && !((p.warehouseBreakdown ?? {})[activeWarehouse] ?? 0)) return false;
     if (!search.trim()) return true;
     const q = search.trim().toLowerCase();
     return (
@@ -1273,8 +1273,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
       (p.brand ?? "").toLowerCase().includes(q) ||
       (p.category ?? "").toLowerCase().includes(q) ||
       (p.oemNumber ?? "").toLowerCase().includes(q) ||
-      (p.rackLocation ?? "").toLowerCase().includes(q) ||
-      (p.warehouse ?? "").toLowerCase().includes(q)
+      (p.rackLocation ?? "").toLowerCase().includes(q)
     );
   });
 
@@ -1389,7 +1388,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
             ["out-of-stock", "Out of Stock", stats.outOfStock, AlertCircle, "text-red-400", "bg-red-500/10"],
           ] as const).map(([filter, label, value, Icon, cls, bg]) => (
             <button key={filter}
-              onClick={() => { setStatusFilter(statusFilter === filter && filter !== "all" ? "all" : filter); setSubTab("products"); }}
+              onClick={() => { setStatusFilter(statusFilter === filter && filter !== "all" ? "all" : filter); if (!["catalogue","rai","rohini","mori-gate"].includes(subTab)) setSubTab("catalogue"); }}
               className={`rounded-xl p-4 flex items-center gap-3 border transition-all text-left ${statusFilter === filter && filter !== "all" ? "border-[#F5A623]/40 bg-[#F5A623]/5" : "bg-[#16181D] border-[#2A2E37] hover:border-[#3A3E47]"}`}>
               <div className={`w-10 h-10 rounded-lg ${bg} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-5 h-5 ${cls}`} />
@@ -1403,7 +1402,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
         </div>
 
         {/* Low Stock Alert Banner */}
-        {stats.lowStock > 0 && subTab === "products" && (
+        {stats.lowStock > 0 && (subTab === "catalogue" || activeWarehouse !== null) && (
           <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-center gap-3 text-sm">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
             <span className="text-amber-300">{stats.lowStock} product{stats.lowStock !== 1 ? "s" : ""} below reorder level — replenishment recommended.</span>
@@ -1411,23 +1410,64 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
         )}
       </div>
 
-      {/* Sub Tabs */}
-      <div className="flex gap-1 mb-6 bg-[#16181D] border border-[#2A2E37] rounded-xl p-1">
+      {/* Sub Tabs — top row: main sections */}
+      <div className="flex gap-1 mb-2 bg-[#16181D] border border-[#2A2E37] rounded-xl p-1">
         {([
-          ["products", "Products", Package],
-          ["import", "Import from Excel / CSV", Upload],
-          ["history", "Import History", FileText],
-        ] as const).map(([t, label, Icon]) => (
-          <button key={t} onClick={() => setSubTab(t)}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${subTab === t ? "bg-[#F5A623] text-black" : "text-gray-400 hover:text-white"}`}>
-            <Icon className="w-4 h-4" /><span className="hidden sm:inline">{label}</span>
-          </button>
-        ))}
+          ["catalogue", "Catalogue", Package],
+          ["import", "Import", Upload],
+          ["history", "History", FileText],
+        ] as const).map(([t, label, Icon]) => {
+          const isActive = subTab === t || (t === "catalogue" && activeWarehouse !== null);
+          return (
+            <button key={t} onClick={() => setSubTab(t)}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${isActive ? "bg-[#F5A623] text-black" : "text-gray-400 hover:text-white"}`}>
+              <Icon className="w-4 h-4" /><span className="hidden sm:inline">{label}</span>
+            </button>
+          );
+        })}
       </div>
+      {/* Location pages — only shown when in catalogue section */}
+      {(subTab === "catalogue" || activeWarehouse !== null) && (
+        <div className="flex gap-1 mb-6 bg-[#0D0F12] border border-[#2A2E37] rounded-xl p-1">
+          {([
+            ["catalogue", "All Products", "text-gray-300", "border-gray-400/40 bg-gray-400/10"],
+            ["rai", "Rai", "text-violet-400", "border-violet-500/40 bg-violet-500/10"],
+            ["rohini", "Rohini", "text-sky-400", "border-sky-500/40 bg-sky-500/10"],
+            ["mori-gate", "Mori Gate", "text-teal-400", "border-teal-500/40 bg-teal-500/10"],
+          ] as const).map(([t, label, textCls, activeCls]) => (
+            <button key={t} onClick={() => setSubTab(t)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-black border transition-all ${subTab === t ? `${activeCls} ${textCls}` : "border-transparent text-gray-600 hover:text-gray-400"}`}>
+              {t !== "catalogue" && <span className={`w-2 h-2 rounded-full ${t === "rai" ? "bg-violet-400" : t === "rohini" ? "bg-sky-400" : "bg-teal-400"}`} />}
+              {label}
+              {t !== "catalogue" && (
+                <span className={`ml-1 text-[10px] font-bold opacity-70`}>
+                  {products.filter((p) => ((p.warehouseBreakdown ?? {})[t] ?? 0) > 0).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
 
-      {/* ── Products Tab ─────────────────────────────────────────────────────── */}
-      {subTab === "products" && (
+      {/* ── Catalogue / Location Tabs ─────────────────────────────────────── */}
+      {(subTab === "catalogue" || activeWarehouse !== null) && (
         <div>
+          {/* Location page header banner */}
+          {activeWarehouse && (
+            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl border mb-4 ${
+              activeWarehouse === "rai" ? "bg-violet-500/10 border-violet-500/30"
+              : activeWarehouse === "rohini" ? "bg-sky-500/10 border-sky-500/30"
+              : "bg-teal-500/10 border-teal-500/30"
+            }`}>
+              <span className={`w-3 h-3 rounded-full shrink-0 ${activeWarehouse === "rai" ? "bg-violet-400" : activeWarehouse === "rohini" ? "bg-sky-400" : "bg-teal-400"}`} />
+              <div className="flex-1">
+                <p className={`font-black text-sm ${activeWarehouse === "rai" ? "text-violet-300" : activeWarehouse === "rohini" ? "text-sky-300" : "text-teal-300"}`}>
+                  {activeWarehouse === "rai" ? "Rai Warehouse" : activeWarehouse === "rohini" ? "Rohini Warehouse" : "Mori Gate Warehouse"}
+                </p>
+                <p className="text-gray-400 text-xs mt-0.5">{filtered.length} product{filtered.length !== 1 ? "s" : ""} stocked at this location</p>
+              </div>
+            </div>
+          )}
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -1444,16 +1484,6 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                 <option value="low-stock">Low Stock</option>
                 <option value="out-of-stock">Out of Stock</option>
                 <option value="reserved">Reserved</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-            </div>
-            <div className="relative">
-              <select value={warehouseFilter} onChange={(e) => setWarehouseFilter(e.target.value)}
-                className="appearance-none bg-[#16181D] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg pl-4 pr-9 py-2.5 text-white text-sm cursor-pointer">
-                <option value="all">All Locations</option>
-                <option value="rai">Rai</option>
-                <option value="rohini">Rohini</option>
-                <option value="mori-gate">Mori Gate</option>
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
@@ -1715,7 +1745,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                   className="text-xs text-gray-500 hover:text-white transition-colors underline">
                   Import more
                 </button>
-                <button onClick={() => setSubTab("products")}
+                <button onClick={() => setSubTab("catalogue")}
                   className="text-xs text-[#F5A623] hover:underline transition-colors">
                   View Products →
                 </button>
