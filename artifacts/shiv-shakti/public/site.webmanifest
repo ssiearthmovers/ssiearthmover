@@ -1,0 +1,13 @@
+{
+  "name": "SSI Earthmovers – Motor Grader Parts",
+  "short_name": "SSI Earthmovers",
+  "description": "India's leading motor grader spare parts supplier. 5,000+ OEM parts, 30+ years experience.",
+  "icons": [
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#0A0B0E",
+  "background_color": "#0A0B0E",
+  "display": "browser",
+  "start_url": "/"
+}
