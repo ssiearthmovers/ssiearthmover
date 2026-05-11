@@ -1,3 +1,13 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+  <!-- Black background with rounded corners -->
+  <rect width="180" height="180" rx="28" fill="#0A0B0E"/>
+  <!-- Gold border square (inner frame) -->
+  <rect x="18" y="18" width="144" height="144" rx="6" stroke="#F5A623" stroke-width="5" fill="none"/>
+  <!-- S -->
+  <text x="22" y="118" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="76" fill="#F5A623" letter-spacing="-2">SS</text>
+  <!-- i (lowercase, smaller) -->
+  <text x="130" y="115" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="62" fill="#F5A623" font-style="italic">i</text>
+  <!-- Swoosh accent lines -->
+  <path d="M138 60 Q162 80 155 125" stroke="#F5A623" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M145 55 Q172 78 163 130" stroke="#F5A623" stroke-width="3.5" fill="none" stroke-linecap="round"/>
 </svg>
