@@ -847,21 +847,6 @@ export default function BrandPage() {
         </div>
       </section>
 
-      {/* Floating WhatsApp */}
-      <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 group flex items-center gap-3">
-        <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 1.2, type: "spring", stiffness: 200 }} className="flex items-center gap-3">
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-[#0F1014] text-white text-sm font-semibold px-4 py-2 rounded shadow-lg border border-[#2A2E37] whitespace-nowrap">
-            Enquire on WhatsApp
-          </span>
-          <div className="relative w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_4px_24px_rgba(37,211,102,0.5)] hover:shadow-[0_4px_32px_rgba(37,211,102,0.7)] hover:scale-110 transition-all duration-300">
-            <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
-            <FaWhatsapp size={30} className="text-white relative z-10" />
-          </div>
-        </motion.div>
-      </a>
-
       {/* ─── IMAGE ZOOM LIGHTBOX ─── */}
       {zoomImg && (
         <div
