@@ -48,7 +48,7 @@ interface Payment {
 
 interface DraftItem {
   productId: number | null; partNumber: string; partName: string;
-  quantity: number; unitPrice: number;
+  quantity: number; unitPrice: number; availableStock: number | null;
 }
 
 interface Summary {
@@ -65,6 +65,7 @@ interface Summary {
 interface SearchProduct {
   id: number; partNumber: string; name: string;
   brand: string | null; model: string | null; unit: string;
+  quantity: number | null; status: string | null;
 }
 
 /* ── Helpers ────────────────────────────────────────────────────────────── */
@@ -341,7 +342,7 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
   const [taxPercent, setTaxPercent] = useState(18);
   const [notes, setNotes] = useState("");
   const [deductStock, setDeductStock] = useState(true);
-  const [items, setItems] = useState<DraftItem[]>([{ productId: null, partNumber: "", partName: "", quantity: 1, unitPrice: 0 }]);
+  const [items, setItems] = useState<DraftItem[]>([{ productId: null, partNumber: "", partName: "", quantity: 1, unitPrice: 0, availableStock: null }]);
   const [partSearch, setPartSearch] = useState<Record<number, string>>({});
   const [partResults, setPartResults] = useState<Record<number, SearchProduct[]>>({});
   const [loading, setLoading] = useState(false);
@@ -361,7 +362,7 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
 
   const selectPart = (idx: number, p: SearchProduct) => {
     setItems(prev => prev.map((it, i) => i === idx
-      ? { ...it, productId: p.id, partNumber: p.partNumber, partName: p.name }
+      ? { ...it, productId: p.id, partNumber: p.partNumber, partName: p.name, availableStock: p.quantity ?? null }
       : it
     ));
     setPartSearch(prev => ({ ...prev, [idx]: "" }));
@@ -393,7 +394,11 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
           })),
         }),
       });
-      if (!r.ok) { const d = await r.json() as { error?: string }; setErr(d.error ?? "Failed"); return; }
+      if (!r.ok) {
+        const d = await r.json() as { error?: string; details?: string[] };
+        const msg = d.details?.length ? `${d.error}: ${d.details.join("; ")}` : (d.error ?? "Failed");
+        setErr(msg); return;
+      }
       onDone();
     } catch { setErr("Network error."); }
     finally { setLoading(false); }
@@ -452,10 +457,17 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
                       <div className="absolute top-full left-0 right-0 z-10 bg-[#1A1D24] border border-[#2A2E37] rounded-lg mt-1 shadow-xl max-h-48 overflow-y-auto">
                         {(partResults[idx] ?? []).map(p => (
                           <button key={p.id} type="button" onClick={() => selectPart(idx, p)}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-[#2A2E37] text-white">
-                            <span className="text-[#F5A623] font-mono text-xs mr-2">{p.partNumber}</span>
-                            {p.name}
-                            {p.brand && <span className="text-gray-500 text-xs ml-1">({p.brand})</span>}
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-[#2A2E37] text-white flex items-center justify-between gap-2">
+                            <span>
+                              <span className="text-[#F5A623] font-mono text-xs mr-2">{p.partNumber}</span>
+                              {p.name}
+                              {p.brand && <span className="text-gray-500 text-xs ml-1">({p.brand})</span>}
+                            </span>
+                            {p.quantity !== null && (
+                              <span className={`text-xs font-bold shrink-0 px-1.5 py-0.5 rounded ${p.quantity === 0 ? "bg-red-500/20 text-red-400" : p.status === "low-stock" ? "bg-yellow-500/20 text-yellow-400" : "bg-green-500/20 text-green-400"}`}>
+                                {p.quantity} in stock
+                              </span>
+                            )}
                           </button>
                         ))}
                       </div>
@@ -482,9 +494,17 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2">
-                    <span className="text-[#F5A623] text-xs font-bold">
-                      = ₹{(it.quantity * it.unitPrice).toLocaleString("en-IN", { maximumFractionDigits: 2 })}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[#F5A623] text-xs font-bold">
+                        = ₹{(it.quantity * it.unitPrice).toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+                      </span>
+                      {it.availableStock !== null && it.quantity > it.availableStock && (
+                        <span className="text-red-400 text-xs font-bold">⚠ Only {it.availableStock} in stock</span>
+                      )}
+                      {it.availableStock !== null && it.quantity <= it.availableStock && (
+                        <span className="text-green-500 text-xs">{it.availableStock} available</span>
+                      )}
+                    </div>
                     {items.length > 1 && (
                       <button type="button" onClick={() => setItems(prev => prev.filter((_, i) => i !== idx))}
                         className="text-red-400 hover:text-red-300 text-xs">Remove</button>
@@ -492,7 +512,7 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={() => setItems(prev => [...prev, { productId: null, partNumber: "", partName: "", quantity: 1, unitPrice: 0 }])}
+              <button type="button" onClick={() => setItems(prev => [...prev, { productId: null, partNumber: "", partName: "", quantity: 1, unitPrice: 0, availableStock: null }])}
                 className="flex items-center gap-2 text-[#F5A623] text-sm font-bold hover:text-[#F5A623]/80 border border-dashed border-[#F5A623]/30 rounded-lg py-2.5 justify-center hover:bg-[#F5A623]/5">
                 <Plus className="w-4 h-4" /> Add Line Item
               </button>

@@ -74,6 +74,7 @@ router.get("/products/search", async (req, res) => {
         description: productsTable.description,
         unit: productsTable.unit,
         status: productsTable.status,
+        quantity: strict ? productsTable.quantity : sql<number>`NULL`,
       })
       .from(productsTable)
       .where(q ? or(...conditions) : undefined)

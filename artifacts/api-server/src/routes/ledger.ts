@@ -179,6 +179,24 @@ router.post("/ledger/invoices", requireAdmin, async (req, res) => {
     const [customer] = await db.select().from(customersTable).where(eq(customersTable.id, customerId));
     if (!customer) { res.status(404).json({ error: "Customer not found" }); return; }
 
+    // Pre-validate stock availability before touching the DB
+    if (deductStock !== false) {
+      const stockErrors: string[] = [];
+      for (const it of items) {
+        if (it.productId) {
+          const [product] = await db.select({ name: productsTable.name, partNumber: productsTable.partNumber, quantity: productsTable.quantity, unit: productsTable.unit })
+            .from(productsTable).where(eq(productsTable.id, it.productId));
+          if (product && product.quantity < it.quantity) {
+            stockErrors.push(`${product.name} (${product.partNumber}): requested ${it.quantity} ${product.unit}, only ${product.quantity} in stock`);
+          }
+        }
+      }
+      if (stockErrors.length > 0) {
+        res.status(409).json({ error: "Insufficient stock", details: stockErrors });
+        return;
+      }
+    }
+
     const invoiceNumber = await nextInvoiceNumber();
     const tax = Number(taxPercent ?? 18);
     const subtotal = items.reduce((s, it) => s + it.quantity * it.unitPrice, 0);
