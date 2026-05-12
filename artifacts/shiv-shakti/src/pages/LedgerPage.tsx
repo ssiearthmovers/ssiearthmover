@@ -501,10 +501,10 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
 
           {/* Totals */}
           <div className="bg-[#1A1D24] rounded-xl p-4 flex flex-col gap-1">
-            <div className="flex justify-between text-sm text-gray-400"><span>Subtotal</span><span>₹{(subtotal / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span></div>
-            <div className="flex justify-between text-sm text-gray-400"><span>GST ({taxPercent}%)</span><span>₹{(taxAmount / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span></div>
+            <div className="flex justify-between text-sm text-gray-400"><span>Subtotal</span><span>₹{subtotal.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span></div>
+            <div className="flex justify-between text-sm text-gray-400"><span>GST ({taxPercent}%)</span><span>₹{taxAmount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span></div>
             <div className="flex justify-between text-base font-black text-white border-t border-[#2A2E37] pt-2 mt-1">
-              <span>Total</span><span className="text-[#F5A623]">₹{(total / 100).toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span>
+              <span>Total</span><span className="text-[#F5A623]">₹{total.toLocaleString("en-IN", { maximumFractionDigits: 2 })}</span>
             </div>
           </div>
 
