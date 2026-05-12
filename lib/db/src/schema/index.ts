@@ -7,3 +7,6 @@ export * from "./products";
 export * from "./stockHistory";
 export * from "./warehouseStock";
 export * from "./importHistory";
+export * from "./customers";
+export * from "./invoices";
+export * from "./payments";

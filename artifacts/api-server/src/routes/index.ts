@@ -7,6 +7,7 @@ import repliesRouter from "./replies.js";
 import templatesRouter from "./templates.js";
 import notificationsRouter from "./notifications.js";
 import stockRouter from "./stock.js";
+import ledgerRouter from "./ledger.js";
 
 const router: IRouter = Router();
 
@@ -18,5 +19,6 @@ router.use(repliesRouter);
 router.use(templatesRouter);
 router.use(notificationsRouter);
 router.use(stockRouter);
+router.use(ledgerRouter);
 
 export default router;

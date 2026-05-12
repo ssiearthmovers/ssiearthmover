@@ -13,6 +13,7 @@ import BlogPostPage from "@/pages/BlogPostPage";
 import SearchPage from "@/pages/SearchPage";
 import FindMyPartPage from "@/pages/FindMyPartPage";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import LedgerPage from "@/pages/LedgerPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPostPage} />
       <Route path="/admin" component={AdminPage} />
       <Route path="/stock" component={StockPage} />
+      <Route path="/ledger" component={LedgerPage} />
       <Route component={NotFound} />
     </Switch>
   );
