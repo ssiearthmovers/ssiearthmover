@@ -1011,7 +1011,7 @@ export default function LedgerPage() {
 
       {/* ── INVOICE DETAIL SIDE PANEL ───────────────────────────────────── */}
       {selectedInvoice && !showPayment && !printInvoice && (
-        <div className="fixed inset-0 z-[150] bg-black/70 flex justify-end" onClick={() => setSelectedInvoice(null)}>
+        <div className="fixed inset-0 z-[500] bg-black/70 flex justify-end" onClick={() => setSelectedInvoice(null)}>
           <div className="bg-[#13151A] border-l border-[#2A2E37] w-full max-w-md overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="sticky top-0 bg-[#13151A] border-b border-[#2A2E37] p-4 flex justify-between items-center">
               <div>
