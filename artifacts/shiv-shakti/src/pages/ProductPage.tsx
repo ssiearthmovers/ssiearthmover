@@ -10,6 +10,7 @@ import { productCategories, brands, WHATSAPP, PHONE1, PHONE2 } from "@/lib/siteD
 import { usePageMeta } from "@/hooks/usePageMeta";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
+import EnquiryModal from "@/components/EnquiryModal";
 
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => {
   const ref = useRef(null);
@@ -39,6 +40,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function ProductPage() {
   const params = useParams<{ slug: string }>();
   const product = productCategories.find(p => p.slug === params.slug);
+  const [showEnquiry, setShowEnquiry] = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, [params.slug]);
 
@@ -143,10 +145,10 @@ export default function ProductPage() {
             </FadeIn>
             <FadeIn delay={0.2}>
               <div className="flex flex-wrap gap-4">
-                <a href={`https://wa.me/${WHATSAPP}?text=${waMsg}`} target="_blank" rel="noopener noreferrer"
+                <button onClick={() => setShowEnquiry(true)}
                   className="flex items-center gap-2 bg-[#25D366] text-white px-7 py-3.5 rounded font-black text-sm hover:brightness-110 transition-all">
                   <FaWhatsapp size={18} /> Enquire on WhatsApp
-                </a>
+                </button>
                 <a href={`tel:${PHONE1}`}
                   className="flex items-center gap-2 border border-[#F5A623] text-[#F5A623] px-7 py-3.5 rounded font-bold text-sm hover:bg-[#F5A623]/10 transition-colors">
                   <Phone className="w-4 h-4" /> Call Now
@@ -179,14 +181,12 @@ export default function ProductPage() {
                   </div>
                 ))}
               </div>
-              <a
-                href={`https://wa.me/${WHATSAPP}?text=${waMsg}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => setShowEnquiry(true)}
                 className="mt-6 w-full flex items-center justify-center gap-2 bg-[#F5A623] text-black py-3.5 rounded font-black text-sm hover:brightness-110 transition-all"
               >
                 Get a Quote <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </FadeIn>
         </div>
@@ -344,6 +344,15 @@ export default function ProductPage() {
       </section>
 
       <SiteFooter />
+
+      {showEnquiry && product && (
+        <EnquiryModal
+          part={product.name}
+          machine=""
+          whatsappUrl={`https://wa.me/${WHATSAPP}?text=${waMsg}`}
+          onClose={() => setShowEnquiry(false)}
+        />
+      )}
     </div>
   );
 }

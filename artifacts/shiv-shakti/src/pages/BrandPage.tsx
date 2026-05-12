@@ -14,6 +14,7 @@ import {
 import { usePageMeta } from "@/hooks/usePageMeta";
 import SiteNavbar from "@/components/SiteNavbar";
 import SiteFooter from "@/components/SiteFooter";
+import EnquiryModal from "@/components/EnquiryModal";
 
 const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) => {
   const ref = useRef(null);
@@ -89,32 +90,13 @@ function AvailBadge({ status }: { status: AvailStatus | undefined }) {
   );
 }
 
-function PartRow({ part, index, onImageClick, availability }: {
+function PartRow({ part, index, onImageClick, availability, onEnquire }: {
   part: BrandPart; index: number;
   onImageClick?: (src: string, name: string) => void;
   availability?: AvailStatus;
+  onEnquire?: () => void;
 }) {
   const badge = CAT_BADGE[part.category] ?? CAT_BADGE.general;
-  const waMsg = encodeURIComponent(
-    `Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`
-  );
-
-  const handleEnquire = async () => {
-    try {
-      await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: "Website Visitor", phone: "—",
-          machine: part.model,
-          part: `${part.name} (${part.partNo})`,
-          message: "Enquiry via brand parts catalog",
-          source: "brand-page",
-        }),
-      });
-    } catch { /* continue */ }
-    window.open(`https://wa.me/${WHATSAPP}?text=${waMsg}`, "_blank");
-  };
 
   return (
     <div className={`grid items-center gap-3 px-5 py-4 border-b border-[#2A2E37] hover:bg-[#F5A623]/5 transition-colors group
@@ -169,7 +151,7 @@ function PartRow({ part, index, onImageClick, availability }: {
 
       {/* Enquire */}
       <button
-        onClick={handleEnquire}
+        onClick={onEnquire}
         className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white text-xs font-bold px-4 py-2 rounded-lg hover:brightness-110 transition-all whitespace-nowrap"
       >
         <FaWhatsapp className="w-3.5 h-3.5" />
@@ -206,6 +188,11 @@ export default function BrandPage() {
   const [catFilter, setCatFilter] = useState("all");
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
   const [availMap, setAvailMap] = useState<Record<string, AvailStatus>>({});
+  const [enquiryModal, setEnquiryModal] = useState<{ part: string; machine: string; waUrl: string } | null>(null);
+
+  const openEnquiry = (part: string, machine: string, waUrl: string) => {
+    setEnquiryModal({ part, machine, waUrl });
+  };
 
   useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
 
@@ -379,11 +366,12 @@ export default function BrandPage() {
                     <Package className="w-5 h-5 text-[#F5A623]" />
                   </div>
                   <h3 className="font-bold text-white mb-3">{part}</h3>
-                  <a href={`https://wa.me/${WHATSAPP}?text=Hello,%20I%20need%20${encodeURIComponent(part)}%20for%20${encodeURIComponent(brand.fullName)}%20motor%20grader.%20Please%20share%20pricing.`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="text-[#F5A623] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                  <button
+                    onClick={() => openEnquiry(part, brand.fullName, `https://wa.me/${WHATSAPP}?text=Hello,%20I%20need%20${encodeURIComponent(part)}%20for%20${encodeURIComponent(brand.fullName)}%20motor%20grader.%20Please%20share%20pricing.`)}
+                    className="text-[#F5A623] text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
+                  >
                     Enquire Now <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </button>
                 </div>
               </FadeIn>
             ))}
@@ -461,13 +449,12 @@ export default function BrandPage() {
                         <div className="w-1 h-5 bg-[#F5A623] rounded-full" />
                         <p className="text-white text-sm font-bold">{fp.name}</p>
                       </div>
-                      <a
-                        href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello SSI Earthmovers, I need ${fp.name} for ${brand.fullName} motor grader. Please share pricing.`)}`}
-                        target="_blank" rel="noopener noreferrer"
+                      <button
+                        onClick={() => openEnquiry(fp.name, brand.fullName, `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello SSI Earthmovers, I need ${fp.name} for ${brand.fullName} motor grader. Please share pricing.`)}`)}
                         className="flex items-center gap-1.5 text-xs font-bold text-[#25D366] hover:underline"
                       >
                         <FaWhatsapp className="w-3.5 h-3.5" /> Enquire
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </FadeIn>
@@ -567,7 +554,12 @@ export default function BrandPage() {
                 {filteredParts.map((part, i) => (
                   <PartRow key={`${part.partNo}-${i}`} part={part} index={i}
                     onImageClick={(src, name) => setZoomImg({ src, name })}
-                    availability={availMap[part.partNo.toUpperCase()] ?? availMap[part.partNo]} />
+                    availability={availMap[part.partNo.toUpperCase()] ?? availMap[part.partNo]}
+                    onEnquire={() => openEnquiry(
+                      `${part.name} (${part.partNo})`,
+                      part.model,
+                      `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hello SSI Earthmovers,\n\nI need the following part:\n\nPart Name: ${part.name}\nPart No: ${part.partNo}\nMachine: ${part.model}\n\nPlease confirm availability and pricing.`)}`
+                    )} />
                 ))}
               </div>
             ) : (
@@ -877,6 +869,15 @@ export default function BrandPage() {
       )}
 
       <SiteFooter />
+
+      {enquiryModal && (
+        <EnquiryModal
+          part={enquiryModal.part}
+          machine={enquiryModal.machine}
+          whatsappUrl={enquiryModal.waUrl}
+          onClose={() => setEnquiryModal(null)}
+        />
+      )}
     </div>
   );
 }
