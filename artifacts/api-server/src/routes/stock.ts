@@ -46,14 +46,19 @@ router.get("/products/search", async (req, res) => {
     const model = String(req.query["model"] ?? "").trim();
     const limit = Math.min(200, Math.max(1, parseInt(String(req.query["limit"] ?? "100"), 10) || 100));
 
+    const strict = String(req.query["strict"] ?? "") === "1";
     const conditions: ReturnType<typeof ilike>[] = [];
     if (q) {
       conditions.push(
         ilike(productsTable.name, `%${q}%`),
         ilike(productsTable.partNumber, `%${q}%`),
-        ilike(productsTable.description, `%${q}%`),
-        ilike(productsTable.oemNumber, `%${q}%`),
       );
+      if (!strict) {
+        conditions.push(
+          ilike(productsTable.description, `%${q}%`),
+          ilike(productsTable.oemNumber, `%${q}%`),
+        );
+      }
     }
 
     let rows = await db

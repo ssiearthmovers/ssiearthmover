@@ -351,12 +351,12 @@ function CreateInvoiceModal({ customers, token, onClose, onDone }: {
   const searchParts = (idx: number, q: string) => {
     setPartSearch(prev => ({ ...prev, [idx]: q }));
     clearTimeout(searchTimeout.current);
-    if (!q.trim()) { setPartResults(prev => ({ ...prev, [idx]: [] })); return; }
+    if (q.trim().length < 2) { setPartResults(prev => ({ ...prev, [idx]: [] })); return; }
     searchTimeout.current = setTimeout(async () => {
-      const r = await fetch(`${API}/products/search?q=${encodeURIComponent(q)}&limit=10`);
+      const r = await fetch(`${API}/products/search?q=${encodeURIComponent(q.trim())}&limit=15&strict=1`);
       const d = await r.json() as SearchProduct[];
       setPartResults(prev => ({ ...prev, [idx]: d }));
-    }, 300);
+    }, 250);
   };
 
   const selectPart = (idx: number, p: SearchProduct) => {
