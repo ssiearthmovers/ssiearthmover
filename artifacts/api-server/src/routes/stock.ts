@@ -52,11 +52,11 @@ router.get("/products/search", async (req, res) => {
       conditions.push(
         ilike(productsTable.name, `%${q}%`),
         ilike(productsTable.partNumber, `%${q}%`),
+        ilike(productsTable.oemNumber, `%${q}%`),
       );
       if (!strict) {
         conditions.push(
           ilike(productsTable.description, `%${q}%`),
-          ilike(productsTable.oemNumber, `%${q}%`),
         );
       }
     }
