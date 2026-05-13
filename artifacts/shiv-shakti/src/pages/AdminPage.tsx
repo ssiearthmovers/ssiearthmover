@@ -1441,10 +1441,29 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
   const [stockSaving, setStockSaving] = useState(false);
   const [stockError, setStockError] = useState("");
 
+  const CATEGORIES_LIST = [
+    { label: "Cutting Edges",                   slug: "cutting-edges" },
+    { label: "End Bits",                         slug: "end-bits" },
+    { label: "Grader Blades",                    slug: "grader-blades" },
+    { label: "Scarifier Teeth & Ripper Tips",    slug: "scarifier-teeth" },
+    { label: "Circle & Draw Bar",                slug: "circle-draw-bar" },
+    { label: "Sprockets / Worm Gears / Ring Gears", slug: "sprockets-gears" },
+    { label: "Hydraulic Cylinders",              slug: "hydraulic-cylinders" },
+    { label: "Hydraulic Parts",                  slug: "hydraulic-parts" },
+    { label: "Braking System",                   slug: "braking-system" },
+    { label: "Ball Joints & Tie Rod Ends",       slug: "ball-joints" },
+    { label: "Drive & Transmission",             slug: "drive-transmission" },
+    { label: "Wear Plates",                      slug: "wear-plates" },
+    { label: "Filters",                          slug: "filters" },
+    { label: "Engine Parts",                     slug: "engine-parts" },
+    { label: "Electrical Parts",                 slug: "electrical-parts" },
+    { label: "Other",                            slug: "other" },
+  ];
+
   // Add product modal
   const [showAdd, setShowAdd] = useState(false);
   const [addForm, setAddForm] = useState({
-    partNumber: "", name: "", brand: "", model: "", category: "",
+    partNumber: "", name: "", brand: "", model: "", category: "", categorySlug: "",
     oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5",
   });
   const activeWarehouse = (["rai", "rohini", "mori-gate"] as const).includes(subTab as "rai" | "rohini" | "mori-gate") ? subTab as "rai" | "rohini" | "mori-gate" : null;
@@ -1561,7 +1580,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
       const created = (await r.json()) as Product;
       setProducts((prev) => [...prev, created].sort((a, b) => a.name.localeCompare(b.name)));
       setShowAdd(false);
-      setAddForm({ partNumber: "", name: "", brand: "", model: "", category: "", oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5" });
+      setAddForm({ partNumber: "", name: "", brand: "", model: "", category: "", categorySlug: "", oemNumber: "", description: "", unit: "pcs", rackLocation: "", warehouse: "", quantity: "0", reorderLevel: "5" });
     } finally { setAddSaving(false); }
   };
 
@@ -2209,8 +2228,17 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Category</label>
-                  <input value={addForm.category} onChange={(e) => setAddForm((f) => ({ ...f, category: e.target.value }))}
-                    placeholder="Filters, Sprockets…" className="w-full bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white placeholder-gray-600 text-xs" />
+                  <select value={addForm.categorySlug}
+                    onChange={(e) => {
+                      const cat = CATEGORIES_LIST.find((c) => c.slug === e.target.value);
+                      setAddForm((f) => ({ ...f, categorySlug: e.target.value, category: cat?.label ?? "" }));
+                    }}
+                    className="w-full appearance-none bg-[#0D0F12] border border-[#2A2E37] focus:border-[#F5A623] outline-none rounded-lg px-3 py-2.5 text-white text-xs cursor-pointer">
+                    <option value="">— Select category —</option>
+                    {CATEGORIES_LIST.map((c) => (
+                      <option key={c.slug} value={c.slug}>{c.label}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">Unit</label>

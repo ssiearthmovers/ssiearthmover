@@ -12,6 +12,38 @@ function computeStatus(qty: number, reorderLevel: number): string {
   return "in-stock";
 }
 
+const CATEGORY_SLUG_MAP: { keywords: string[]; slug: string; label: string }[] = [
+  { keywords: ["cutting edge"],              slug: "cutting-edges",      label: "Cutting Edges" },
+  { keywords: ["end bit"],                   slug: "end-bits",           label: "End Bits" },
+  { keywords: ["grader blade"],              slug: "grader-blades",      label: "Grader Blades" },
+  { keywords: ["scarifier", "ripper"],       slug: "scarifier-teeth",    label: "Scarifier Teeth & Ripper Tips" },
+  { keywords: ["circle", "draw bar"],        slug: "circle-draw-bar",    label: "Circle & Draw Bar" },
+  { keywords: ["sprocket", "worm gear", "ring gear"], slug: "sprockets-gears", label: "Sprockets / Worm Gears / Ring Gears" },
+  { keywords: ["hydraulic cylinder"],        slug: "hydraulic-cylinders",label: "Hydraulic Cylinders" },
+  { keywords: ["hydraulic"],                 slug: "hydraulic-parts",    label: "Hydraulic Parts" },
+  { keywords: ["brake", "braking"],          slug: "braking-system",     label: "Braking System" },
+  { keywords: ["ball joint", "tie rod"],     slug: "ball-joints",        label: "Ball Joints & Tie Rod Ends" },
+  { keywords: ["drive", "transmission"],     slug: "drive-transmission", label: "Drive & Transmission" },
+  { keywords: ["wear plate", "wear"],        slug: "wear-plates",        label: "Wear Plates" },
+  { keywords: ["filter"],                    slug: "filters",            label: "Filters" },
+  { keywords: ["engine"],                    slug: "engine-parts",       label: "Engine Parts" },
+  { keywords: ["electric"],                  slug: "electrical-parts",   label: "Electrical Parts" },
+];
+
+function deriveCategorySlug(category: string): { slug: string; label: string } | null {
+  const lower = category.toLowerCase();
+  // exact slug match first
+  const exactSlug = CATEGORY_SLUG_MAP.find((m) => m.slug === lower);
+  if (exactSlug) return { slug: exactSlug.slug, label: exactSlug.label };
+  // keyword match
+  for (const entry of CATEGORY_SLUG_MAP) {
+    if (entry.keywords.some((kw) => lower.includes(kw))) {
+      return { slug: entry.slug, label: entry.label };
+    }
+  }
+  return null;
+}
+
 const router: IRouter = Router();
 
 /* ── Public availability endpoint ─────────────────────────────────────────── */
@@ -362,13 +394,20 @@ router.post("/stock/import", requireAdmin, async (req, res) => {
 
     const qty = Number(row["quantity"] ?? row["Quantity"] ?? row["qty"] ?? 0);
     const rl = Number(row["reorderLevel"] ?? row["reorder_level"] ?? row["ReorderLevel"] ?? row["reorder"] ?? 5);
+    const rawCategory = String(row["category"] ?? row["Category"] ?? "").trim();
+    const rawSlug = String(row["categorySlug"] ?? row["category_slug"] ?? row["CategorySlug"] ?? "").trim();
+    // Auto-derive slug from category name when not explicitly provided
+    const derived = !rawSlug && rawCategory ? deriveCategorySlug(rawCategory) : null;
+    const finalSlug = rawSlug || derived?.slug || null;
+    const finalCategory = rawCategory || derived?.label || null;
+
     const values = {
       partNumber: pn,
       name: nm,
       brand: String(row["brand"] ?? row["Brand"] ?? "").trim() || null,
       model: String(row["model"] ?? row["Model"] ?? "").trim() || null,
-      category: String(row["category"] ?? row["Category"] ?? "").trim() || null,
-      categorySlug: String(row["categorySlug"] ?? row["category_slug"] ?? row["CategorySlug"] ?? "").trim() || null,
+      category: finalCategory,
+      categorySlug: finalSlug,
       oemNumber: String(row["oemNumber"] ?? row["oem_number"] ?? row["OemNumber"] ?? row["OEM"] ?? row["oem"] ?? "").trim() || null,
       description: String(row["description"] ?? row["Description"] ?? "").trim() || null,
       unit: String(row["unit"] ?? row["Unit"] ?? "").trim() || "pcs",
