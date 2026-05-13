@@ -1454,6 +1454,8 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
     { label: "Ball Joints & Tie Rod Ends",       slug: "ball-joints" },
     { label: "Drive & Transmission",             slug: "drive-transmission" },
     { label: "Wear Plates",                      slug: "wear-plates" },
+    { label: "Steering, Axle & King Pin Parts",  slug: "steering-axle" },
+    { label: "Ground Engaging Tools",            slug: "ground-engaging-tools" },
     { label: "Filters",                          slug: "filters" },
     { label: "Engine Parts",                     slug: "engine-parts" },
     { label: "Electrical Parts",                 slug: "electrical-parts" },

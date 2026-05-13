@@ -28,6 +28,9 @@ const CATEGORY_SLUG_MAP: { keywords: string[]; slug: string; label: string }[] =
   { keywords: ["filter"],                    slug: "filters",            label: "Filters" },
   { keywords: ["engine"],                    slug: "engine-parts",       label: "Engine Parts" },
   { keywords: ["electric"],                  slug: "electrical-parts",   label: "Electrical Parts" },
+  { keywords: ["king pin", "steering", "axle", "stud ball", "housing", "bracket", "adjuster"], slug: "steering-axle", label: "Steering, Axle & King Pin" },
+  { keywords: ["shank", "wedge", "ground engaging", "ripper tip", "tooth point"], slug: "ground-engaging-tools", label: "Ground Engaging Tools" },
+  { keywords: ["fastener", "bolt", "washer", "cotter pin", "nut"], slug: "other", label: "Other" },
 ];
 
 function deriveCategorySlug(category: string): { slug: string; label: string } | null {

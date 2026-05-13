@@ -253,6 +253,22 @@ export default function Home() {
       imgClass: "object-contain p-3",
       imgStyle: { filter: "brightness(1.1) contrast(1.25) saturate(1.4) drop-shadow(0 4px 14px rgba(245,166,35,0.25))" },
     },
+    {
+      title: "Steering, Axle & King Pin Parts",
+      desc: "King pins, front axle housings, stud balls, steering brackets and bushings for all brands",
+      img: "/images/category-axle.png",
+      slug: "steering-axle",
+      imgClass: "object-contain p-4",
+      imgStyle: { filter: "brightness(1.1) contrast(1.2) saturate(0.9) drop-shadow(0 4px 14px rgba(245,166,35,0.2))" },
+    },
+    {
+      title: "Ground Engaging Tools",
+      desc: "Ripper shanks (standard & HD), wedges and tooth points for all motor grader brands",
+      img: "/images/category-scarifier-teeth.png",
+      slug: "ground-engaging-tools",
+      imgClass: "object-contain p-5",
+      imgStyle: { filter: "brightness(1.05) contrast(1.15) saturate(1.3)" },
+    },
   ];
 
   const features = [

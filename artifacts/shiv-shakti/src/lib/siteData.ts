@@ -1262,4 +1262,61 @@ export const productCategories: ProductCategory[] = [
       { q: "How do I know when to replace circle segments?", a: "Signs of worn circle segments include blade wobble during grading, difficulty maintaining blade angle, unusual noise during circle rotation, and visible wear or gaps in the circle teeth. Replace individual segments before the wear spreads to the full ring." },
     ],
   },
+  {
+    slug: "steering-axle",
+    name: "Steering, Axle & King Pin Parts",
+    tagline: "Front axle, king pin, housing, brackets & steering components for all motor grader brands",
+    description:
+      "SSI Earthmovers supplies a complete range of front axle, king pin and steering components for Komatsu GD511, GD535, CAT, CASE, XCMG and all major motor grader brands — including king pins, housings, stud balls, steering joints, brackets and bushings.",
+    longDescription:
+      "The front axle and steering system of a motor grader takes constant stress from grading loads and rough terrain. Worn king pins, bushings or steering joints cause shimmy, poor blade control and can lead to costly machine downtime. SSI Earthmovers stocks king pins, front axle housings (LH & RH), stud balls (big and small), steering joint brackets, adjuster assemblies, front axle covers and all associated hardware for Komatsu GD511, GD535 and other major brands. All parts are manufactured to OEM specifications for precise fit and long service life.",
+    specs: [
+      { label: "Key Parts", value: "King Pins, Housings, Stud Balls, Brackets, Bushings, Adjusters" },
+      { label: "Material", value: "Alloy steel / Cast iron — OEM spec" },
+      { label: "Compatibility", value: "Komatsu GD511, GD535, CAT, CASE, XCMG" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "King Pin Sets", desc: "Complete king pin kits with bushings for Komatsu and all major brands." },
+      { name: "Front Axle Housings (LH & RH)", desc: "OEM-spec housings for Komatsu GD511 and GD535." },
+      { name: "Stud Balls (Big & Small)", desc: "Precision stud balls for steering joints — exact OEM dimensions." },
+      { name: "Steering Brackets & Adjusters", desc: "Mounting brackets and steering adjusters for front axle assembly." },
+    ],
+    compatibleBrands: ["Komatsu", "CAT", "CASE", "XCMG", "Sany", "SDLG", "Liugong"],
+    img: "/images/category-axle.png",
+    metaTitle: "Motor Grader King Pin Steering Axle Parts India | SSI Earthmovers Delhi",
+    metaDesc: "Buy motor grader king pin, front axle housing, stud ball and steering parts in India. Komatsu GD511 GD535 and all brands. Same-day dispatch from New Delhi.",
+    faqs: [
+      { q: "Do you stock king pins for Komatsu GD535?", a: "Yes, we carry king pin sets, front axle housings (LH & RH), stud balls and all associated steering components for the Komatsu GD535 and GD511. Available for same-day dispatch from New Delhi." },
+      { q: "How do I know when to replace king pins?", a: "Signs of worn king pins include excessive front wheel play, steering shimmy at speed, uneven tyre wear and poor blade control. It is advisable to replace king pin sets during scheduled maintenance before symptoms appear." },
+    ],
+  },
+  {
+    slug: "ground-engaging-tools",
+    name: "Ground Engaging Tools",
+    tagline: "Ripper shanks, wedges, tooth points and ground engaging wear parts",
+    description:
+      "SSI Earthmovers supplies heavy-duty ground engaging tools (GETs) including ripper shanks, shank HD versions, wedges and tooth points for Komatsu, CAT, CASE, XCMG and all major motor grader brands.",
+    longDescription:
+      "Ground engaging tools are among the highest wear-rate components on any motor grader. Ripper shanks, wedges and tooth points are subject to direct impact and abrasion in every grading pass. Using OEM-spec or OEM-quality shanks and wedges reduces tip breakage and extends service intervals. SSI Earthmovers stocks standard and heavy-duty (HD) ripper shanks, steel wedges and tooth points for Komatsu GD511/GD535 and all major grader brands. All GET components are forged and heat-treated for maximum hardness and wear resistance.",
+    specs: [
+      { label: "Key Parts", value: "Ripper Shanks, Shanks HD, Wedges, Tooth Points" },
+      { label: "Material", value: "Forged alloy steel, heat-treated" },
+      { label: "Hardness", value: "HB 400–500" },
+      { label: "Delivery", value: "Same-day dispatch from New Delhi" },
+    ],
+    variants: [
+      { name: "Standard Ripper Shanks", desc: "For road construction and highway grading applications." },
+      { name: "Heavy-Duty Shanks (HD)", desc: "Thicker section for quarry, mining and rocky terrain." },
+      { name: "Wedges", desc: "Steel wedges for blade retention and circle assembly." },
+      { name: "Tooth Points", desc: "Replaceable tooth points for ripper and scarifier bars." },
+    ],
+    compatibleBrands: ["Komatsu", "CAT", "CASE", "XCMG", "Sany", "SDLG", "Liugong", "BEML"],
+    img: "/images/category-scarifier-teeth.png",
+    metaTitle: "Motor Grader Ripper Shanks Wedges Ground Engaging Tools India | SSI Earthmovers",
+    metaDesc: "Buy motor grader ripper shanks, wedges and ground engaging tools in India. Komatsu, CAT, CASE, XCMG and all brands. Same-day dispatch from New Delhi.",
+    faqs: [
+      { q: "Do you stock Komatsu GD535 ripper shanks?", a: "Yes, we carry standard and heavy-duty (HD) ripper shanks for the Komatsu GD535 (Part No. 09271-00045 and 09271-00045-HD). Available for immediate dispatch from New Delhi." },
+    ],
+  },
 ];
