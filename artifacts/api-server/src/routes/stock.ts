@@ -380,18 +380,49 @@ router.post("/stock/import", requireAdmin, async (req, res) => {
       updatedAt: new Date(),
     };
 
+    const VALID_WAREHOUSES = ["rai", "rohini", "mori-gate"];
+    const whValue = values.warehouse?.toLowerCase().trim() ?? null;
+    const validWarehouse = whValue && VALID_WAREHOUSES.includes(whValue) ? whValue : null;
+
     try {
       const existing = await db
         .select({ id: productsTable.id })
         .from(productsTable)
         .where(eq(productsTable.partNumber, pn));
 
+      let productId: number;
       if (existing[0]) {
         await db.update(productsTable).set(values).where(eq(productsTable.id, existing[0].id));
+        productId = existing[0].id;
         updated++;
       } else {
-        await db.insert(productsTable).values(values);
+        const [created] = await db.insert(productsTable).values(values).returning({ id: productsTable.id });
+        productId = created!.id;
         inserted++;
+      }
+
+      // If a valid warehouse was specified, upsert into warehouse_stock too
+      if (validWarehouse && qty > 0) {
+        const whExact = await db.select({ id: warehouseStockTable.id })
+          .from(warehouseStockTable)
+          .where(sql`product_id = ${productId} AND warehouse = ${validWarehouse}`);
+        if (whExact[0]) {
+          await db.update(warehouseStockTable)
+            .set({ quantity: qty, updatedAt: new Date() })
+            .where(eq(warehouseStockTable.id, whExact[0].id));
+        } else {
+          await db.insert(warehouseStockTable).values({ productId, warehouse: validWarehouse, quantity: qty });
+        }
+        // recompute total from all warehouses so the product total stays accurate
+        const allWh = await db.select({ quantity: warehouseStockTable.quantity })
+          .from(warehouseStockTable)
+          .where(eq(warehouseStockTable.productId, productId));
+        const totalQty = allWh.reduce((s, r) => s + r.quantity, 0);
+        if (totalQty !== qty) {
+          await db.update(productsTable)
+            .set({ quantity: totalQty, status: computeStatus(totalQty, values.reorderLevel), updatedAt: new Date() })
+            .where(eq(productsTable.id, productId));
+        }
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
