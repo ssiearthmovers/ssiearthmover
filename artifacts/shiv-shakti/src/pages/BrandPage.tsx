@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useParams, Link } from "wouter";
 import { motion, useInView } from "framer-motion";
 import {
@@ -180,6 +180,16 @@ const CATEGORIES = [
   { value: "general", label: "General Parts" },
 ];
 
+interface DbProduct {
+  id: number; partNumber: string; name: string; brand: string | null;
+  model: string | null; category: string | null; oemNumber: string | null;
+  description: string | null; unit: string; status: string;
+}
+
+function mapDbToPart(p: DbProduct): BrandPart {
+  return { name: p.name, partNo: p.partNumber, model: p.model ?? "", category: "general" as const };
+}
+
 export default function BrandPage() {
   const params = useParams<{ slug: string }>();
   const brand = brands.find(b => b.slug === params.slug);
@@ -189,12 +199,15 @@ export default function BrandPage() {
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
   const [availMap, setAvailMap] = useState<Record<string, AvailStatus>>({});
   const [enquiryModal, setEnquiryModal] = useState<{ part: string; machine: string; waUrl: string } | null>(null);
+  const [dbResults, setDbResults] = useState<DbProduct[]>([]);
+  const [dbLoading, setDbLoading] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openEnquiry = (part: string, machine: string, waUrl: string) => {
     setEnquiryModal({ part, machine, waUrl });
   };
 
-  useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); }, [params.slug]);
+  useEffect(() => { window.scrollTo(0, 0); setSearch(""); setCatFilter("all"); setDbResults([]); }, [params.slug]);
 
   useEffect(() => {
     fetch("/api/stock/availability")
@@ -202,6 +215,24 @@ export default function BrandPage() {
       .then(data => setAvailMap(data))
       .catch(() => {});
   }, []);
+
+  const fetchDb = useCallback(async (q: string, brandName: string) => {
+    setDbLoading(true);
+    try {
+      const ps = new URLSearchParams({ limit: "500", brand: brandName });
+      if (q) ps.set("q", q);
+      const r = await fetch(`/api/products/search?${ps.toString()}`);
+      if (r.ok) setDbResults((await r.json()) as DbProduct[]);
+    } catch { /* silently fail */ }
+    finally { setDbLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    if (!brand) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => { void fetchDb(search.trim(), brand.name); }, 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [search, brand, fetchDb]);
 
   usePageMeta({
     title: brand?.metaTitle ?? "Motor Grader Spare Parts | SSI Earthmovers India",
@@ -225,7 +256,8 @@ export default function BrandPage() {
     } : undefined,
   });
 
-  const filteredParts = useMemo(() => {
+  /* Static parts filtered by search + category */
+  const staticFiltered = useMemo(() => {
     if (!brand?.parts.length) return [];
     return brand.parts.filter(p => {
       const matchesCat = catFilter === "all" || p.category === catFilter;
@@ -234,6 +266,17 @@ export default function BrandPage() {
       return matchesCat && matchesSearch;
     });
   }, [brand, search, catFilter]);
+
+  /* Merge: DB results first, then static parts not already covered by DB */
+  const filteredParts = useMemo<BrandPart[]>(() => {
+    const dbPartNos = new Set(dbResults.map(p => p.partNumber.toLowerCase()));
+    const staticOnly = staticFiltered.filter(p => !dbPartNos.has(p.partNo.toLowerCase()));
+    return [...dbResults.map(mapDbToPart), ...staticOnly];
+  }, [dbResults, staticFiltered]);
+
+  const totalCount = (brand?.parts.length ?? 0) + dbResults.filter(
+    p => !brand?.parts.some(s => s.partNo.toLowerCase() === p.partNumber.toLowerCase())
+  ).length;
 
   if (!brand) {
     return (
@@ -322,7 +365,7 @@ export default function BrandPage() {
               ))}
               {brand.parts.length > 0 && (
                 <span className="border border-white/20 text-gray-300 text-sm font-bold px-4 py-1.5 rounded-full">
-                  {brand.parts.length} Parts Listed
+                  {totalCount} Parts Listed
                 </span>
               )}
             </div>
@@ -402,7 +445,7 @@ export default function BrandPage() {
               <p className="text-gray-300 text-sm mb-4">{brand.models.join("  ·  ")}</p>
               <div className="flex gap-3">
                 <span className="bg-[#F5A623] text-black text-xs font-black px-3 py-1.5 rounded-full">
-                  {brand.parts.length} OEM Parts Listed
+                  {totalCount} OEM Parts Listed
                 </span>
                 <span className="border border-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-full">
                   Same-Day Dispatch · New Delhi
@@ -495,7 +538,7 @@ export default function BrandPage() {
                 {brand.fullName} Parts Catalogue
               </h2>
               <p className="text-gray-400 mt-4 max-w-2xl">
-                Browse all {brand.parts.length} listed parts with official OEM part numbers. Click the WhatsApp button on any part to enquire instantly.
+                Browse all {totalCount} listed parts with official OEM part numbers. Click the WhatsApp button on any part to enquire instantly.
               </p>
             </FadeIn>
 
@@ -528,8 +571,14 @@ export default function BrandPage() {
 
             {/* Result count */}
             <div className="flex items-center justify-between mb-6">
-              <p className="text-gray-500 text-sm">
-                Showing <span className="text-white font-bold">{filteredParts.length}</span> of {brand.parts.length} parts
+              <p className="text-gray-500 text-sm flex items-center gap-2">
+                {dbLoading && (
+                  <svg className="animate-spin w-3.5 h-3.5 text-[#F5A623]" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                )}
+                Showing <span className="text-white font-bold mx-1">{filteredParts.length}</span> of {totalCount} parts
               </p>
               {(search || catFilter !== "all") && (
                 <button onClick={() => { setSearch(""); setCatFilter("all"); }}
