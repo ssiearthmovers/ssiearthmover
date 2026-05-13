@@ -1460,6 +1460,7 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
     inserted: number; updated: number; skipped: number; errors: string[]; total: number;
   } | null>(null);
   const [importFileName, setImportFileName] = useState("paste-import");
+  const [importWarehouse, setImportWarehouse] = useState("");
 
   // History state
   const [importHistory, setImportHistory] = useState<ImportHistoryItem[]>([]);
@@ -1589,10 +1590,14 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
     if (!importRows.length) return;
     setImporting(true); setImportResult(null);
     try {
+      // Inject the selected warehouse into every row that doesn't already have one
+      const rowsToSend = importWarehouse
+        ? importRows.map((r) => ({ ...r, warehouse: (r["warehouse"] ?? r["location"] ?? r["Warehouse"] ?? "") || importWarehouse }))
+        : importRows;
       const r = await fetch(`${API_BASE}/stock/import`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader(auth.token) },
-        body: JSON.stringify({ rows: importRows, fileName: importFileName }),
+        body: JSON.stringify({ rows: rowsToSend, fileName: importFileName }),
       });
       const result = (await r.json()) as { inserted: number; updated: number; skipped: number; errors: string[]; total: number };
       setImportResult(result);
@@ -1882,6 +1887,26 @@ function InventoryPanel({ auth }: { auth: AuthInfo }) {
                 <span className="text-xs text-[#F5A623] font-mono bg-[#F5A623]/10 px-2 py-1 rounded">{importFileName}</span>
               )}
               <input ref={fileRef} type="file" accept=".csv,.tsv,.txt" className="hidden" onChange={handleFilePick} />
+            </div>
+
+            {/* Warehouse selector */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
+                Assign to Warehouse <span className="text-gray-600 font-normal normal-case tracking-normal">(optional — overrides warehouse column in CSV)</span>
+              </label>
+              <div className="flex gap-2 flex-wrap">
+                {[{ value: "", label: "No default / use CSV column" }, ...WAREHOUSES].map((w) => (
+                  <button key={w.value} type="button"
+                    onClick={() => setImportWarehouse(w.value)}
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
+                      importWarehouse === w.value
+                        ? w.value === "" ? "border-[#F5A623]/60 bg-[#F5A623]/10 text-[#F5A623]" : `border-current ${"color" in w ? w.color : ""}`
+                        : "border-[#2A2E37] text-gray-500 hover:border-[#3A3E47] hover:text-gray-300"
+                    }`}>
+                    {w.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div>
