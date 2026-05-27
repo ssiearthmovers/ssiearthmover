@@ -169,13 +169,19 @@ export default function SearchPage() {
       if (brandFilter !== "all" && r.brandSlug !== brandFilter) return false;
       if (catFilter !== "all" && r.part.category !== catFilter) return false;
       if (!words.length) return true;
-      return words.every(word =>
-        r.part.partNo.toLowerCase().includes(word) ||
-        r.part.name.toLowerCase().includes(word) ||
-        r.part.model.toLowerCase().includes(word) ||
-        r.brandName.toLowerCase().includes(word) ||
-        r.brandFullName.toLowerCase().includes(word)
-      );
+      return words.every(word => {
+        /* Also try singular form to handle plurals: bits→bit, shafts→shaft */
+        const terms = new Set([word]);
+        if (word.length > 3 && word.endsWith("es")) terms.add(word.slice(0, -2));
+        if (word.length > 3 && word.endsWith("s"))  terms.add(word.slice(0, -1));
+        return [...terms].some(t =>
+          r.part.partNo.toLowerCase().includes(t) ||
+          r.part.name.toLowerCase().includes(t) ||
+          r.part.model.toLowerCase().includes(t) ||
+          r.brandName.toLowerCase().includes(t) ||
+          r.brandFullName.toLowerCase().includes(t)
+        );
+      });
     });
   }, [allStaticParts, query, brandFilter, catFilter]);
 

@@ -91,14 +91,22 @@ router.get("/products/search", async (req, res) => {
       const words = q.split(/\s+/).filter(w => w && !STOP_WORDS.has(w.toLowerCase()));
       if (words.length > 0) {
         const wordConds = words.map(word => {
-          const f: SQL[] = [
-            ilike(productsTable.name, `%${word}%`),
-            ilike(productsTable.partNumber, `%${word}%`),
-            ilike(productsTable.oemNumber, `%${word}%`),
-            ilike(productsTable.brand, `%${word}%`),
-            ilike(productsTable.model, `%${word}%`),
-          ];
-          if (!strict) f.push(ilike(productsTable.description, `%${word}%`));
+          const w = word.toLowerCase();
+          /* Also try singular form to handle plurals (bits→bit, shafts→shaft) */
+          const terms = new Set([w]);
+          if (w.length > 3 && w.endsWith("es")) terms.add(w.slice(0, -2));
+          if (w.length > 3 && w.endsWith("s"))  terms.add(w.slice(0, -1));
+          const f: SQL[] = [...terms].flatMap(term => {
+            const cols: SQL[] = [
+              ilike(productsTable.name, `%${term}%`),
+              ilike(productsTable.partNumber, `%${term}%`),
+              ilike(productsTable.oemNumber, `%${term}%`),
+              ilike(productsTable.brand, `%${term}%`),
+              ilike(productsTable.model, `%${term}%`),
+            ];
+            if (!strict) cols.push(ilike(productsTable.description, `%${term}%`));
+            return cols;
+          });
           return or(...f) as SQL;
         });
         searchWhere = wordConds.length === 1 ? wordConds[0] : and(...wordConds) as SQL;
