@@ -162,17 +162,17 @@ export default function SearchPage() {
   }, []);
 
   const staticFiltered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return allStaticParts.filter((r) => {
       if (brandFilter !== "all" && r.brandSlug !== brandFilter) return false;
       if (catFilter !== "all" && r.part.category !== catFilter) return false;
-      if (!q) return true;
-      return (
-        r.part.partNo.toLowerCase().includes(q) ||
-        r.part.name.toLowerCase().includes(q) ||
-        r.part.model.toLowerCase().includes(q) ||
-        r.brandName.toLowerCase().includes(q) ||
-        r.brandFullName.toLowerCase().includes(q)
+      if (!words.length) return true;
+      return words.every(word =>
+        r.part.partNo.toLowerCase().includes(word) ||
+        r.part.name.toLowerCase().includes(word) ||
+        r.part.model.toLowerCase().includes(word) ||
+        r.brandName.toLowerCase().includes(word) ||
+        r.brandFullName.toLowerCase().includes(word)
       );
     });
   }, [allStaticParts, query, brandFilter, catFilter]);

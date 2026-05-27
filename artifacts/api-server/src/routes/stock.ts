@@ -3,7 +3,7 @@ import { db } from "@workspace/db";
 import {
   productsTable, stockHistoryTable, notificationsTable, importHistoryTable, warehouseStockTable
 } from "@workspace/db/schema";
-import { eq, desc, ilike, or, sql } from "drizzle-orm";
+import { eq, desc, ilike, or, and, sql, type SQL } from "drizzle-orm";
 import { requireAuth, requireAdmin, type AuthPayload } from "../middlewares/adminAuth.js";
 
 function computeStatus(qty: number, reorderLevel: number): string {
@@ -82,18 +82,23 @@ router.get("/products/search", async (req, res) => {
     const limit = Math.min(200, Math.max(1, parseInt(String(req.query["limit"] ?? "100"), 10) || 100));
 
     const strict = String(req.query["strict"] ?? "") === "1";
-    const conditions: ReturnType<typeof ilike>[] = [];
+
+    /* Multi-word AND search: every word must match at least one field */
+    let searchWhere: SQL | undefined;
     if (q) {
-      conditions.push(
-        ilike(productsTable.name, `%${q}%`),
-        ilike(productsTable.partNumber, `%${q}%`),
-        ilike(productsTable.oemNumber, `%${q}%`),
-      );
-      if (!strict) {
-        conditions.push(
-          ilike(productsTable.description, `%${q}%`),
-        );
-      }
+      const words = q.split(/\s+/).filter(Boolean);
+      const wordConds = words.map(word => {
+        const f: SQL[] = [
+          ilike(productsTable.name, `%${word}%`),
+          ilike(productsTable.partNumber, `%${word}%`),
+          ilike(productsTable.oemNumber, `%${word}%`),
+          ilike(productsTable.brand, `%${word}%`),
+          ilike(productsTable.model, `%${word}%`),
+        ];
+        if (!strict) f.push(ilike(productsTable.description, `%${word}%`));
+        return or(...f) as SQL;
+      });
+      searchWhere = wordConds.length === 1 ? wordConds[0] : and(...wordConds) as SQL;
     }
 
     let rows = await db
@@ -112,7 +117,7 @@ router.get("/products/search", async (req, res) => {
         quantity: strict ? productsTable.quantity : sql<number>`NULL`,
       })
       .from(productsTable)
-      .where(q ? or(...conditions) : undefined)
+      .where(searchWhere)
       .orderBy(productsTable.name)
       .limit(limit * 3);
 
