@@ -97,66 +97,96 @@ function PartRow({ part, index, onImageClick, availability, onEnquire }: {
   onEnquire?: () => void;
 }) {
   const badge = CAT_BADGE[part.category] ?? CAT_BADGE.general;
+  const rowBg = index % 2 === 0 ? "bg-[#1A1D24]" : "bg-[#16181D]";
 
   return (
-    <div className={`grid items-center gap-3 px-5 py-4 border-b border-[#2A2E37] hover:bg-[#F5A623]/5 transition-colors group
-      ${index % 2 === 0 ? "bg-[#1A1D24]" : "bg-[#16181D]"}
-    `} style={{ gridTemplateColumns: "2rem 1fr auto auto auto" }}>
-      {/* Row number */}
-      <span className="text-xs text-gray-600 font-mono tabular-nums">{index + 1}</span>
+    <div className={`border-b border-[#2A2E37] hover:bg-[#F5A623]/5 transition-colors ${rowBg}`}>
 
-      {/* Part info */}
-      <div className="min-w-0">
-        <p className="font-semibold text-white text-sm leading-tight">{part.name}</p>
-        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${badge.cls}`}>
-            {badge.label}
-          </span>
-          <AvailBadge status={availability} />
-          <span className="text-gray-500 text-xs">{part.model}</span>
-        </div>
-      </div>
+      {/* ── Mobile layout (< md) ── */}
+      <div className="flex items-center gap-3 px-4 py-3 md:hidden">
+        <span className="text-xs text-gray-600 font-mono w-5 shrink-0 tabular-nums">{index + 1}</span>
 
-      {/* Photo thumbnail(s) (optional) */}
-      {part.img ? (
-        <div className="shrink-0 flex gap-1">
+        {/* Thumbnail */}
+        {part.img ? (
           <button
             onClick={() => onImageClick?.(part.img!, `${part.name} — ${part.partNo}`)}
-            className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
-            title="Click to zoom photo"
+            className="w-11 h-11 shrink-0 rounded-lg overflow-hidden border border-[#F5A623]/30 bg-white cursor-zoom-in"
           >
             <img src={part.img} alt={part.name} className="w-full h-full object-contain p-0.5" />
           </button>
-          {part.img2 && (
-            <button
-              onClick={() => onImageClick?.(part.img2!, `${part.name} — ${part.partNo} (view 2)`)}
-              className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white"
-              title="Click to zoom photo (view 2)"
-            >
-              <img src={part.img2} alt={`${part.name} view 2`} className="w-full h-full object-contain p-0.5" />
-            </button>
-          )}
-        </div>
-      ) : (
-        <span />
-      )}
+        ) : (
+          <span className="w-11 h-11 shrink-0 rounded-lg border border-[#2A2E37] bg-[#111317] flex items-center justify-center">
+            <Package className="w-4 h-4 text-gray-600" />
+          </span>
+        )}
 
-      {/* Part number */}
-      <div className="flex items-center gap-1.5 shrink-0">
-        <span className="font-mono text-sm font-bold text-[#F5A623] bg-[#F5A623]/10 px-3 py-1.5 rounded border border-[#F5A623]/25 whitespace-nowrap">
-          {part.partNo}
-        </span>
-        <CopyButton text={part.partNo} />
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-white text-sm leading-snug truncate">{part.name}</p>
+          <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${badge.cls}`}>{badge.label}</span>
+            <AvailBadge status={availability} />
+            {part.model && <span className="text-gray-500 text-xs">{part.model}</span>}
+          </div>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <span className="font-mono text-xs font-bold text-[#F5A623] bg-[#F5A623]/10 px-2 py-1 rounded border border-[#F5A623]/25 flex-1 truncate">
+              {part.partNo}
+            </span>
+            <CopyButton text={part.partNo} />
+          </div>
+        </div>
+
+        {/* WhatsApp */}
+        <button
+          onClick={onEnquire}
+          className="shrink-0 flex items-center justify-center bg-[#25D366] text-white w-10 h-10 rounded-lg hover:brightness-110 transition-all"
+        >
+          <FaWhatsapp className="w-4 h-4" />
+        </button>
       </div>
 
-      {/* Enquire */}
-      <button
-        onClick={onEnquire}
-        className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white text-xs font-bold px-4 py-2 rounded-lg hover:brightness-110 transition-all whitespace-nowrap"
-      >
-        <FaWhatsapp className="w-3.5 h-3.5" />
-        <span className="hidden md:inline">Enquire</span>
-      </button>
+      {/* ── Desktop layout (≥ md) ── */}
+      <div className="hidden md:grid items-center gap-3 px-5 py-4"
+        style={{ gridTemplateColumns: "2rem 1fr auto auto auto" }}>
+        <span className="text-xs text-gray-600 font-mono tabular-nums">{index + 1}</span>
+
+        <div className="min-w-0">
+          <p className="font-semibold text-white text-sm leading-tight">{part.name}</p>
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${badge.cls}`}>{badge.label}</span>
+            <AvailBadge status={availability} />
+            <span className="text-gray-500 text-xs">{part.model}</span>
+          </div>
+        </div>
+
+        {part.img ? (
+          <div className="shrink-0 flex gap-1">
+            <button onClick={() => onImageClick?.(part.img!, `${part.name} — ${part.partNo}`)}
+              className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white">
+              <img src={part.img} alt={part.name} className="w-full h-full object-contain p-0.5" />
+            </button>
+            {part.img2 && (
+              <button onClick={() => onImageClick?.(part.img2!, `${part.name} — ${part.partNo} (view 2)`)}
+                className="w-12 h-12 rounded-lg overflow-hidden border border-[#F5A623]/30 hover:border-[#F5A623] transition-colors cursor-zoom-in bg-white">
+                <img src={part.img2} alt={`${part.name} view 2`} className="w-full h-full object-contain p-0.5" />
+              </button>
+            )}
+          </div>
+        ) : <span />}
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="font-mono text-sm font-bold text-[#F5A623] bg-[#F5A623]/10 px-3 py-1.5 rounded border border-[#F5A623]/25 whitespace-nowrap">
+            {part.partNo}
+          </span>
+          <CopyButton text={part.partNo} />
+        </div>
+
+        <button onClick={onEnquire}
+          className="shrink-0 flex items-center gap-1.5 bg-[#25D366] text-white text-xs font-bold px-4 py-2 rounded-lg hover:brightness-110 transition-all whitespace-nowrap">
+          <FaWhatsapp className="w-3.5 h-3.5" /> Enquire
+        </button>
+      </div>
+
     </div>
   );
 }
@@ -591,14 +621,14 @@ export default function BrandPage() {
             {/* Parts Table */}
             {filteredParts.length > 0 ? (
               <div className="rounded-xl overflow-hidden border border-[#2A2E37]">
-                {/* Table header */}
-                <div className="grid items-center gap-3 px-5 py-3 bg-[#111317] border-b border-[#2A2E37]"
+                {/* Table header — desktop only */}
+                <div className="hidden md:grid items-center gap-3 px-5 py-3 bg-[#111317] border-b border-[#2A2E37]"
                   style={{ gridTemplateColumns: "2rem 1fr auto auto auto" }}>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">#</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Part Name / Category</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Photo</span>
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">OEM Part No.</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 hidden md:block">Action</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Action</span>
                 </div>
                 {filteredParts.map((part, i) => (
                   <PartRow key={`${part.partNo}-${i}`} part={part} index={i}
