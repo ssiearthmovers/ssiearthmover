@@ -161,8 +161,10 @@ export default function SearchPage() {
     return results;
   }, []);
 
+  const STOP_WORDS = new Set(["all","part","parts","spare","spares","for","the","a","an","and","or","of","in","to","with","my","buy","near","me","india","delhi","new"]);
+
   const staticFiltered = useMemo(() => {
-    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const words = query.trim().toLowerCase().split(/\s+/).filter(w => w && !STOP_WORDS.has(w));
     return allStaticParts.filter((r) => {
       if (brandFilter !== "all" && r.brandSlug !== brandFilter) return false;
       if (catFilter !== "all" && r.part.category !== catFilter) return false;

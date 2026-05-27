@@ -84,21 +84,25 @@ router.get("/products/search", async (req, res) => {
     const strict = String(req.query["strict"] ?? "") === "1";
 
     /* Multi-word AND search: every word must match at least one field */
+    const STOP_WORDS = new Set(["all","part","parts","spare","spares","for","the","a","an","and","or","of","in","to","with","my","buy","near","me","india","delhi","new"]);
+
     let searchWhere: SQL | undefined;
     if (q) {
-      const words = q.split(/\s+/).filter(Boolean);
-      const wordConds = words.map(word => {
-        const f: SQL[] = [
-          ilike(productsTable.name, `%${word}%`),
-          ilike(productsTable.partNumber, `%${word}%`),
-          ilike(productsTable.oemNumber, `%${word}%`),
-          ilike(productsTable.brand, `%${word}%`),
-          ilike(productsTable.model, `%${word}%`),
-        ];
-        if (!strict) f.push(ilike(productsTable.description, `%${word}%`));
-        return or(...f) as SQL;
-      });
-      searchWhere = wordConds.length === 1 ? wordConds[0] : and(...wordConds) as SQL;
+      const words = q.split(/\s+/).filter(w => w && !STOP_WORDS.has(w.toLowerCase()));
+      if (words.length > 0) {
+        const wordConds = words.map(word => {
+          const f: SQL[] = [
+            ilike(productsTable.name, `%${word}%`),
+            ilike(productsTable.partNumber, `%${word}%`),
+            ilike(productsTable.oemNumber, `%${word}%`),
+            ilike(productsTable.brand, `%${word}%`),
+            ilike(productsTable.model, `%${word}%`),
+          ];
+          if (!strict) f.push(ilike(productsTable.description, `%${word}%`));
+          return or(...f) as SQL;
+        });
+        searchWhere = wordConds.length === 1 ? wordConds[0] : and(...wordConds) as SQL;
+      }
     }
 
     let rows = await db
