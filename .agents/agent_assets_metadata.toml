@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "Ov7ki9CwAJv18ZA58kJSP"
@@ -60,3 +59,51 @@ id = "XW0ex8z-9quXYdJK4DjU9"
 uri = "file://attached_assets/generated_images/generated_image.png"
 type = "image"
 title = "generated_image"
+
+[[generated]]
+id = "X77y0tFI-4omyCe8ZLH2u"
+uri = "file://attached_assets/ad_landscape_1.png"
+type = "image"
+title = "ssi_ad_landscape_motorgrader"
+
+[[generated]]
+id = "wM6YcA9FSzGXnSgXRuAw2"
+uri = "file://attached_assets/ad_square_1.png"
+type = "image"
+title = "ssi_ad_square_parts_flatlay"
+
+[[generated]]
+id = "yI7tQzQIKeIi_RHNyWS1t"
+uri = "file://attached_assets/ad_square_2.png"
+type = "image"
+title = "ssi_ad_square_delivery_features"
+
+[[generated]]
+id = "8IgZwen3gG2cSrx_n_Yse"
+uri = "file://attached_assets/ad_landscape_2.png"
+type = "image"
+title = "ssi_ad_landscape_all_brands"
+
+[[outputs]]
+id = "8UQ2JIVqnsIQgfJHHuc1q"
+uri = "file://attached_assets/ad_landscape_1.png"
+type = "image"
+title = "Ad 1 — Motor Grader in Action (Landscape 16:9)"
+
+[[outputs]]
+id = "dKK0l3yb98MKQwYip1kOs"
+uri = "file://attached_assets/ad_square_1.png"
+type = "image"
+title = "Ad 2 — Parts Flat Lay (Square 1:1)"
+
+[[outputs]]
+id = "xM_BXFfybW16v8N0iQ-9a"
+uri = "file://attached_assets/ad_square_2.png"
+type = "image"
+title = "Ad 3 — Features & Delivery (Square 1:1)"
+
+[[outputs]]
+id = "4D0maFsItb4HI98_65ZxB"
+uri = "file://attached_assets/ad_landscape_2.png"
+type = "image"
+title = "Ad 4 — All Brands, One Supplier (Landscape 16:9)"
