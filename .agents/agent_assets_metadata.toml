@@ -107,3 +107,9 @@ id = "4D0maFsItb4HI98_65ZxB"
 uri = "file://attached_assets/ad_landscape_2.png"
 type = "image"
 title = "Ad 4 — All Brands, One Supplier (Landscape 16:9)"
+
+[[outputs]]
+id = "aGTargcPO5tRKEfHxWXlV"
+uri = "file://ssi-earthmovers-hostinger.zip"
+type = "unspecified"
+title = "SSI Earthmovers — Hostinger Production Package"
