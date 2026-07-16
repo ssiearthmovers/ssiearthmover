@@ -11,7 +11,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "npm run typecheck && npm run build --workspaces --if-present",
+    "build": "BASE_PATH=/ PORT=3000 NODE_ENV=production npm run build -w @workspace/shiv-shakti && npm run build -w @workspace/api-server && cp -r artifacts/shiv-shakti/dist/public artifacts/api-server/dist/public",
     "typecheck:libs": "tsc --build",
     "typecheck": "npm run typecheck:libs && npm run typecheck --workspaces --if-present"
   },
