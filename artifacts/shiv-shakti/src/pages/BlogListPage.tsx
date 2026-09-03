@@ -33,7 +33,7 @@ function formatDate(iso: string) {
 export default function BlogListPage() {
   usePageMeta({
     title: "Motor Grader Blog — Expert Tips, Guides & Industry Insights | SSI Earthmovers",
-    description: "Expert articles on motor grader spare parts, maintenance tips, buying guides and troubleshooting from SSI Earthmovers — India's leading grader parts supplier since 1994.",
+    description: "Expert articles on motor grader spare parts, maintenance tips, buying guides and troubleshooting from SSI Earthmovers — an established independent grader parts supplier since 1994.",
     canonical: "https://ssiearthmovers.in/blog",
     schema: {
       "@context": "https://schema.org",
@@ -93,7 +93,7 @@ export default function BlogListPage() {
         </FadeIn>
         <FadeIn delay={0.15}>
           <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
-            Expert articles on spare parts maintenance, buying guides, brand comparisons and troubleshooting — from SSI Earthmovers, India's leading motor grader parts supplier since 1994.
+            Expert articles on spare parts maintenance, buying guides, brand comparisons and troubleshooting — from SSI Earthmovers, an established independent motor grader parts supplier since 1994.
           </p>
         </FadeIn>
       </section>

@@ -81,7 +81,7 @@ export const brands: BrandInfo[] = [
     description:
       "Caterpillar (CAT) motor graders are the most widely deployed machines on India's road construction and highway projects. SSI Earthmovers stocks a comprehensive range of CAT grader spare parts for the 120K, 120H, 120NG and 140H models — ready for same-day dispatch from New Delhi.",
     longDescription:
-      "SSI Earthmovers is India's trusted source for Caterpillar motor grader spare parts. With 30+ years of experience, we supply OEM-quality cutting edges, grader blades, scarifier teeth, end bits, circle segments and draw bar components specifically manufactured for CAT 120K, 120H, 120NG and 140H models. Our Hardox 400 and 500 grade cutting edges offer up to 3× the wear life of standard edges, reducing downtime on your projects. We serve road construction contractors, highway agencies, quarry operators and infrastructure companies across all 28 states. No minimum order quantity for catalogue items. Bulk pricing available for fleet operators. All parts dispatched same day from our Mori Gate, New Delhi warehouse.",
+      "SSI Earthmovers is an independent supplier of Caterpillar motor grader spare parts. With 30+ years of experience, we supply high-quality replacement cutting edges, grader blades, scarifier teeth, end bits, circle segments and draw bar components specifically manufactured for CAT 120K, 120H, 120NG and 140H models. Our Hardox 400 and 500 grade cutting edges offer up to 3× the wear life of standard edges, reducing downtime on your projects. We serve road construction contractors, highway agencies, quarry operators and infrastructure companies across all 28 states. No minimum order quantity for catalogue items. Bulk pricing available for fleet operators. All parts dispatched same day from our Mori Gate, New Delhi warehouse.",
     keyParts: [
       "Cutting Edges (14-hole, 16-hole)",
       "Grader Blades (14ft, 16ft)",
@@ -161,7 +161,7 @@ export const brands: BrandInfo[] = [
       },
       {
         q: "Are your CAT grader parts OEM or aftermarket?",
-        a: "We supply genuine OEM Caterpillar parts as well as high-quality OEM-spec aftermarket replacements that meet or exceed original Caterpillar specifications.",
+        a: "We supply high-quality replacement and compatible parts for Caterpillar graders. Unless expressly stated, parts are not manufactured by or supplied by Caterpillar. OEM reference numbers are used for identification and compatibility.",
       },
     ],
   },
@@ -176,7 +176,7 @@ export const brands: BrandInfo[] = [
     description:
       "Komatsu GD511 and GD535 are among the most powerful and reliable motor graders used across India's mining and infrastructure sectors. SSI Earthmovers maintains a dedicated inventory of Komatsu GD511 and GD535 spare parts for fast dispatch from New Delhi.",
     longDescription:
-      "SSI Earthmovers supplies a complete range of Komatsu GD511 and GD535 motor grader spare parts including cutting edges, grader blades, scarifier teeth, end bits and all wear components. The GD511 and GD535 are widely used in coal mines, stone quarries and large infrastructure projects in Jharkhand, Odisha, Chhattisgarh and Rajasthan. Our parts are manufactured to Komatsu OEM specifications using high-tensile and Hardox grade steels for maximum wear life. We stock sufficient quantities for immediate dispatch — no waiting time. Fleet operators running multiple Komatsu units can avail of our bulk pricing.",
+      "SSI Earthmovers supplies a complete range of Komatsu GD511 and GD535 motor grader spare parts including cutting edges, grader blades, scarifier teeth, end bits and all wear components. The GD511 and GD535 are widely used in coal mines, stone quarries and large infrastructure projects in Jharkhand, Odisha, Chhattisgarh and Rajasthan. Our parts are built to compatible dimensional specifications matching Komatsu OEM reference standards, using high-tensile and Hardox grade steels for maximum wear life. We stock sufficient quantities for immediate dispatch — no waiting time. Fleet operators running multiple Komatsu units can avail of our bulk pricing.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -224,7 +224,7 @@ export const brands: BrandInfo[] = [
       { name: "Shaft",                                        partNo: "23A-70-15140",        model: "Komatsu GD511/GD535", category: "shaft" },
       { name: "Shaft",                                        partNo: "23A-27-11350",        model: "Komatsu GD511/GD535", category: "shaft" },
       { name: "Shank",                                        partNo: "0927100045",          model: "Komatsu GD535",       category: "general" },
-      { name: "Sheer Pin Genuine",                            partNo: "234-71-13256",        model: "Komatsu GD511/GD535", category: "pin" },
+      { name: "Sheer Pin",                            partNo: "234-71-13256",        model: "Komatsu GD511/GD535", category: "pin" },
       { name: "Shim",                                         partNo: "232-70-51230",        model: "Komatsu GD511/GD535", category: "plate" },
       { name: "Shim",                                         partNo: "232-70-51220",        model: "Komatsu GD535",       category: "plate" },
       { name: "Sprocket (Small)",                             partNo: "23A-22-11420",        model: "Komatsu GD511/GD535", category: "sprocket" },
@@ -271,11 +271,11 @@ export const brands: BrandInfo[] = [
     country: "USA",
     models: ["CASE 845B"],
     color: "#3a7be8",
-    tagline: "Genuine & OEM-spec spare parts for CASE 845B motor graders",
+    tagline: "Replacement & compatible spare parts for CASE 845B motor graders",
     description:
       "The CASE 845B is a popular motor grader in road construction and municipal work across India. SSI Earthmovers stocks all major wearing parts for the CASE 845B — cutting edges, blades, scarifier teeth and circle components, ready for fast delivery.",
     longDescription:
-      "SSI Earthmovers supplies complete spare parts support for CASE 845B motor graders operating across India. Our inventory includes Hardox cutting edges, grader blades, scarifier teeth, end bits, circle segments and draw bar parts, all manufactured to CASE Construction's OEM specifications. The CASE 845B is commonly deployed on state highway and rural road projects, and minimising downtime is critical. We maintain sufficient stock for immediate same-day dispatch to any destination in India. Whether you need a single replacement part or a full set for fleet maintenance, our team can assist.",
+      "SSI Earthmovers supplies complete spare parts support for CASE 845B motor graders operating across India. Our inventory includes Hardox cutting edges, grader blades, scarifier teeth, end bits, circle segments and draw bar parts, all built to compatible dimensional specifications matching CASE Construction OEM reference standards. The CASE 845B is commonly deployed on state highway and rural road projects, and minimising downtime is critical. We maintain sufficient stock for immediate same-day dispatch to any destination in India. Whether you need a single replacement part or a full set for fleet maintenance, our team can assist.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -354,7 +354,7 @@ export const brands: BrandInfo[] = [
     description:
       "XCMG motor graders have gained significant adoption across India's road construction sector due to their competitive pricing and reliability. SSI Earthmovers supplies a complete range of spare parts for the XCMG 165 motor grader.",
     longDescription:
-      "As XCMG graders have expanded their presence in Indian road projects, SSI Earthmovers has built a dedicated parts inventory for the XCMG 165. We supply cutting edges, grader blades, scarifier teeth, end bits and circle components that meet XCMG OEM specifications. XCMG 165 parts are available from our New Delhi warehouse for same-day or next-day dispatch. Our team has in-depth knowledge of XCMG grader parts compatibility — we can help you identify the right part even without the OEM part number.",
+      "As XCMG graders have expanded their presence in Indian road projects, SSI Earthmovers has built a dedicated parts inventory for the XCMG 165. We supply cutting edges, grader blades, scarifier teeth, end bits and circle components built to compatible specifications matching XCMG OEM reference standards. XCMG 165 parts are available from our New Delhi warehouse for same-day or next-day dispatch. Our team has in-depth knowledge of XCMG grader parts compatibility — we can help you identify the right part even without the OEM part number.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -417,7 +417,7 @@ export const brands: BrandInfo[] = [
     country: "India",
     models: ["Leeboy 785", "Leeboy 985"],
     color: "#3ae8a0",
-    tagline: "Genuine spare parts for Leeboy 785 & 985 motor graders",
+    tagline: "Replacement spare parts for Leeboy 785 & 985 motor graders",
     description:
       "Leeboy motor graders are a popular Indian brand widely used in state highway, rural road and PMGSY projects. SSI Earthmovers maintains dedicated stock of Leeboy 785 and 985 spare parts for fast PAN India delivery.",
     longDescription:
@@ -497,7 +497,7 @@ export const brands: BrandInfo[] = [
     description:
       "The Sany PQ190 is a heavy-duty motor grader increasingly deployed in Indian road and mining projects. SSI Earthmovers stocks cutting edges, grader blades, scarifier teeth and all major wearing parts for the Sany PQ190.",
     longDescription:
-      "Sany is one of the fastest-growing heavy equipment brands in India, and the PQ190 motor grader is popular on large road construction and earthmoving projects. SSI Earthmovers supplies OEM-compatible spare parts for the Sany PQ190 including Hardox cutting edges, grader blades, scarifier teeth, end bits and circle components. Our team has hands-on knowledge of Sany PQ190 part specifications, enabling accurate part matching even without an OEM part number. All parts are available from our New Delhi warehouse with same-day or next-day dispatch.",
+      "Sany is one of the fastest-growing heavy equipment brands in India, and the PQ190 motor grader is popular on large road construction and earthmoving projects. SSI Earthmovers supplies replacement spare parts compatible with the Sany PQ190 including Hardox cutting edges, grader blades, scarifier teeth, end bits and circle components. Our team has hands-on knowledge of Sany PQ190 part specifications, enabling accurate part matching even without an OEM part number. All parts are available from our New Delhi warehouse with same-day or next-day dispatch.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -553,11 +553,11 @@ export const brands: BrandInfo[] = [
     country: "China",
     models: ["SDLG 9138", "SDLG 9190"],
     color: "#e87a3a",
-    tagline: "OEM-spec spare parts for SDLG 9138 & 9190 motor graders",
+    tagline: "Replacement spare parts for SDLG 9138 & 9190 motor graders",
     description:
       "SDLG motor graders — particularly the 9138 and 9190 models — are widely used in Indian road construction. SSI Earthmovers maintains a ready stock of SDLG grader spare parts for fast delivery nationwide.",
     longDescription:
-      "SDLG 9138 and 9190 motor graders are commonly deployed on National Highway and state road projects across India. SSI Earthmovers has developed a strong parts inventory for both SDLG models, covering all major wear items: cutting edges, grader blades, scarifier teeth, end bits and circle components. Parts are manufactured to SDLG OEM dimensional specifications for perfect fit and long service life. Available for same-day dispatch from our Mori Gate, New Delhi warehouse. We offer bulk pricing to contractors with multiple SDLG units.",
+      "SDLG 9138 and 9190 motor graders are commonly deployed on National Highway and state road projects across India. SSI Earthmovers has developed a strong parts inventory for both SDLG models, covering all major wear items: cutting edges, grader blades, scarifier teeth, end bits and circle components. Parts are built to compatible dimensional specifications matching SDLG OEM reference standards for a precise fit and long service life. Available for same-day dispatch from our Mori Gate, New Delhi warehouse. We offer bulk pricing to contractors with multiple SDLG units.",
     keyParts: [
       "Cutting Edges (9138 & 9190)",
       "Grader Blades",
@@ -616,7 +616,7 @@ export const brands: BrandInfo[] = [
     description:
       "The Liugong CG414 is a robust motor grader used in Indian road construction and earthmoving projects. SSI Earthmovers supplies cutting edges, grader blades, scarifier teeth and all wearing parts for the Liugong CG414.",
     longDescription:
-      "Liugong CG414 motor graders are active across Indian road construction and infrastructure projects, particularly in Uttar Pradesh, Madhya Pradesh and Rajasthan. SSI Earthmovers maintains a dedicated inventory of CG414 spare parts including Hardox cutting edges, grader blades, scarifier teeth, end bits and circle components. All Liugong CG414 parts are manufactured to original dimensional specifications for a perfect fit. Available for same-day dispatch from our New Delhi warehouse with 2–5 day PAN India delivery.",
+      "Liugong CG414 motor graders are active across Indian road construction and infrastructure projects, particularly in Uttar Pradesh, Madhya Pradesh and Rajasthan. SSI Earthmovers maintains a dedicated inventory of CG414 spare parts including Hardox cutting edges, grader blades, scarifier teeth, end bits and circle components. All Liugong CG414 parts are built to compatible dimensional specifications for a precise fit. Available for same-day dispatch from our New Delhi warehouse with 2–5 day PAN India delivery.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -689,7 +689,7 @@ export const brands: BrandInfo[] = [
     color: "#e83a8a",
     tagline: "Spare parts for BEML 605 motor graders — India's trusted PSU brand",
     description:
-      "BEML 605 motor graders are widely deployed by government departments, PSUs and defence projects across India. SSI Earthmovers stocks OEM-quality spare parts for the BEML 605, ensuring your graders stay operational.",
+      "BEML 605 motor graders are widely deployed by government departments, PSUs and defence projects across India. SSI Earthmovers stocks high-quality replacement spare parts for the BEML 605, ensuring your graders stay operational.",
     longDescription:
       "BEML Limited's 605 motor grader is the preferred choice for government road agencies, state PWD departments and defence establishments across India. SSI Earthmovers supplies a full range of BEML 605 spare parts including cutting edges, grader blades, scarifier teeth, end bits and circle components. As a Made-in-India brand operated by a government PSU, BEML 605 graders are deployed from Kashmir to Kanyakumari. Our PAN India logistics network ensures rapid delivery to any location. All BEML 605 parts are quality-checked and dispatched same day from our New Delhi warehouse.",
     keyParts: [
@@ -762,7 +762,7 @@ export const brands: BrandInfo[] = [
     description:
       "The Mitsubishi 330 MG is a heavy-duty motor grader used in Indian mining and large infrastructure projects. SSI Earthmovers maintains a specialist inventory of 330 MG spare parts for rapid supply across India.",
     longDescription:
-      "Mitsubishi 330 MG motor graders are renowned for their durability in demanding Indian mining and large-scale road construction environments. SSI Earthmovers is one of the few suppliers in India with a dedicated stock of Mitsubishi 330 MG spare parts — including cutting edges, grader blades, scarifier teeth, end bits and circle components. Parts are sourced to meet Mitsubishi OEM specifications. Our technical team can assist with part identification and compatibility for all Mitsubishi grader models.",
+      "Mitsubishi 330 MG motor graders are renowned for their durability in demanding Indian mining and large-scale road construction environments. SSI Earthmovers is one of the few suppliers in India with a dedicated stock of Mitsubishi 330 MG spare parts — including cutting edges, grader blades, scarifier teeth, end bits and circle components. Parts are built to compatible specifications matching Mitsubishi OEM reference standards. Our technical team can assist with part identification and compatibility for all Mitsubishi grader models.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -835,11 +835,11 @@ export const brands: BrandInfo[] = [
     country: "India",
     models: ["ACE AG 176"],
     color: "#e83a3a",
-    tagline: "OEM-spec spare parts for ACE AG 176 motor graders — PAN India supply",
+    tagline: "Replacement spare parts for ACE AG 176 motor graders — PAN India supply",
     description:
       "The ACE AG 176 is a popular Indian-made motor grader widely used on PMGSY, state highway and municipal road projects. SSI Earthmovers stocks a dedicated range of ACE AG 176 spare parts including cutting edges, blades, scarifier teeth and all major circle assembly components.",
     longDescription:
-      "Action Construction Equipment (ACE) graders, particularly the AG 176, are trusted across India for road construction and maintenance projects. SSI Earthmovers maintains a focused inventory of ACE AG 176 spare parts — chuk nuts, adjust washers, bearings, C plates, sliding shoes, sleeves, and other critical wear components — all sourced to OEM dimensional specifications. As a Made-in-India brand, ACE graders are deployed widely across PMGSY projects and state PWD contracts. Our New Delhi warehouse stocks ACE AG 176 parts for same-day dispatch, ensuring minimal downtime for contractors and fleet operators.",
+      "Action Construction Equipment (ACE) graders, particularly the AG 176, are trusted across India for road construction and maintenance projects. SSI Earthmovers maintains a focused inventory of ACE AG 176 spare parts — chuk nuts, adjust washers, bearings, C plates, sliding shoes, sleeves, and other critical wear components — all built to compatible dimensional specifications matching OEM reference standards. As a Made-in-India brand, ACE graders are deployed widely across PMGSY projects and state PWD contracts. Our New Delhi warehouse stocks ACE AG 176 parts for same-day dispatch, ensuring minimal downtime for contractors and fleet operators.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -889,7 +889,7 @@ export const brands: BrandInfo[] = [
     description:
       "Volvo motor graders and heavy equipment are increasingly deployed across India's premium highway and mining projects. SSI Earthmovers stocks a growing range of Volvo G720, G930, FM340 and FM400 spare parts for fast dispatch from New Delhi.",
     longDescription:
-      "Volvo Construction Equipment is one of the world's most trusted brands in heavy machinery. SSI Earthmovers supplies genuine OEM-compatible spare parts for Volvo motor graders and vehicles including the G720, G930, FM340 and FM400 models. Our Volvo parts inventory covers all major wear and mechanical components — cutting edges, grader blades, scarifier teeth, end bits, circle segments, drive components and hydraulic parts. With 30+ years of experience in the motor grader parts industry, our team can help identify the correct part even without an OEM part number. All Volvo parts are dispatched same day from our Mori Gate, New Delhi warehouse with PAN India delivery in 2–5 business days.",
+      "Volvo Construction Equipment is one of the world's most trusted brands in heavy machinery. SSI Earthmovers supplies replacement spare parts compatible with Volvo motor graders and vehicles including the G720, G930, FM340 and FM400 models. Our Volvo parts inventory covers all major wear and mechanical components — cutting edges, grader blades, scarifier teeth, end bits, circle segments, drive components and hydraulic parts. With 30+ years of experience in the motor grader parts industry, our team can help identify the correct part even without an OEM part number. All Volvo parts are dispatched same day from our Mori Gate, New Delhi warehouse with PAN India delivery in 2–5 business days.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -944,7 +944,7 @@ export const brands: BrandInfo[] = [
     description:
       "Mahindra heavy equipment is widely used across India's road construction and agricultural sectors. SSI Earthmovers stocks a dedicated range of Mahindra spare parts for fast dispatch from New Delhi.",
     longDescription:
-      "Mahindra is one of India's most trusted and widely deployed heavy equipment brands. SSI Earthmovers supplies OEM-compatible spare parts for Mahindra motor graders and construction equipment operating across India. Our Mahindra parts inventory covers all major wear components — cutting edges, grader blades, scarifier teeth, end bits, circle segments, brake components and drive parts. As a Made-in-India brand with a vast nationwide fleet, Mahindra equipment requires quick parts availability to minimise project downtime. Our same-day dispatch from New Delhi and PAN India logistics network ensures your Mahindra machines stay operational.",
+      "Mahindra is one of India's most trusted and widely deployed heavy equipment brands. SSI Earthmovers supplies replacement spare parts compatible with Mahindra motor graders and construction equipment operating across India. Our Mahindra parts inventory covers all major wear components — cutting edges, grader blades, scarifier teeth, end bits, circle segments, brake components and drive parts. As a Made-in-India brand with a vast nationwide fleet, Mahindra equipment requires quick parts availability to minimise project downtime. Our same-day dispatch from New Delhi and PAN India logistics network ensures your Mahindra machines stay operational.",
     keyParts: [
       "Cutting Edges",
       "Grader Blades",
@@ -1100,11 +1100,11 @@ export const productCategories: ProductCategory[] = [
     description:
       "End bits protect the ends of the motor grader blade and handle the heaviest wear during grading operations. SSI Earthmovers supplies cast and forged end bits for all major grader brands in left-hand and right-hand pairs.",
     longDescription:
-      "End bits sit at both ends of the motor grader blade and take the most severe wear — they handle the transition between cutting and pushing material. A worn end bit accelerates wear on the main blade and reduces grading quality. SSI Earthmovers supplies both LH (left-hand) and RH (right-hand) end bits in cast steel and Hardox grades for all motor grader models. Our end bits are dimensionally matched to OEM specifications for a perfect bolt-on fit.",
+      "End bits sit at both ends of the motor grader blade and take the most severe wear — they handle the transition between cutting and pushing material. A worn end bit accelerates wear on the main blade and reduces grading quality. SSI Earthmovers supplies both LH (left-hand) and RH (right-hand) end bits in cast steel and Hardox grades for all motor grader models. Our end bits are dimensionally matched to OEM reference specifications for a precise bolt-on fit.",
     specs: [
       { label: "Types", value: "LH (Left-Hand) and RH (Right-Hand)" },
       { label: "Material", value: "Cast steel / Hardox grade" },
-      { label: "Bolt Holes", value: "As per OEM spec for each model" },
+      { label: "Bolt Holes", value: "Matched to OEM reference spec for each model" },
       { label: "Compatibility", value: "All major motor grader brands" },
     ],
     variants: [
@@ -1127,17 +1127,17 @@ export const productCategories: ProductCategory[] = [
     description:
       "SSI Earthmovers supplies complete braking system parts for all major motor grader brands — brake drums, brake shafts, brake shoes, retarder hubs and full braking assemblies for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong and more.",
     longDescription:
-      "The braking system on a motor grader is critical for safe operation on slopes, construction sites and highways. Worn brake drums, damaged brake shafts or degraded brake shoes reduce braking effectiveness and increase stopping distances. SSI Earthmovers maintains a ready stock of all braking system components — brake drums, brake shafts, retarder hubs, brake shoes and complete braking assemblies — for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are manufactured to OEM dimensional specifications for a perfect, safe fit.",
+      "The braking system on a motor grader is critical for safe operation on slopes, construction sites and highways. Worn brake drums, damaged brake shafts or degraded brake shoes reduce braking effectiveness and increase stopping distances. SSI Earthmovers maintains a ready stock of all braking system components — brake drums, brake shafts, retarder hubs, brake shoes and complete braking assemblies — for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are built to compatible dimensional specifications matching OEM reference standards for a precise, safe fit.",
     specs: [
       { label: "Brake Drums", value: "All standard sizes for major brands" },
-      { label: "Brake Shafts", value: "OEM-spec dimensions" },
+      { label: "Brake Shafts", value: "Compatible with OEM reference dimensions" },
       { label: "Retarder Hubs", value: "For CAT, SDLG, Liugong, Sany & more" },
       { label: "Brake Shoes", value: "High-friction lining for maximum stopping power" },
       { label: "Delivery", value: "Same-day dispatch from New Delhi" },
     ],
     variants: [
       { name: "Brake Drums", desc: "Heavy-duty cast iron brake drums for all motor grader brands." },
-      { name: "Brake Shafts", desc: "OEM-spec brake shafts for safe, reliable braking." },
+      { name: "Brake Shafts", desc: "Replacement brake shafts built to compatible specifications for safe, reliable braking." },
       { name: "Retarder Hubs", desc: "Retarder hubs for CAT, SDLG, Liugong, Sany and more." },
       { name: "Brake Shoes", desc: "High-friction brake shoes for maximum stopping power." },
     ],
@@ -1154,11 +1154,11 @@ export const productCategories: ProductCategory[] = [
     name: "Ball Joints & Tie Rod Ends",
     tagline: "Precision steering ball joints and tie rod ends for all motor grader brands",
     description:
-      "SSI Earthmovers supplies OEM-spec ball joints, tie rod ends and steering linkage parts for all major motor grader brands. Precision-manufactured for safe, accurate steering on construction sites and highways.",
+      "SSI Earthmovers supplies high-quality replacement ball joints, tie rod ends and steering linkage parts for all major motor grader brands. Precision-manufactured for safe, accurate steering on construction sites and highways.",
     longDescription:
-      "Worn ball joints and tie rod ends cause imprecise steering, uneven blade control and unsafe handling on slopes and highways. SSI Earthmovers stocks precision ball joints and tie rod ends for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are manufactured to OEM dimensional tolerances to ensure a perfect fit and safe, accurate steering response. Available for same-day dispatch from our Mori Gate, New Delhi warehouse.",
+      "Worn ball joints and tie rod ends cause imprecise steering, uneven blade control and unsafe handling on slopes and highways. SSI Earthmovers stocks precision ball joints and tie rod ends for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All parts are built to compatible dimensional tolerances matching OEM reference standards to ensure a precise fit and safe, accurate steering response. Available for same-day dispatch from our Mori Gate, New Delhi warehouse.",
     specs: [
-      { label: "Ball Joints", value: "OEM-spec for all major brands" },
+      { label: "Ball Joints", value: "Compatible with all major brands" },
       { label: "Tie Rod Ends", value: "Forged steel, all standard sizes" },
       { label: "Steering Pins", value: "Hardened steel" },
       { label: "Delivery", value: "Same-day dispatch from New Delhi" },
@@ -1183,17 +1183,17 @@ export const productCategories: ProductCategory[] = [
     description:
       "SSI Earthmovers stocks sprockets, worm gears, ring gears and transmission components for all major motor grader brands including CAT 6G5533 Ring Gear, Liugong CG414 sprockets, SDLG worm gears and more.",
     longDescription:
-      "Transmission and drive components like sprockets, worm gears and ring gears are subject to constant high-load wear. Using substandard replacement parts leads to premature failure, costly downtime and damage to related components. SSI Earthmovers supplies precision-manufactured sprockets, worm gears and ring gears — including the popular CAT 6G5533 ring gear, Liugong CG414 sprocket and SDLG worm gear — for all major motor grader brands. All parts are manufactured to OEM specifications for a precise fit and long service life.",
+      "Transmission and drive components like sprockets, worm gears and ring gears are subject to constant high-load wear. Using substandard replacement parts leads to premature failure, costly downtime and damage to related components. SSI Earthmovers supplies precision-manufactured sprockets, worm gears and ring gears — including the popular CAT 6G5533 ring gear, Liugong CG414 sprocket and SDLG worm gear — for all major motor grader brands. All parts are built to compatible specifications matching OEM reference standards for a precise fit and long service life.",
     specs: [
       { label: "Ring Gears", value: "CAT 6G5533 and all major brands" },
-      { label: "Worm Gears", value: "OEM-spec for SDLG, Liugong and more" },
+      { label: "Worm Gears", value: "Compatible with SDLG, Liugong and more" },
       { label: "Sprockets", value: "All tooth counts and sizes" },
       { label: "Material", value: "Case-hardened alloy steel" },
       { label: "Delivery", value: "Same-day dispatch from New Delhi" },
     ],
     variants: [
       { name: "Ring Gears", desc: "Complete ring gear assemblies — incl. CAT 6G5533, Komatsu, CASE and more." },
-      { name: "Worm Gears", desc: "OEM-spec worm gears for SDLG, Liugong, XCMG and other brands." },
+      { name: "Worm Gears", desc: "Replacement worm gears compatible with SDLG, Liugong, XCMG and other brands." },
       { name: "Sprockets", desc: "Drive sprockets in all tooth counts for all motor grader models." },
       { name: "Transmission Gears", desc: "All transmission gear components for major motor grader brands." },
     ],
@@ -1212,18 +1212,18 @@ export const productCategories: ProductCategory[] = [
     description:
       "SSI Earthmovers supplies hydraulic cylinders and hydraulic components for all major motor grader brands — centre shift cylinders, blade lift cylinders, steering cylinders and more. Including CAT 6E1634 and all major part numbers.",
     longDescription:
-      "Hydraulic cylinders are the heart of a motor grader's blade movement system. A leaking or damaged cylinder causes loss of blade control, hydraulic oil waste and costly downtime. SSI Earthmovers stocks centre shift cylinders, blade lift cylinders, steering cylinders and all associated hydraulic components for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All cylinders are manufactured to OEM specifications and pressure-tested before dispatch.",
+      "Hydraulic cylinders are the heart of a motor grader's blade movement system. A leaking or damaged cylinder causes loss of blade control, hydraulic oil waste and costly downtime. SSI Earthmovers stocks centre shift cylinders, blade lift cylinders, steering cylinders and all associated hydraulic components for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi motor graders. All cylinders are built to compatible specifications matching OEM reference standards and pressure-tested before dispatch.",
     specs: [
       { label: "Centre Shift Cylinders", value: "Incl. CAT 6E1634 and all major brands" },
       { label: "Blade Lift Cylinders", value: "All standard bore/stroke sizes" },
-      { label: "Steering Cylinders", value: "OEM-spec for all brands" },
+      { label: "Steering Cylinders", value: "Compatible with all brands" },
       { label: "Pressure Testing", value: "All cylinders tested before dispatch" },
       { label: "Delivery", value: "Same-day dispatch from New Delhi" },
     ],
     variants: [
       { name: "Centre Shift Cylinders", desc: "Including CAT 6E1634 and equivalent for all brands." },
       { name: "Blade Lift Cylinders", desc: "All standard bore and stroke sizes for major grader models." },
-      { name: "Steering Cylinders", desc: "OEM-spec hydraulic steering cylinders for safe handling." },
+      { name: "Steering Cylinders", desc: "Replacement hydraulic steering cylinders built to compatible specifications for safe handling." },
       { name: "Blade Side Shift Cylinders", desc: "For lateral blade movement — all brands and models." },
     ],
     compatibleBrands: ["CAT", "Komatsu", "CASE", "XCMG", "Leeboy", "Sany", "SDLG", "Liugong", "BEML", "Mitsubishi"],
@@ -1241,7 +1241,7 @@ export const productCategories: ProductCategory[] = [
     description:
       "The circle assembly and drawbar are critical mechanical components of every motor grader. SSI Earthmovers supplies circle segments, ring gear, drawbar pins, bushings and all associated wear parts for all major grader brands.",
     longDescription:
-      "The motor grader circle (also called the circle ring or ring gear) rotates the blade for angled grading. Worn circle segments cause blade vibration, poor grading quality and eventually costly repairs. SSI Earthmovers supplies individual circle segments, complete ring gear assemblies, drawbar pins, bushings, wear plates and all associated components for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi graders. Parts are manufactured to OEM dimensions for a precise fit.",
+      "The motor grader circle (also called the circle ring or ring gear) rotates the blade for angled grading. Worn circle segments cause blade vibration, poor grading quality and eventually costly repairs. SSI Earthmovers supplies individual circle segments, complete ring gear assemblies, drawbar pins, bushings, wear plates and all associated components for CAT, Komatsu, CASE, XCMG, Leeboy, Sany, SDLG, Liugong, BEML and Mitsubishi graders. Parts are built to compatible dimensions matching OEM reference standards for a precise fit.",
     specs: [
       { label: "Circle Segments", value: "Individual segments or complete ring" },
       { label: "Ring Gear", value: "Complete assembly available" },
@@ -1269,17 +1269,17 @@ export const productCategories: ProductCategory[] = [
     description:
       "SSI Earthmovers supplies a complete range of front axle, king pin and steering components for Komatsu GD511, GD535, CAT, CASE, XCMG and all major motor grader brands — including king pins, housings, stud balls, steering joints, brackets and bushings.",
     longDescription:
-      "The front axle and steering system of a motor grader takes constant stress from grading loads and rough terrain. Worn king pins, bushings or steering joints cause shimmy, poor blade control and can lead to costly machine downtime. SSI Earthmovers stocks king pins, front axle housings (LH & RH), stud balls (big and small), steering joint brackets, adjuster assemblies, front axle covers and all associated hardware for Komatsu GD511, GD535 and other major brands. All parts are manufactured to OEM specifications for precise fit and long service life.",
+      "The front axle and steering system of a motor grader takes constant stress from grading loads and rough terrain. Worn king pins, bushings or steering joints cause shimmy, poor blade control and can lead to costly machine downtime. SSI Earthmovers stocks king pins, front axle housings (LH & RH), stud balls (big and small), steering joint brackets, adjuster assemblies, front axle covers and all associated hardware for Komatsu GD511, GD535 and other major brands. All parts are built to compatible specifications matching OEM reference standards for precise fit and long service life.",
     specs: [
       { label: "Key Parts", value: "King Pins, Housings, Stud Balls, Brackets, Bushings, Adjusters" },
-      { label: "Material", value: "Alloy steel / Cast iron — OEM spec" },
+      { label: "Material", value: "Alloy steel / Cast iron — compatible spec" },
       { label: "Compatibility", value: "Komatsu GD511, GD535, CAT, CASE, XCMG" },
       { label: "Delivery", value: "Same-day dispatch from New Delhi" },
     ],
     variants: [
       { name: "King Pin Sets", desc: "Complete king pin kits with bushings for Komatsu and all major brands." },
-      { name: "Front Axle Housings (LH & RH)", desc: "OEM-spec housings for Komatsu GD511 and GD535." },
-      { name: "Stud Balls (Big & Small)", desc: "Precision stud balls for steering joints — exact OEM dimensions." },
+      { name: "Front Axle Housings (LH & RH)", desc: "Replacement housings compatible with Komatsu GD511 and GD535." },
+      { name: "Stud Balls (Big & Small)", desc: "Precision stud balls for steering joints — OEM reference dimensions." },
       { name: "Steering Brackets & Adjusters", desc: "Mounting brackets and steering adjusters for front axle assembly." },
     ],
     compatibleBrands: ["Komatsu", "CAT", "CASE", "XCMG", "Sany", "SDLG", "Liugong"],
@@ -1298,7 +1298,7 @@ export const productCategories: ProductCategory[] = [
     description:
       "SSI Earthmovers supplies heavy-duty ground engaging tools (GETs) including ripper shanks, shank HD versions, wedges and tooth points for Komatsu, CAT, CASE, XCMG and all major motor grader brands.",
     longDescription:
-      "Ground engaging tools are among the highest wear-rate components on any motor grader. Ripper shanks, wedges and tooth points are subject to direct impact and abrasion in every grading pass. Using OEM-spec or OEM-quality shanks and wedges reduces tip breakage and extends service intervals. SSI Earthmovers stocks standard and heavy-duty (HD) ripper shanks, steel wedges and tooth points for Komatsu GD511/GD535 and all major grader brands. All GET components are forged and heat-treated for maximum hardness and wear resistance.",
+      "Ground engaging tools are among the highest wear-rate components on any motor grader. Ripper shanks, wedges and tooth points are subject to direct impact and abrasion in every grading pass. Using high-quality replacement shanks and wedges built to compatible specifications reduces tip breakage and extends service intervals. SSI Earthmovers stocks standard and heavy-duty (HD) ripper shanks, steel wedges and tooth points for Komatsu GD511/GD535 and all major grader brands. All GET components are forged and heat-treated for maximum hardness and wear resistance.",
     specs: [
       { label: "Key Parts", value: "Ripper Shanks, Shanks HD, Wedges, Tooth Points" },
       { label: "Material", value: "Forged alloy steel, heat-treated" },

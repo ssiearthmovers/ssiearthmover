@@ -47,7 +47,7 @@ export default function SiteFooter() {
             Shiv Shakti <span className="text-[#F5A623]">International</span>
           </Link>
           <p className="text-gray-500 mb-3 text-sm leading-relaxed">
-            SSI Earthmovers (Shiv Shakti International) is India's premier supplier of motor grader
+            SSI Earthmovers (Shiv Shakti International) is an independent supplier of replacement motor grader
             spare parts — serving road construction contractors, quarry operators and infrastructure
             agencies for over 30 years from our warehouse near Mori Gate, New Delhi.
           </p>
@@ -55,7 +55,7 @@ export default function SiteFooter() {
             We stock cutting edges, grader blades, scarifier teeth, end bits, circle segments,
             draw bar parts, hydraulic cylinders, sprockets, ring gears and braking system components
             for CAT, Komatsu, CASE, XCMG, Leeboy, SANY, SDLG, Liugong, BEML and Mitsubishi motor graders.
-            OEM quality. PAN India delivery. Bulk pricing available.
+            High-quality replacement parts. PAN India delivery. Bulk pricing available.
           </p>
           <div className="flex gap-3 mb-5">
             {[
@@ -156,6 +156,19 @@ export default function SiteFooter() {
               </a>
             </li>
           </ul>
+        </div>
+      </div>
+
+      {/* ── Trademark Disclaimer ── */}
+      <div className="border-t border-[#1A1D24]">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6">
+          <p className="text-gray-700 text-xs leading-relaxed max-w-5xl">
+            SSI Earthmovers (Shiv Shakti International) is an independent supplier of replacement and aftermarket motor grader parts. We are not affiliated with, authorized by, sponsored by, or endorsed by Caterpillar Inc., Komatsu Ltd., CASE Construction Equipment, SANY, XCMG, LiuGong, Leeboy, SDLG, BEML, Mitsubishi, Volvo, Mahindra, or other equipment manufacturers referenced on this website.
+            <br /><br />
+            Manufacturer names, trademarks, model names and part numbers are used solely for identification and compatibility purposes. Unless expressly stated otherwise, products supplied by SSI Earthmovers are not manufactured by or supplied by the respective original equipment manufacturer.
+            <br /><br />
+            All trademarks are the property of their respective owners.
+          </p>
         </div>
       </div>
 
