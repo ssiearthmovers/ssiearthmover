@@ -266,7 +266,7 @@ export default function BrandPage() {
 
   usePageMeta({
     title: brand?.metaTitle ?? "Motor Grader Spare Parts | SSI Earthmovers India",
-    description: brand?.metaDesc ?? "Premium OEM-quality motor grader spare parts. Same-day dispatch from New Delhi. Call +91-9953105738.",
+    description: brand?.metaDesc ?? "High-quality replacement motor grader spare parts. Same-day dispatch from New Delhi. Call +91-9953105738.",
     canonical: brand ? `https://ssiearthmovers.in/brands/${brand.slug}` : undefined,
     ogImage: brand?.img,
     schema: brand ? {
@@ -475,7 +475,7 @@ export default function BrandPage() {
               <p className="text-gray-300 text-sm mb-4">{brand.models.join("  ·  ")}</p>
               <div className="flex gap-3">
                 <span className="bg-[#F5A623] text-black text-xs font-black px-3 py-1.5 rounded-full">
-                  {totalCount} OEM Parts Listed
+                  Compatible Parts Listed
                 </span>
                 <span className="border border-white/30 text-white text-xs font-bold px-3 py-1.5 rounded-full">
                   Same-Day Dispatch · New Delhi
@@ -487,7 +487,7 @@ export default function BrandPage() {
           {/* ── Catalogue sheet grid ── */}
           <div className="max-w-7xl mx-auto px-6 md:px-10 py-14">
             <FadeIn className="mb-8">
-              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-2">Official Parts Catalogue</p>
+              <p className="text-[#F5A623] text-xs font-bold uppercase tracking-widest mb-2">Compatible Parts Catalogue</p>
               <h3 className="text-2xl md:text-3xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
                 Parts We Stock for {brand.fullName}
               </h3>
@@ -563,12 +563,12 @@ export default function BrandPage() {
         <section id="parts-catalog" className="py-24 bg-[#16181D]">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
             <FadeIn className="mb-10">
-              <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Official Part Numbers</p>
+              <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">OEM Reference Part Numbers</p>
               <h2 className="text-3xl md:text-4xl font-black uppercase text-white border-l-4 border-[#F5A623] pl-4">
                 {brand.fullName} Parts Catalogue
               </h2>
               <p className="text-gray-400 mt-4 max-w-2xl">
-                Browse all {totalCount} listed parts with official OEM part numbers. Click the WhatsApp button on any part to enquire instantly.
+                Browse all {totalCount} listed parts with OEM reference part numbers used for identification and compatibility. Click the WhatsApp button on any part to enquire instantly.
               </p>
             </FadeIn>
 
@@ -671,12 +671,12 @@ export default function BrandPage() {
           <FadeIn>
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">About {brand.fullName}</p>
             <h2 className="text-3xl font-black uppercase text-white mb-6">
-              Why {brand.fullName} Operators Trust SSI Earthmovers
+              Why Customers Choose SSI for {brand.fullName}-Compatible Parts
             </h2>
             <p className="text-gray-300 leading-relaxed mb-5">{brand.longDescription}</p>
             <div className="grid grid-cols-2 gap-4 mt-6">
               {[
-                { icon: ShieldCheck, label: "OEM-spec quality on every part" },
+                { icon: ShieldCheck, label: "High-quality replacement parts on every order" },
                 { icon: Truck, label: "Same-day dispatch from Delhi" },
                 { icon: Package, label: "5,000+ parts in stock" },
                 { icon: CheckCircle2, label: "30+ years experience" },
@@ -760,7 +760,7 @@ export default function BrandPage() {
             <p className="text-[#F5A623] text-sm font-bold uppercase tracking-widest mb-3">Shop by Category</p>
             <h2 className="text-3xl font-black uppercase text-white">Browse Parts for {brand.fullName} Graders</h2>
             <p className="text-gray-400 mt-3 max-w-2xl mx-auto text-sm">
-              We carry OEM-compatible {brand.fullName} grader parts across all major categories — cutting edges, braking systems, hydraulics, and more.
+              We carry replacement parts compatible with {brand.fullName} graders across all major categories — cutting edges, braking systems, hydraulics, and more.
             </p>
           </FadeIn>
 

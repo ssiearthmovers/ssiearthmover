@@ -233,7 +233,7 @@ export default function ProductPage() {
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: ShieldCheck, title: "OEM-spec Quality", desc: "Parts that match or exceed original equipment specifications. Quality-checked before dispatch." },
+              { icon: ShieldCheck, title: "High-Quality Replacement Parts", desc: "Parts built for compatibility with OEM reference specifications. Quality-checked before dispatch." },
               { icon: Package, title: "5,000+ Parts in Stock", desc: "Massive ready inventory means no waiting. Same-day dispatch on all in-stock items." },
               { icon: Truck, title: "PAN India Delivery", desc: "We deliver to all 28 states. Construction sites, mine locations, city warehouses." },
               { icon: CheckCircle2, title: "30+ Years Experience", desc: "Three decades of expertise means we know grader parts better than anyone in India." },

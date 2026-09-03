@@ -274,8 +274,8 @@ export default function Home() {
   const features = [
     {
       icon: ShieldCheck,
-      title: "OEM Quality",
-      desc: "Parts that meet or exceed original equipment specifications.",
+      title: "High-Quality Replacement Parts",
+      desc: "Parts built for compatibility with OEM reference specifications.",
     },
     {
       icon: Package,
@@ -402,8 +402,8 @@ export default function Home() {
 
   const faqs = [
     {
-      q: "Are all parts OEM quality?",
-      a: "Yes. We supply a combination of genuine OEM parts and high-quality compatible replacements that meet or exceed original specifications. Every part is quality-checked before dispatch.",
+      q: "What quality standards do your replacement parts meet?",
+      a: "We supply high-quality replacement and compatible parts built for fit and performance. OEM reference numbers are used for identification and compatibility. Every part is quality-checked before dispatch.",
     },
     {
       q: "Which motor grader brands do you stock parts for?",
@@ -466,8 +466,7 @@ export default function Home() {
               </span>
               <span className="opacity-40">|</span>
               <span className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 shrink-0" /> OEM Quality
-                Guaranteed on Every Part
+                <ShieldCheck className="w-3.5 h-3.5 shrink-0" /> High-Quality Replacement Parts
               </span>
               <span className="opacity-40">|</span>
             </span>
@@ -634,7 +633,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <img
             src="/images/motor-grader-hero.png"
-            alt="Motor grader operating on road construction site — SSI Earthmovers supplies OEM spare parts for all major motor grader brands across India"
+            alt="Motor grader operating on road construction site — SSI Earthmovers supplies replacement spare parts compatible with all major motor grader brands across India"
             className="w-full h-full object-cover object-center"
             style={{ filter: "brightness(0.45) saturate(1.1)" }}
           />
@@ -673,7 +672,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg text-gray-300 max-w-xl leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-              Trusted supplier of OEM-quality cutting edges, grader blades,
+              Trusted supplier of high-quality replacement cutting edges, grader blades,
               scarifier teeth, end bits and circle parts for construction and
               mining companies across India.
             </p>
@@ -1125,7 +1124,7 @@ export default function Home() {
               <strong className="text-white">
                 SSI Earthmovers (Shiv Shakti International)
               </strong>{" "}
-              has become India's most trusted supplier of motor grader spare
+              has become a trusted independent supplier of motor grader spare
               parts — headquartered near{" "}
               <strong className="text-white">Mori Gate, New Delhi</strong>,
               serving construction, mining, and infrastructure companies
@@ -1133,7 +1132,7 @@ export default function Home() {
             </p>
             <p className="text-gray-400 leading-relaxed">
               Machine downtime costs money. We maintain a warehouse with 5,000+
-              OEM and premium-grade replacement parts, ready for same-day
+              replacement and compatible parts, ready for same-day
               dispatch. From cutting edges and grader blades to scarifier teeth
               and circle parts — if your grader needs it, we have it. Trusted by{" "}
               <strong className="text-white">500+ clients</strong> across 28
@@ -1168,7 +1167,7 @@ export default function Home() {
             <div className="relative p-4">
               <img
                 src="/images/about-warehouse.png"
-                alt="SSI Earthmovers motor grader spare parts warehouse — 5,000+ OEM parts in stock at Mori Gate New Delhi"
+                alt="SSI Earthmovers motor grader spare parts warehouse — 5,000+ compatible replacement parts in stock at Mori Gate New Delhi"
                 loading="lazy"
                 className="relative z-10 rounded-lg w-full h-auto object-cover aspect-[4/3] shadow-2xl"
               />
@@ -1907,7 +1906,7 @@ export default function Home() {
               <img src="/images/ssi-logo.png" alt="SSI Earthmovers" className="h-12 w-auto" />
             </div>
             <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-              India's premier supplier of premium motor grader spare parts.
+              Independent supplier of replacement motor grader spare parts.
               Keeping your machinery moving since 30 years.
             </p>
             <div className="flex gap-3">
@@ -2018,6 +2017,16 @@ export default function Home() {
               </li>
             </ul>
           </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 border-t border-[#1A1D24]">
+          <p className="text-gray-700 text-xs leading-relaxed max-w-5xl">
+            SSI Earthmovers (Shiv Shakti International) is an independent supplier of replacement and aftermarket motor grader parts. We are not affiliated with, authorized by, sponsored by, or endorsed by Caterpillar Inc., Komatsu Ltd., CASE Construction Equipment, SANY, XCMG, LiuGong, Leeboy, SDLG, BEML, Mitsubishi, Volvo, Mahindra, or other equipment manufacturers referenced on this website.
+            <br /><br />
+            Manufacturer names, trademarks, model names and part numbers are used solely for identification and compatibility purposes. Unless expressly stated otherwise, products supplied by SSI Earthmovers are not manufactured by or supplied by the respective original equipment manufacturer.
+            <br /><br />
+            All trademarks are the property of their respective owners.
+          </p>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 md:px-10 pt-8 border-t border-[#2A2E37] flex flex-col md:flex-row justify-between items-center gap-3 text-gray-600 text-xs">
